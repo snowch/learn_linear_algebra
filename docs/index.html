@@ -9,10 +9,12 @@
     // Make the div with id 'mycell' a Sage cell
     sagecell.makeSagecell({inputLocation:  '#mycell',
                            template:       sagecell.templates.minimal,
-                           evalButtonText: 'Activate'});
+                           evalButtonText: 'Activate',
+			 linked: true});
     // Make *any* div with class 'compute' a Sage cell
     sagecell.makeSagecell({inputLocation: 'div.compute',
-                           evalButtonText: 'Evaluate'});
+                           evalButtonText: 'Evaluate',
+			 linked: true});
     </script>
   </head>
   <body>
@@ -124,8 +126,10 @@ def my_solve(augmented_matrix, vars=None):
             sols += sol
 
     return sols, X, X_pivots, X_free, param_sol_dict
+</script></div>
 
 
+    <div class="compute"><script type="text/x-sage">
 M = matrix(QQ, 3, [1,2,3,0,1,2,0,0,1])
 v = vector(QQ, [4,3,2])
 Maug = M.augment(v, subdivide=True)
