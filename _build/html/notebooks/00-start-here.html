@@ -1,0 +1,603 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introduction &#8212; Learn Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/00-start-here';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Vectors" href="01-vectors.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Learn Linear Algebra</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1 current active">
+                <a class="reference internal" href="#">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01-vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02-matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-gauss-method.html">Gauss Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-solution-sets.html">Solution Sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-vector-spaces.html">Vector Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-linear-dependence.html">Linear Dependence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-span.html">Span</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08-basis.html">Basis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09-subspaces.html">Subspaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10-homogenous-ls.html">Homogenous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11-matrixspaces.html">Matrix Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12-transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13-nullspace.html">Nullspace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14-projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15-orthogonality.html">Orthogonality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16-determinants.html">Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17-eigenvalues.html">Eingenvalues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18-matrix-decomp.html">Matrix Decompositions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19-svd.html">SVD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="98-leftovers.html">Left overs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="99-quickref.html">Quick Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/00-start-here.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#course-objectives">Course Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-run-the-notebooks">How to run the notebooks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feedback">Feedback</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-requisites">Pre-requisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source">Source</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
+<section id="course-objectives">
+<h2>Course Objectives<a class="headerlink" href="#course-objectives" title="Link to this heading">#</a></h2>
+<p>In this course, we will learn the basics of Linear Algebra by being hands-on using the open source <a class="reference external" href="https://www.sagemath.org/">SageMath</a> software.  Only basic math knowledge required to follow this course!!</p>
+<p>I created this workshop as revision notes while I was learning Linear Algebra, but it may be useful for students who prefer to get hands-on with concepts before jumping deep into theory.</p>
+<p>If you like this project, please give it a <a class="reference external" href="https://github.com/snowch/learn_linear_algebra">star</a> on Github.</p>
+</section>
+<section id="how-to-run-the-notebooks">
+<h2>How to run the notebooks<a class="headerlink" href="#how-to-run-the-notebooks" title="Link to this heading">#</a></h2>
+<p><strong>View:</strong> to view the notebooks, you can <a class="reference external" href="https://nbviewer.org/github/snowch/learn_linear_algebra/tree/main/notebooks/">start here</a></p>
+<p><strong>Interact:</strong> If you would like an interactive environment to experiment with the notebook code, you can run then online for free <a class="reference external" href="https://mybinder.org/v2/gh/snowch/learn_linear_algebra/main?labpath=00-start-here.ipynb">here</a></p>
+<p>Notes for the interactive environment:</p>
+<ul class="simple">
+<li><p>it may take about 5 mins to launch the environment</p></li>
+<li><p>notebook state is not persisted - anything you add is lost when the notebook session closes</p></li>
+<li><p>the notebooks have an inactivity timeout of 10 mins after which the session closes</p></li>
+</ul>
+</section>
+<section id="feedback">
+<h2>Feedback<a class="headerlink" href="#feedback" title="Link to this heading">#</a></h2>
+<p>If after following this workshop you feel that the objectives haven’t been achieved, please <a class="reference external" href="mailto:chsnow123&#37;&#52;&#48;gmail&#46;com">email me</a> with your feedback.</p>
+</section>
+<section id="pre-requisites">
+<h2>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Link to this heading">#</a></h2>
+<p>You should have basic Python knowledge and be familiar with using Jupyter Notebooks.  If not, the following free hands-on workshops are recommended:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://hackshack.hpedev.io/workshop/15">Python 101</a></p></li>
+<li><p><a class="reference external" href="https://hackshack.hpedev.io/workshop/25">Jupyter Notebooks 101</a></p></li>
+</ul>
+</section>
+<section id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Notebook</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="01-vectors.html"><span class="std std-doc">01 Vectors</span></a></p></td>
+<td><p>Learn the fundamentals of working with vectors, including vector addition, scalar multiplication, and vector operations in geometric and algebraic contexts.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="02-matrices.html"><span class="std std-doc">02 Matrices</span></a></p></td>
+<td><p>Explore matrices, their properties, and operations such as addition, multiplication, and inversion. Understand how matrices are used to represent linear transformations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="03-gauss-method.html"><span class="std std-doc">03 Gauss Method</span></a></p></td>
+<td><p>Learn about the Gaussian elimination method for solving systems of linear equations and transforming matrices into reduced row-echelon form.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="04-solution-sets.html"><span class="std std-doc">04 Solution Sets</span></a></p></td>
+<td><p>Investigate solution sets of linear systems, including unique solutions, infinite solutions and no solutions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="05-vector-spaces.html"><span class="std std-doc">05 Vector Spaces</span></a></p></td>
+<td><p>Study vector spaces, their properties, and examples from various fields. Explore concepts such as linear independence, spanning sets, and basis vectors.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="06-linear-dependence.html"><span class="std std-doc">06 Linear Dependence</span></a></p></td>
+<td><p>Understand the concept of linear dependence and independence among vectors and its implications for vector spaces and systems of equations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="07-span.html"><span class="std std-doc">07 Span</span></a></p></td>
+<td><p>Study the span of a set of vectors, which represents all possible linear combinations of those vectors. Understand its connection to subspaces and basis vectors.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="08-basis.html"><span class="std std-doc">08 Basis</span></a></p></td>
+<td><p>Learn about basis vectors, which form the building blocks for vector spaces. Understand how basis vectors can be used to represent other vectors uniquely.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="09-subspaces.html"><span class="std std-doc">09 Subspaces</span></a></p></td>
+<td><p>Explore subspaces of vector spaces, including their definitions, properties, and examples, such as column spaces, row spaces, and null spaces.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="10-homogenous-ls.html"><span class="std std-doc">10 Homogenous Linear Systems</span></a></p></td>
+<td><p>Investigate homogeneous linear systems, which have solutions that form vector spaces. Understand their relationship to null spaces and the nullity of matrices.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="11-matrixspaces.html"><span class="std std-doc">11 MatrixSpaces</span></a></p></td>
+<td><p>Explore spaces of matrices, including their properties, dimensions, and relationships to vector spaces.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="12-transformations.html"><span class="std std-doc">12 Linear Transformations</span></a></p></td>
+<td><p>Study linear transformations, which are functions that preserve vector addition and scalar multiplication. Understand their properties and geometric interpretations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#./13-nullspaces.ipynb"><span class="xref myst">13 Null Spaces and Column Spaces</span></a></p></td>
+<td><p>Investigate the relationship between the null space and the column space of a matrix, as well as their dimensions and properties.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="14-projections.html"><span class="std std-doc">14 Projections</span></a></p></td>
+<td><p>Explore projections of vectors onto subspaces, including orthogonal and non-orthogonal projections. Understand their applications in various fields.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="15-orthogonality.html"><span class="std std-doc">15 Orthogonality</span></a></p></td>
+<td><p>Study orthogonality between vectors and subspaces, including orthogonal complements and orthogonal bases. Understand its significance in geometry and linear algebra.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="16-determinants.html"><span class="std std-doc">16 Determinants</span></a></p></td>
+<td><p>Define determinants, explain their geometric interpretation, and show how to compute them. Understand their role in determining properties of matrices and their applications.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="17-eigenvalues.html"><span class="std std-doc">17 Eigenvalues and Eigenvectors</span></a></p></td>
+<td><p>Introduce the concept of eigenvalues and eigenvectors, their geometric interpretation, and their computation. Understand their significance in diagonalizing matrices and solving systems of differential equations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="18-matrix-decomp.html"><span class="std std-doc">18 Matrix Decomposition</span></a></p></td>
+<td><p>LU Decomposition, QR Decomposition, Cholesky Decomposition, Eigendecomposition</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="19-svd.html"><span class="std std-doc">19 Singular Value Decomposition</span></a></p></td>
+<td><p>Singular Values, Singular Vectors, Applications of SVD, Principal Component Analysis</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="98-leftovers.html"><span class="std std-doc">98 Leftovers</span></a></p></td>
+<td><p>Least Squares, Distance, Transpose.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="99-quickref.html"><span class="std std-doc">99 Quickref</span></a></p></td>
+<td><p>SageMath linear algebra quick reference, and tutorials.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading">#</a></h2>
+<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+  <img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png" alt="CC BY-NC-SA" width="88" height="32">
+</a></section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Link to this heading">#</a></h2>
+<p><a class="github reference external" href="https://github.com/snowch/learn_linear_algebra">snowch/learn_linear_algebra</a></p>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="01-vectors.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Vectors</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#course-objectives">Course Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-run-the-notebooks">How to run the notebooks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feedback">Feedback</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-requisites">Pre-requisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source">Source</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Chris Snow
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

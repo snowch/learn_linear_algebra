@@ -1,0 +1,706 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Matrix Spaces &#8212; Learn Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/11-matrixspaces';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Transformations" href="12-transformations.html" />
+    <link rel="prev" title="Homogenous" href="10-homogenous-ls.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00-start-here.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Learn Linear Algebra</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00-start-here.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01-vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02-matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-gauss-method.html">Gauss Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-solution-sets.html">Solution Sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-vector-spaces.html">Vector Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-linear-dependence.html">Linear Dependence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-span.html">Span</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08-basis.html">Basis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09-subspaces.html">Subspaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10-homogenous-ls.html">Homogenous</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Matrix Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12-transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13-nullspace.html">Nullspace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14-projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15-orthogonality.html">Orthogonality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16-determinants.html">Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17-eigenvalues.html">Eingenvalues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18-matrix-decomp.html">Matrix Decompositions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19-svd.html">SVD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="98-leftovers.html">Left overs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="99-quickref.html">Quick Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/11-matrixspaces.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Matrix Spaces</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-a-matrix-space">What is a Matrix Space?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-space-of-all-2x2-matrices">The Space of All 2x2 Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-space-of-symmetric-2x2-matrices">The Space of Symmetric 2x2 Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-space-of-upper-triangular-3x3-matrices">The Space of Upper Triangular 3x3 Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lesson-key-concepts">Lesson Key Concepts</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="matrix-spaces">
+<h1>Matrix Spaces<a class="headerlink" href="#matrix-spaces" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Let’s dive into the concept of matrix spaces and illustrate them with SageMath examples.</p>
+</section>
+<section id="what-is-a-matrix-space">
+<h2>What is a Matrix Space?<a class="headerlink" href="#what-is-a-matrix-space" title="Link to this heading">#</a></h2>
+<div style="background-color:yellow; padding: 5px 10px 0px 10px; border: 1px solid black;">
+<p>Definitions: <strong>Closure</strong></p>
+<p>A set is said to be closed under an operation if performing that <strong>operation on members of the set always produces a result that is also a member of the set</strong>.</p>
+<p>This definition is general and applies to any set and any operation, not just matrix spaces. You can then follow it with your definition of matrix spaces, which will be a specific application of the closure concept.</p>
+</div><div style="background-color:yellow; padding: 5px 10px 0px 10px; border: 1px solid black;">
+<p>Definitions: <strong>Matrix Space</strong></p>
+<p>A matrix space is a set of matrices that have the same dimensions (same number of rows and columns) and share the following properties:</p>
+<ol class="arabic simple">
+<li><p><strong>Closure under Addition:</strong> Adding any two matrices within the space results in another matrix that also belongs to the space.</p></li>
+<li><p><strong>Closure under Scalar Multiplication:</strong> Multiplying any matrix in the space by a scalar (a number) produces a matrix that remains within the space.</p></li>
+</ol>
+<p>In essence, a matrix space is a vector space where the “vectors” are matrices.</p>
+</div><p><strong>SageMath Examples</strong></p>
+<p>SageMath is a fantastic tool for exploring matrix spaces. Let’s work through some examples:</p>
+</section>
+<section id="the-space-of-all-2x2-matrices">
+<h2>The Space of All 2x2 Matrices<a class="headerlink" href="#the-space-of-all-2x2-matrices" title="Link to this heading">#</a></h2>
+<p>This section introduces a fundamental matrix space: the set of all 2x2 matrices with entries that are rational numbers.  We denote this space as <span class="math notranslate nohighlight">\(M\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="n">MatrixSpace</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> 
+<span class="n">A</span> <span class="o">=</span> <span class="n">M</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span> 
+<span class="n">B</span> <span class="o">=</span> <span class="n">M</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A</span> <span class="o">+</span> <span class="n">B</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rr}
+1 & 1 \\
+5 & 5
+\end{array}\right)\)</html></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">show</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rr}
+3 & 6 \\
+9 & 12
+\end{array}\right)\)</html></div></div>
+</div>
+<p><strong>Key Points:</strong></p>
+<ul class="simple">
+<li><p><strong>Construction:</strong> The <code class="docutils literal notranslate"><span class="pre">MatrixSpace(QQ,</span> <span class="pre">2,</span> <span class="pre">2)</span></code> command in SageMath creates this space. <code class="docutils literal notranslate"><span class="pre">QQ</span></code> indicates that matrix entries are rational (can be expressed as fractions), while <code class="docutils literal notranslate"><span class="pre">2,</span> <span class="pre">2</span></code> specifies the dimensions of the matrices.</p></li>
+<li><p><strong>Examples:</strong> Matrices <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> are specific instances within this space, demonstrating the variety of matrices it contains.</p></li>
+<li><p><strong>Closure:</strong>  We showcase how this space upholds the essential properties of closure:</p>
+<ul>
+<li><p><strong>Addition:</strong> The sum of <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> results in another 2x2 matrix with rational entries, remaining within the space <code class="docutils literal notranslate"><span class="pre">M</span></code>.</p></li>
+<li><p><strong>Scalar Multiplication:</strong>  Multiplying matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> by the scalar 3 produces a matrix that still belongs to <code class="docutils literal notranslate"><span class="pre">M</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Significance:</strong></p>
+<p>This example serves as a building block for understanding more complex matrix spaces. It illustrates the core concepts of:</p>
+<ul class="simple">
+<li><p><strong>Matrix Spaces as Vector Spaces:</strong> The space <code class="docutils literal notranslate"><span class="pre">M</span></code> behaves like a vector space, where matrices take the role of vectors.</p></li>
+<li><p><strong>Closure as a Defining Feature:</strong> The closure properties are fundamental to the definition of a matrix space.</p></li>
+</ul>
+<p>By grasping these concepts in this simple context, we lay the groundwork for exploring a rich variety of matrix spaces with different dimensions, entry types, and additional constraints.</p>
+</section>
+<section id="the-space-of-symmetric-2x2-matrices">
+<h2>The Space of Symmetric 2x2 Matrices<a class="headerlink" href="#the-space-of-symmetric-2x2-matrices" title="Link to this heading">#</a></h2>
+<p>This section delves into a specific type of matrix space: the set of all 2x2 symmetric matrices with rational number entries.  A symmetric matrix is one that is equal to its transpose (flipped along its diagonal).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the matrix space over the rationals with dimension 2x2</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">MatrixSpace</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Define the matrices C and D</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">M</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>  
+<span class="n">D</span> <span class="o">=</span> <span class="n">M</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span> 
+
+<span class="c1"># Sum the matrices</span>
+<span class="n">E</span> <span class="o">=</span> <span class="n">C</span> <span class="o">+</span> <span class="n">D</span>
+
+<span class="c1"># Check if E is symmetric by comparing it to its transpose</span>
+<span class="n">is_symmetric</span> <span class="o">=</span> <span class="n">E</span> <span class="o">==</span> <span class="n">E</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+<span class="c1"># Print the result</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix C is:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix D is:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix C + D is:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is C + D symmetric?&quot;</span><span class="p">,</span> <span class="n">is_symmetric</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matrix C is:
+[1 2]
+[2 3]
+Matrix D is:
+[ 0  1]
+[ 1 -1]
+Matrix C + D is:
+[1 3]
+[3 2]
+Is C + D symmetric? True
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Key Points:</strong></p>
+<ul class="simple">
+<li><p><strong>Defining the Space:</strong> We begin by creating the space <code class="docutils literal notranslate"><span class="pre">M</span></code> of all 2x2 matrices over rational numbers (<code class="docutils literal notranslate"><span class="pre">QQ</span></code>) using <code class="docutils literal notranslate"><span class="pre">MatrixSpace(QQ,</span> <span class="pre">2)</span></code>.</p></li>
+<li><p><strong>Constructing Symmetric Matrices:</strong> Matrices <code class="docutils literal notranslate"><span class="pre">C</span></code> and <code class="docutils literal notranslate"><span class="pre">D</span></code> are defined within this space, and their entries are carefully chosen to ensure they are symmetric (note that the elements below the diagonal are mirrored above it).</p></li>
+<li><p><strong>Closure under Addition:</strong>  The code demonstrates that adding the symmetric matrices <code class="docutils literal notranslate"><span class="pre">C</span></code> and <code class="docutils literal notranslate"><span class="pre">D</span></code> results in a new matrix <code class="docutils literal notranslate"><span class="pre">E</span></code> that is also symmetric. This reinforces the concept of closure under addition for this specific matrix space.</p></li>
+<li><p><strong>Verification of Symmetry:</strong> The code explicitly checks whether the resulting matrix <code class="docutils literal notranslate"><span class="pre">E</span></code> is symmetric by comparing it to its transpose. This verification step confirms that the operation of addition preserves the symmetry property within this space.</p></li>
+</ul>
+<p><strong>Significance:</strong></p>
+<p>This example highlights:</p>
+<ul class="simple">
+<li><p><strong>Subspaces:</strong> The space of symmetric matrices is a subspace within the larger space <code class="docutils literal notranslate"><span class="pre">M</span></code> of all 2x2 matrices. This means it inherits the closure properties of <code class="docutils literal notranslate"><span class="pre">M</span></code> but also satisfies an additional constraint (symmetry).</p></li>
+<li><p><strong>Structure:</strong> Symmetric matrices have a special structure where the elements above and below the diagonal are mirror images. This structure is preserved under addition, making this subspace particularly interesting.</p></li>
+</ul>
+<p>Understanding symmetric matrix spaces is crucial in various areas of mathematics and applications, including linear algebra, optimization, and physics. This example serves as a stepping stone towards exploring other structured subspaces with unique properties.</p>
+</section>
+<section id="the-space-of-upper-triangular-3x3-matrices">
+<h2>The Space of Upper Triangular 3x3 Matrices<a class="headerlink" href="#the-space-of-upper-triangular-3x3-matrices" title="Link to this heading">#</a></h2>
+<p>This section explores another important subspace within the larger space of all 3x3 matrices: the set of upper triangular matrices.</p>
+<div style="background-color:yellow; padding: 5px 10px 0px 10px; border: 1px solid black;">
+<p>Definitions: <strong>Upper Triangular Matrix</strong></p>
+<p>An upper triangular matrix is a square matrix where <strong>all the elements below the main diagonal (the diagonal running from the top-left corner to the bottom-right corner) are zero</strong>. These matrices form a distinct subspace within the space of all square matrices, meaning they possess closure properties and maintain their structure under addition.</p>
+<p>Significance:</p>
+<p>Subspace Properties: Upper triangular matrices form a subspace, inheriting the properties of closure under addition and scalar multiplication from the larger space of square matrices. Additionally, the sum of two upper triangular matrices always results in another upper triangular matrix, preserving their characteristic structure.</p>
+<p>Applications: Upper triangular matrices are of significant importance in linear algebra and numerical analysis. They frequently appear in matrix factorizations like LU decomposition (covered in a later lesson), simplifying calculations involved in solving systems of linear equations, finding determinants, and other matrix operations.</p>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import the necessary module</span>
+<span class="kn">from</span> <span class="nn">sage.all</span> <span class="kn">import</span> <span class="n">MatrixSpace</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">RR</span>
+
+<span class="c1"># Define the matrix space over the real numbers with dimension 3x3</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">MatrixSpace</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Define the upper triangular matrices E and F</span>
+<span class="n">E</span> <span class="o">=</span> <span class="n">M</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">]])</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">M</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]])</span>
+
+<span class="c1"># Sum the matrices</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">E</span> <span class="o">+</span> <span class="n">F</span>
+
+<span class="c1"># Check if G is upper triangular - notice how we are checking</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">nrows</span><span class="p">()</span>
+<span class="n">is_upper_triangular</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+
+<span class="c1"># Print the result</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix E is:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix F is:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix E + F is:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is E + F upper triangular?&quot;</span><span class="p">,</span> <span class="n">is_upper_triangular</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matrix E is:
+[1 2 3]
+[0 4 5]
+[0 0 6]
+Matrix F is:
+[-1  0  2]
+[ 0  3  1]
+[ 0  0 -2]
+Matrix E + F is:
+[0 2 5]
+[0 7 6]
+[0 0 4]
+Is E + F upper triangular? True
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Key Points:</strong></p>
+<ul class="simple">
+<li><p><strong>Defining the Space:</strong> We begin by creating the general matrix space <code class="docutils literal notranslate"><span class="pre">M</span></code> over the rational numbers using <code class="docutils literal notranslate"><span class="pre">MatrixSpace(QQ,</span> <span class="pre">3,</span> <span class="pre">3)</span></code>. This provides a framework for building our specific subspace.</p></li>
+<li><p><strong>Constructing Upper Triangular Matrices:</strong>  Matrices <code class="docutils literal notranslate"><span class="pre">E</span></code> and <code class="docutils literal notranslate"><span class="pre">F</span></code> are constructed with elements strategically placed to ensure they are upper triangular. The key is that all entries with row index greater than column index are zero.</p></li>
+<li><p><strong>Closure under Addition:</strong> The sum of upper triangular matrices <code class="docutils literal notranslate"><span class="pre">E</span></code> and <code class="docutils literal notranslate"><span class="pre">F</span></code> results in another upper triangular matrix <code class="docutils literal notranslate"><span class="pre">G</span></code>. This demonstrates closure under addition within this subspace.</p></li>
+<li><p><strong>Verification of Upper Triangular Form:</strong> The code uses the <code class="docutils literal notranslate"><span class="pre">all()</span></code> function and a generator expression to check if matrix <code class="docutils literal notranslate"><span class="pre">G</span></code> is upper triangular. Here’s how it works:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">=</span> <span class="pre">G.nrows()</span></code>: Determines the number of rows in matrix <code class="docutils literal notranslate"><span class="pre">G</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">i</span> <span class="pre">in</span> <span class="pre">range(n)</span></code>: Iterates over each row of the matrix.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">j</span> <span class="pre">in</span> <span class="pre">range(i)</span></code>:  Iterates over columns up to the main diagonal within each row.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">G[i,</span> <span class="pre">j]</span> <span class="pre">==</span> <span class="pre">0</span></code>: Checks if each element below the main diagonal is zero.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">all(...)</span></code>: Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> only if all the conditions (below-diagonal elements being zero) are met. Otherwise, it returns <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ol>
+</li>
+</ul>
+<p><strong>Significance:</strong></p>
+<p>Understanding the space of upper triangular matrices deepens our knowledge of matrix structures and their applications.  It illustrates how specific constraints can lead to subspaces with unique properties and practical significance.</p>
+</section>
+<section id="lesson-key-concepts">
+<h2>Lesson Key Concepts<a class="headerlink" href="#lesson-key-concepts" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Basis:</strong> A set of matrices that span the entire matrix space and are linearly independent. You can find a basis for a matrix space using SageMath’s <code class="docutils literal notranslate"><span class="pre">.basis()</span></code> method.</p></li>
+<li><p><strong>Dimension:</strong> The number of matrices in a basis for the space.</p></li>
+<li><p><strong>Subspaces:</strong> Smaller matrix spaces contained within a larger one.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "sagemath"
+        },
+        kernelOptions: {
+            name: "sagemath",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'sagemath'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="10-homogenous-ls.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Homogenous</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="12-transformations.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Transformations</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-a-matrix-space">What is a Matrix Space?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-space-of-all-2x2-matrices">The Space of All 2x2 Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-space-of-symmetric-2x2-matrices">The Space of Symmetric 2x2 Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-space-of-upper-triangular-3x3-matrices">The Space of Upper Triangular 3x3 Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lesson-key-concepts">Lesson Key Concepts</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Chris Snow
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

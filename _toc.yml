@@ -1,0 +1,24 @@
+format: jb-book
+root: notebooks/00-start-here
+chapters:
+- file: notebooks/01-vectors
+- file: notebooks/02-matrices
+- file: notebooks/03-gauss-method
+- file: notebooks/04-solution-sets
+- file: notebooks/05-vector-spaces
+- file: notebooks/06-linear-dependence
+- file: notebooks/07-span
+- file: notebooks/08-basis
+- file: notebooks/09-subspaces
+- file: notebooks/10-homogenous-ls
+- file: notebooks/11-matrixspaces
+- file: notebooks/12-transformations
+- file: notebooks/13-nullspace
+- file: notebooks/14-projections
+- file: notebooks/15-orthogonality
+- file: notebooks/16-determinants
+- file: notebooks/17-eigenvalues
+- file: notebooks/18-matrix-decomp
+- file: notebooks/19-svd
+- file: notebooks/98-leftovers
+- file: notebooks/99-quickref

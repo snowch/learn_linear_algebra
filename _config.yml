@@ -1,0 +1,9 @@
+title: Learn Linear Algebra
+author: Chris Snow
+logo: logo.png
+execute:
+  execute_notebooks: force
+  kernel_manager_class: jupyter_client.manager.KernelManager
+  kernel_name_map:
+    sagemath: sagemath-10.6
+exclude_patterns: ['README.md']

@@ -1,0 +1,749 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Gauss Method &#8212; Learn Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/03-gauss-method';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Solution Sets" href="04-solution-sets.html" />
+    <link rel="prev" title="Matrices" href="02-matrices.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00-start-here.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Learn Linear Algebra</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00-start-here.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01-vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02-matrices.html">Matrices</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Gauss Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-solution-sets.html">Solution Sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-vector-spaces.html">Vector Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-linear-dependence.html">Linear Dependence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-span.html">Span</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08-basis.html">Basis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09-subspaces.html">Subspaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10-homogenous-ls.html">Homogenous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11-matrixspaces.html">Matrix Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12-transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13-nullspace.html">Nullspace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14-projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15-orthogonality.html">Orthogonality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16-determinants.html">Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17-eigenvalues.html">Eingenvalues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18-matrix-decomp.html">Matrix Decompositions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19-svd.html">SVD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="98-leftovers.html">Left overs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="99-quickref.html">Quick Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/03-gauss-method.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Gauss Method</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-row-operations">Matrix Row Operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#augmented-matrices">Augmented Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduced-row-echelon-form-rref">Reduced row echelon form (rref)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#row-operations">Row operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gauss-s-method-step-by-step-automation">Gauss’s method step-by-step automation</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="gauss-method">
+<h1>Gauss Method<a class="headerlink" href="#gauss-method" title="Link to this heading">#</a></h1>
+<section id="matrix-row-operations">
+<h2>Matrix Row Operations<a class="headerlink" href="#matrix-row-operations" title="Link to this heading">#</a></h2>
+<p>In linear algebra, matrix row operations are fundamental techniques used to manipulate matrices into simpler forms, such as reduced row echelon form (RREF). These operations are essential for solving systems of linear equations, determining matrix rank, and finding inverse matrices.</p>
+<p>Let’s start by defining our matrix and vector.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr}
+1 & 2 & -1 \\
+0 & 1 & 3 \\
+2 & -1 & 1
+\end{array}\right)\)</html></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">vector</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">show</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(4,\,7,\,1\right)\)</html></div></div>
+</div>
+<p>Let’s check this matrix has a solution:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">solution</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">solve_right</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\frac{8}{9},\,\frac{7}{3},\,\frac{14}{9}\right)\)</html></div></div>
+</div>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://doc.sagemath.org/html/en/reference/matrices/sage/matrix/constructor.html#sage.matrix.constructor.matrix">sage.matrix.constructor.matrixsage.matrix.constructor.matrix</a></p></li>
+<li><p><a class="reference external" href="https://doc.sagemath.org/html/en/reference/modules/sage/modules/free_module_element.html#sage.modules.free_module_element.vector">sage.modules.free_module_element.vector</a></p></li>
+<li><p><a class="reference external" href="https://doc.sagemath.org/html/en/reference/matrices/sage/matrix/matrix2.html#sage.matrix.matrix2.Matrix.solve_right">sage.matrix.matrix2.Matrix.solve_right</a></p></li>
+</ul>
+</section>
+<section id="augmented-matrices">
+<h2>Augmented Matrices<a class="headerlink" href="#augmented-matrices" title="Link to this heading">#</a></h2>
+<p>We can create an augmented matrix by adding the constants vector (<span class="math notranslate nohighlight">\(b\)</span>) to the matrix of coefficients (<span class="math notranslate nohighlight">\(A\)</span>)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A_aug</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">augment</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">subdivide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A_aug</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr|r}
+1 & 2 & -1 & 4 \\
+0 & 1 & 3 & 7 \\
+2 & -1 & 1 & 1
+\end{array}\right)\)</html></div></div>
+</div>
+<p>Documentation for <a class="reference external" href="https://doc.sagemath.org/html/en/reference/matrices/sage/matrix/matrix1.html#sage.matrix.matrix1.Matrix.augment">sage.matrix.matrix1.Matrix.augment</a></p>
+</section>
+<section id="reduced-row-echelon-form-rref">
+<h2>Reduced row echelon form (rref)<a class="headerlink" href="#reduced-row-echelon-form-rref" title="Link to this heading">#</a></h2>
+<p>We show the method to retrieve the rref before showing row operations to manually obtain the rref.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rref</span> <span class="o">=</span> <span class="n">A_aug</span><span class="o">.</span><span class="n">rref</span><span class="p">()</span>
+<span class="n">show</span><span class="p">(</span><span class="n">rref</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr|r}
+1 & 0 & 0 & \frac{8}{9} \\
+0 & 1 & 0 & \frac{7}{3} \\
+0 & 0 & 1 & \frac{14}{9}
+\end{array}\right)\)</html></div></div>
+</div>
+<p>Documentation for <a class="reference external" href="https://doc.sagemath.org/html/en/reference/matrices/sage/matrix/matrix2.html#sage.matrix.matrix2.Matrix.rref">sage.matrix.matrix2.Matrix.rref</a></p>
+</section>
+<section id="row-operations">
+<h2>Row operations<a class="headerlink" href="#row-operations" title="Link to this heading">#</a></h2>
+<p>The three basic row operations are:</p>
+<ul class="simple">
+<li><p>Swap Rows</p></li>
+<li><p>Rescale Rows</p></li>
+<li><p>Add Multiple of Row</p></li>
+</ul>
+<p>Let’s start with the augmented matrix:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">show</span><span class="p">(</span><span class="n">A_aug</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr|r}
+1 & 2 & -1 & 4 \\
+0 & 1 & 3 & 7 \\
+2 & -1 & 1 & 1
+\end{array}\right)\)</html></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Row 3  &lt;- Row 3 - 2*Row 1</span>
+<span class="n">A_aug</span><span class="o">.</span><span class="n">add_multiple_of_row</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A_aug</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr|r}
+1 & 2 & -1 & 4 \\
+0 & 1 & 3 & 7 \\
+0 & -5 & 3 & -7
+\end{array}\right)\)</html></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Row 3 &lt;-&gt; Row 2</span>
+<span class="n">A_aug</span><span class="o">.</span><span class="n">swap_rows</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A_aug</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr|r}
+1 & 2 & -1 & 4 \\
+0 & -5 & 3 & -7 \\
+0 & 1 & 3 & 7
+\end{array}\right)\)</html></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Row 3 &lt;- -5*Row 3</span>
+<span class="n">A_aug</span><span class="o">.</span><span class="n">rescale_row</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A_aug</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr|r}
+1 & 2 & -1 & 4 \\
+0 & -5 & 3 & -7 \\
+0 & -5 & -15 & -35
+\end{array}\right)\)</html></div></div>
+</div>
+<p>… and so on</p>
+<p>See if you can complete the operations to achieve reduce row echelon form (rref).</p>
+<p>Each of these operations modify (mutate) the original matrix.  There are equivalent operations that leave the original matrix unchanged and return a new matrix.  These operations have <em>similar</em> names, but have the prefix <code class="docutils literal notranslate"><span class="pre">with_</span></code>, e.g.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">swap_rows()</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">with_swapped_rows()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rescale_row()</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">with_rescaled_row()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">add_multiple_of_row()</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">with_added_multiple_of_row()</span></code></p></li>
+</ul>
+<p>Documentation: <a class="reference external" href="https://doc.sagemath.org/html/en/reference/matrices/sage/matrix/matrix0.html">matrix0</a>.</p>
+</section>
+<section id="gauss-s-method-step-by-step-automation">
+<h2>Gauss’s method step-by-step automation<a class="headerlink" href="#gauss-s-method-step-by-step-automation" title="Link to this heading">#</a></h2>
+<p>The following code automates the gauss method outputting each step.</p>
+<p>Adapted from: <a class="reference external" href="https://gitlab.com/jim.hefferon/linear-algebra/-/blob/master/src/lab/gauss_method.sage">gaus_method.sage</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show Gauss&#39;s method and Gauss-Jordan reduction steps. </span>
+<span class="c1"># 2012-Apr-20  Jim Hefferon  Public Domain. </span>
+<span class="c1"># 2019-Nov-09 JH  Minor reformatting</span>
+<span class="c1"># 2021-Sep-22 JH  Adjust for Python3</span>
+
+<span class="c1"># Naive Gaussian reduction</span>
+<span class="k">def</span> <span class="nf">gauss_method</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="n">rescale_leading_entry</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Describe the reduction to echelon form of the given matrix of </span>
+<span class="sd">    rationals.</span>
+<span class="sd">      M  matrix of rationals   e.g., M = matrix(QQ, [[..], [..], ..])</span>
+<span class="sd">      rescale_leading_entry=False  boolean  make leading entries to 1&#39;s</span>
+<span class="sd">    Returns: None.  Side effects: M is reduced, steps are printed.  </span>
+<span class="sd">    Note that this is echelon form, not reduced echelon form, and that </span>
+<span class="sd">    this routine does not end the same way as does M.echelon_form().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_rows</span><span class="o">=</span><span class="n">M</span><span class="o">.</span><span class="n">nrows</span><span class="p">()</span>
+    <span class="n">num_cols</span><span class="o">=</span><span class="n">M</span><span class="o">.</span><span class="n">ncols</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original matrix</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">show</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>    
+
+    <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># all cols before this are already done</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">num_rows</span><span class="p">):</span> 
+        <span class="c1"># Do we need to swap in a nonzero entry from below?</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">col</span> <span class="o">&lt;</span> <span class="n">num_cols</span>
+               <span class="ow">and</span> <span class="n">M</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span> 
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">M</span><span class="o">.</span><span class="n">nonzero_positions_in_column</span><span class="p">(</span><span class="n">col</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">row</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">swap row&quot;</span><span class="p">,</span> <span class="n">row</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;with row&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">M</span><span class="o">.</span><span class="n">swap_rows</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+                    <span class="n">show</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+                    <span class="k">break</span>     
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">col</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">col</span> <span class="o">&gt;=</span> <span class="n">num_cols</span><span class="p">:</span>
+            <span class="k">break</span>
+       
+        <span class="c1"># Now we are guaranteed M[row][col] != 0</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rescale_leading_entry</span>
+           <span class="ow">and</span> <span class="n">M</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">take&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="n">M</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">],</span> <span class="s2">&quot;times row&quot;</span><span class="p">,</span> <span class="n">row</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">M</span><span class="o">.</span><span class="n">rescale_row</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="n">M</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">])</span>
+            <span class="n">show</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">change_flag</span><span class="o">=</span><span class="kc">False</span>
+        <span class="k">for</span> <span class="n">changed_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">row</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">num_rows</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">M</span><span class="p">[</span><span class="n">changed_row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">change_flag</span><span class="o">=</span><span class="kc">True</span>
+                <span class="n">factor</span><span class="o">=-</span><span class="mi">1</span><span class="o">*</span><span class="n">M</span><span class="p">[</span><span class="n">changed_row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span><span class="o">/</span><span class="n">M</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">take&quot;</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="s2">&quot;times row&quot;</span><span class="p">,</span> <span class="n">row</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;plus row&quot;</span><span class="p">,</span> <span class="n">changed_row</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">M</span><span class="o">.</span><span class="n">add_multiple_of_row</span><span class="p">(</span><span class="n">changed_row</span><span class="p">,</span><span class="n">row</span><span class="p">,</span><span class="n">factor</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">change_flag</span><span class="p">:</span>
+            <span class="n">show</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">col</span> <span class="o">+=</span><span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">gauss_method</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Original matrix
+</pre></div>
+</div>
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr}
+1 & 2 & -1 \\
+0 & 1 & 3 \\
+2 & -1 & 1
+\end{array}\right)\)</html></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>take -2 times row 1 plus row 3 
+</pre></div>
+</div>
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr}
+1 & 2 & -1 \\
+0 & 1 & 3 \\
+0 & -5 & 3
+\end{array}\right)\)</html></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>take 5 times row 2 plus row 3 
+</pre></div>
+</div>
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr}
+1 & 2 & -1 \\
+0 & 1 & 3 \\
+0 & 0 & 18
+\end{array}\right)\)</html></div></div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "sagemath"
+        },
+        kernelOptions: {
+            name: "sagemath",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'sagemath'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02-matrices.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Matrices</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="04-solution-sets.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Solution Sets</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-row-operations">Matrix Row Operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#augmented-matrices">Augmented Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduced-row-echelon-form-rref">Reduced row echelon form (rref)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#row-operations">Row operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gauss-s-method-step-by-step-automation">Gauss’s method step-by-step automation</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Chris Snow
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

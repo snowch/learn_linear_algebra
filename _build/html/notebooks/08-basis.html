@@ -1,0 +1,607 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Basis &#8212; Learn Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/08-basis';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Subspaces" href="09-subspaces.html" />
+    <link rel="prev" title="Span" href="07-span.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00-start-here.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Learn Linear Algebra</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00-start-here.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01-vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02-matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-gauss-method.html">Gauss Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-solution-sets.html">Solution Sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-vector-spaces.html">Vector Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-linear-dependence.html">Linear Dependence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-span.html">Span</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Basis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09-subspaces.html">Subspaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10-homogenous-ls.html">Homogenous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11-matrixspaces.html">Matrix Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12-transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13-nullspace.html">Nullspace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14-projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15-orthogonality.html">Orthogonality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16-determinants.html">Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17-eigenvalues.html">Eingenvalues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18-matrix-decomp.html">Matrix Decompositions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19-svd.html">SVD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="98-leftovers.html">Left overs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="99-quickref.html">Quick Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/08-basis.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Basis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-basis-matters">Why Basis Matters</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="basis">
+<h1>Basis<a class="headerlink" href="#basis" title="Link to this heading">#</a></h1>
+<p>Let’s dive into the concept of linear algebra basis using SageMath to illustrate.</p>
+<p><strong>Review of key concepts</strong></p>
+<ul class="simple">
+<li><p><strong>Vector Space:</strong> A collection of vectors that can be added together and multiplied by scalars (usually real or complex numbers), while still obeying specific rules.</p></li>
+<li><p><strong>Linear Combination:</strong> Adding multiples of vectors together (e.g., 3<em>vector1 + 2</em>vector2).</p></li>
+<li><p><strong>Span:</strong> The set of all possible linear combinations you can create from a given set of vectors.</p></li>
+<li><p><strong>Linear Independence:</strong> A set of vectors is linearly independent if none of them can be expressed as a linear combination of the others.</p></li>
+</ul>
+<div style="background-color:yellow; padding: 5px 10px 0px 10px; border: 1px solid black;">
+<p>Definition: <strong>Basis:</strong></p>
+<p>A linearly independent set of vectors that spans the entire vector space. It’s essentially a minimal set of vectors that can “build” any other vector in the space through linear combinations.</p>
+<p>A basis is a <strong>special type of spanning set that is also linearly independent</strong>, making it the minimal and most efficient set of vectors needed to span the space.</p>
+</div><p><strong>SageMath Examples</strong></p>
+<p>Let’s use SageMath, a powerful open-source mathematics software system, to make these concepts more tangible.</p>
+<p><strong>1. Creating Vectors and Vector Spaces</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">v1</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">v2</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="n">v3</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">VectorSpace</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># Create a 3-dimensional vector space over rational numbers</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Vector space of dimension 3 over Rational Field
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>2. Checking Linear Independence</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">V</span><span class="o">.</span><span class="n">linear_dependence</span><span class="p">([</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">])</span>
+<span class="c1"># A non-empty list indicates linear dependence</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(1, -2, 1)]
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>3. Finding a Basis</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]])</span>
+<span class="n">row_space_basis</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">row_space</span><span class="p">()</span>
+<span class="n">basis_vectors</span> <span class="o">=</span> <span class="n">row_space_basis</span><span class="o">.</span><span class="n">basis</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">basis_vectors</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[
+(1, 0, -1),
+(0, 1, 2)
+]
+</pre></div>
+</div>
+</div>
+</div>
+<p>SageMath finds a basis for the row space of matrix <code class="docutils literal notranslate"><span class="pre">A</span></code>.</p>
+<p>This means these two vectors can be combined to create any row of <code class="docutils literal notranslate"><span class="pre">A</span></code>.</p>
+<p><strong>4. Expressing rows as a combination of the basis vectors</strong></p>
+<p>Each row of matrix <span class="math notranslate nohighlight">\( A \)</span> can be expressed as a combination of the basis vectors found by SageMath. Let’s start with your matrix <span class="math notranslate nohighlight">\( A \)</span>:</p>
+<p><span class="math notranslate nohighlight">\( A = \begin{pmatrix}
+1 &amp; 2 &amp; 3 \\
+4 &amp; 5 &amp; 6 \\
+7 &amp; 8 &amp; 9
+\end{pmatrix} \)</span></p>
+<p>The basis vectors for the row space of <span class="math notranslate nohighlight">\( A \)</span> are given by:</p>
+<p><span class="math notranslate nohighlight">\( \mathbf{v}_1 = (1, 0, -1) \)</span>
+<span class="math notranslate nohighlight">\( \mathbf{v}_2 = (0, 1, 2) \)</span></p>
+<p>These basis vectors mean that any row of <span class="math notranslate nohighlight">\( A \)</span> can be written as a linear combination of <span class="math notranslate nohighlight">\(\mathbf{v}_1\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}_2\)</span>.</p>
+<p>Let’s express each row of <span class="math notranslate nohighlight">\( A \)</span> as such a combination.</p>
+<p><strong>Row 1: <span class="math notranslate nohighlight">\( (1, 2, 3) \)</span></strong></p>
+<p>We want to find scalars <span class="math notranslate nohighlight">\( c_1 \)</span> and <span class="math notranslate nohighlight">\( c_2 \)</span> such that:</p>
+<p><span class="math notranslate nohighlight">\( (1, 2, 3) = c_1 (1, 0, -1) + c_2 (0, 1, 2) \)</span></p>
+<p>This leads to the system of equations:</p>
+<p>$ \begin{cases}
+c_1 = 1 \
+c_2 = 2 \</p>
+<ul class="simple">
+<li><p>c_1 + 2c_2 = 3
+\end{cases} $</p></li>
+</ul>
+<p>Let’s solve it step-by-step:</p>
+<ol class="arabic simple">
+<li><p>From the first equation: <span class="math notranslate nohighlight">\( c_1 = 1 \)</span>.</p></li>
+<li><p>From the second equation: <span class="math notranslate nohighlight">\( c_2 = 2 \)</span>.</p></li>
+<li><p>Check the third equation: <span class="math notranslate nohighlight">\( -1 + 2 \cdot 2 = -1 + 4 = 3 \)</span>.</p></li>
+</ol>
+<p>So, the combination for the first row is:</p>
+<p><span class="math notranslate nohighlight">\( (1, 2, 3) = 1 \cdot (1, 0, -1) + 2 \cdot (0, 1, 2) \)</span></p>
+<p>Let’s verify this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span> <span class="n">vector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+<p>The combinations for the second and third row have been calculated for you and are shown below:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\( (4, 5, 6) = 4 \cdot (1, 0, -1) + 5 \cdot (0, 1, 2) \)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\( (7, 8, 9) = 7 \cdot (1, 0, -1) + 8 \cdot (0, 1, 2) \)</span></p></li>
+</ul>
+<p>In summary, the basis vectors <span class="math notranslate nohighlight">\((1, 0, -1)\)</span> and <span class="math notranslate nohighlight">\((0, 1, 2)\)</span> can indeed be combined using appropriate scalars to reconstruct each row of matrix <span class="math notranslate nohighlight">\( A \)</span>.</p>
+<section id="why-basis-matters">
+<h2>Why Basis Matters<a class="headerlink" href="#why-basis-matters" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Compact Representation:</strong>  A basis gives you the most concise way to describe a vector space.</p></li>
+<li><p><strong>Coordinates:</strong> Every vector in the space gets a unique “address” (coordinates) with respect to a chosen basis.</p></li>
+<li><p><strong>Transformations:</strong> Basis vectors help understand how linear transformations (like rotations or reflections) work.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "sagemath"
+        },
+        kernelOptions: {
+            name: "sagemath",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'sagemath'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="07-span.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Span</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="09-subspaces.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Subspaces</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-basis-matters">Why Basis Matters</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Chris Snow
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

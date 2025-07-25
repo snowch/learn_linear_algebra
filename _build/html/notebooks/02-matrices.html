@@ -1,0 +1,684 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Matrices &#8212; Learn Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/02-matrices';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Gauss Method" href="03-gauss-method.html" />
+    <link rel="prev" title="Vectors" href="01-vectors.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00-start-here.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Learn Linear Algebra</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00-start-here.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01-vectors.html">Vectors</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-gauss-method.html">Gauss Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-solution-sets.html">Solution Sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-vector-spaces.html">Vector Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-linear-dependence.html">Linear Dependence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-span.html">Span</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08-basis.html">Basis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09-subspaces.html">Subspaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10-homogenous-ls.html">Homogenous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11-matrixspaces.html">Matrix Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12-transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13-nullspace.html">Nullspace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14-projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15-orthogonality.html">Orthogonality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16-determinants.html">Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17-eigenvalues.html">Eingenvalues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18-matrix-decomp.html">Matrix Decompositions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19-svd.html">SVD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="98-leftovers.html">Left overs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="99-quickref.html">Quick Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/02-matrices.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Matrices</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-linear-equations">Solving Linear Equations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solve-right-versus-solve-left">Solve right versus Solve left</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-are-qq-zz-rr-cc-etc">What are <code class="docutils literal notranslate"><span class="pre">QQ</span></code>, <code class="docutils literal notranslate"><span class="pre">ZZ</span></code>, <code class="docutils literal notranslate"><span class="pre">RR</span></code>, <code class="docutils literal notranslate"><span class="pre">CC</span></code>, etc?</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="matrices">
+<h1>Matrices<a class="headerlink" href="#matrices" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<div style="background-color:yellow; padding: 5px 10px 0px 10px; border: 1px solid black;">
+<p>Definition: <strong>Matrix</strong></p>
+<p>In linear algebra, a matrix is a rectangular array of numbers, symbols, or expressions, arranged in rows and columns. Matrices are fundamental in representing and solving linear equations, performing transformations, and various other applications in mathematics and engineering.</p>
+</div>
+<p>Matrices are used to compactly represent and manipulate linear systems. They allow us to solve complex problems efficiently and provide a framework for understanding higher-dimensional spaces.</p>
+</section>
+<section id="solving-linear-equations">
+<h2>Solving Linear Equations<a class="headerlink" href="#solving-linear-equations" title="Link to this heading">#</a></h2>
+<p>Let’s start by considering this System of Linear equations:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+x + 2y + 3z &amp;= 4 \\
+&amp; \\
+y + 2z &amp;= 3 \\
+&amp; \\
+z &amp;= 2
+\end{align*}
+\end{split}\]</div>
+<p>Let’s put this into Matrix format:</p>
+<div class="math notranslate nohighlight">
+\[
+Ax = b
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the first parameter &#39;3&#39; means use three rows</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr}
+1 & 2 & 3 \\
+0 & 1 & 2 \\
+0 & 0 & 1
+\end{array}\right)\)</html></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">show</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(4,\,3,\,2\right)\)</html></div></div>
+</div>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://doc.sagemath.org/html/en/reference/matrices/sage/matrix/constructor.html#sage.matrix.constructor.matrix">sage.matrix.constructor.matrixsage.matrix.constructor.matrix</a></p></li>
+<li><p><a class="reference external" href="https://doc.sagemath.org/html/en/reference/modules/sage/modules/free_module_element.html#sage.modules.free_module_element.vector">sage.modules.free_module_element.vector</a></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">solve_right</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0, -1, 2)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The output tells us the following values solve the equation:</p>
+<p><span class="math notranslate nohighlight">\(x = 0\)</span>, <span class="math notranslate nohighlight">\(y = -1\)</span>, and <span class="math notranslate nohighlight">\(z = 2\)</span>.</p>
+<p>A linear system may have no solution, one solution or many solutions.  We will explore this aspect in a subsequent notebook.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get the &#39;solution&#39; vector from solve_right</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">solve_right</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The solution vector contains the values for <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">z</span></code>.  We can plug those back into our system:</p>
+<p><span class="math notranslate nohighlight">\(As = b\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">*</span><span class="n">s</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(4, 3, 2)
+</pre></div>
+</div>
+</div>
+</div>
+<p>As expected, the result from <span class="math notranslate nohighlight">\(As\)</span> is equal to the value of <span class="math notranslate nohighlight">\(b\)</span> vector:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">*</span><span class="n">s</span> <span class="o">==</span> <span class="n">b</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+<p>Documentation: <a class="reference external" href="https://doc.sagemath.org/html/en/reference/matrices/sage/matrix/matrix2.html#sage.matrix.matrix2.Matrix.solve_right">sage.matrix.matrix2.Matrix.solve_right</a></p>
+</section>
+<section id="solve-right-versus-solve-left">
+<h2>Solve right versus Solve left<a class="headerlink" href="#solve-right-versus-solve-left" title="Link to this heading">#</a></h2>
+<p>In SageMath, <code class="docutils literal notranslate"><span class="pre">solve_right</span></code> and <code class="docutils literal notranslate"><span class="pre">solve_left</span></code> are methods used to solve matrix equations. The difference lies in which side of the equation the matrix is placed and which side the solution is returned.</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">solve_right</span></code>: This method is used to solve matrix equations of the form ( AX = B ), where ( A ) is the matrix and ( B ) is the right-hand side. In other words, you provide the matrix ( A ) and the result ( B ), and the method will return the solution ( X ).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solve_left</span></code>: This method is used to solve matrix equations of the form ( XA = B ), where ( A ) is the matrix and ( B ) is the right-hand side. Here, you provide the matrix ( A ) and the result ( B ), and the method returns the solution ( X ).</p></li>
+</ol>
+</section>
+<section id="what-are-qq-zz-rr-cc-etc">
+<h2>What are <code class="docutils literal notranslate"><span class="pre">QQ</span></code>, <code class="docutils literal notranslate"><span class="pre">ZZ</span></code>, <code class="docutils literal notranslate"><span class="pre">RR</span></code>, <code class="docutils literal notranslate"><span class="pre">CC</span></code>, etc?<a class="headerlink" href="#what-are-qq-zz-rr-cc-etc" title="Link to this heading">#</a></h2>
+<p>You will frequently see <code class="docutils literal notranslate"><span class="pre">matrix()</span></code> and <code class="docutils literal notranslate"><span class="pre">vector()</span></code> having the first parameter like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">vector</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">QQ</span></code> means Rational Numbers. Other number types are described below.</p>
+<div style="background-color:yellow; padding: 5px 10px 0px 10px; border: 1px solid black;">
+<p>Definition: <strong>Ring</strong></p>
+<p>In mathematics, a ring is an algebraic structure consisting of a set equipped with two binary operations: addition and multiplication. These operations must satisfy certain properties, such as associativity and distributivity. Rings generalize the concepts of arithmetic operations found in familiar number systems.</p>
+<p>The term “ring” is used because the operations of addition and multiplication form a structure that “rings” around itself, meaning the results of these operations always remain within the set, forming a closed loop or “ring.” This closed-loop nature is a key characteristic of rings, differentiating them from other algebraic structures like groups and fields.</p>
+<p>Many common sets of numbers naturally form rings:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(ZZ\)</span> - Integer Numbers</p></li>
+<li><p><span class="math notranslate nohighlight">\(RR\)</span> - Real Number</p></li>
+<li><p><span class="math notranslate nohighlight">\(QQ\)</span> - Rational Numbers</p></li>
+<li><p><span class="math notranslate nohighlight">\(CC\)</span> - Complex Numbers</p></li>
+<li><p><span class="math notranslate nohighlight">\(GF(x)\)</span> - Finite Field of size x</p></li>
+</ul>
+</div><p>Closely related to Rings are Fields:</p>
+<div style="background-color:yellow; padding: 5px 10px 0px 10px; border: 1px solid black;">
+<p>Definition: <strong>Field</strong></p>
+<p>A <strong>field is a special type of ring</strong> where not only addition and multiplication are defined and follow the standard arithmetic properties, but also every non-zero element has a multiplicative inverse. This means for every non-zero element <span class="math notranslate nohighlight">\(a\)</span> in a field, there exists an element <span class="math notranslate nohighlight">\(b\)</span> such that <span class="math notranslate nohighlight">\(a \cdot b = 1\)</span>. Fields are fundamental in algebra because they allow for division by non-zero elements, making them very versatile and powerful in solving equations and various mathematical problems.</p>
+<p>The term “field” reflects its broad applicability and utility in various areas of mathematics, much like how fields of study encompass wide areas of knowledge.</p>
+<p>Fields ensure that operations like addition, subtraction, multiplication, and division (except by zero) can be performed within the set, providing a robust framework for various algebraic and geometric concepts.</p>
+</div><p>You can change the type using <code class="docutils literal notranslate"><span class="pre">change_ring()</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">v</span> <span class="o">=</span> <span class="n">vector</span><span class="p">(</span><span class="n">QQ</span><span class="p">[</span><span class="s1">&#39;x,y&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mf">1..5</span><span class="p">])</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">change_ring</span><span class="p">(</span><span class="n">GF</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># display the current ring</span>
+<span class="n">v</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Vector space of dimension 5 over Finite Field of size 3
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here the output reports the Field type, Finite Field of size 3, i.e. <code class="docutils literal notranslate"><span class="pre">GF(3)</span></code>.</p>
+<p>We cover “Vector Space” and “Dimensions” in later lessons.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">])</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">change_ring</span><span class="p">(</span><span class="n">GF</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># display the current ring</span>
+<span class="n">A</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Full MatrixSpace of 2 by 2 dense matrices over Ring of integers modulo 5
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that both <code class="docutils literal notranslate"><span class="pre">v</span></code> (<code class="docutils literal notranslate"><span class="pre">GF(3)</span></code>) and <code class="docutils literal notranslate"><span class="pre">A</span></code> (<code class="docutils literal notranslate"><span class="pre">GF(5)</span></code>) are finite fields. The distinction between “finite field” and “ring of integers modulo 5” in the outputs may be a matter of how SageMath represents and labels the structures.</p>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://doc.sagemath.org/html/en/tutorial/tour_rings.html">Basic Rings</a></p></li>
+<li><p><a class="reference external" href="https://doc.sagemath.org/html/en/reference/modules/sage/modules/free_module_element.html#sage.modules.free_module_element.FreeModuleElement.change_ring">sage.modules.free_module_element.FreeModuleElement.change_ring (vector)</a></p></li>
+<li><p><a class="reference external" href="https://doc.sagemath.org/html/en/reference/matrices/sage/matrix/matrix0.html#sage.matrix.matrix0.Matrix.change_ring">sage.matrix.matrix0.Matrix.change_ring</a></p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "sagemath"
+        },
+        kernelOptions: {
+            name: "sagemath",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'sagemath'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01-vectors.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Vectors</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="03-gauss-method.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Gauss Method</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-linear-equations">Solving Linear Equations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solve-right-versus-solve-left">Solve right versus Solve left</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-are-qq-zz-rr-cc-etc">What are <code class="docutils literal notranslate"><span class="pre">QQ</span></code>, <code class="docutils literal notranslate"><span class="pre">ZZ</span></code>, <code class="docutils literal notranslate"><span class="pre">RR</span></code>, <code class="docutils literal notranslate"><span class="pre">CC</span></code>, etc?</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Chris Snow
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

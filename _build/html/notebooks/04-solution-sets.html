@@ -1,0 +1,1088 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Solution Sets &#8212; Learn Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/04-solution-sets';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Vector Spaces" href="05-vector-spaces.html" />
+    <link rel="prev" title="Gauss Method" href="03-gauss-method.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00-start-here.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Learn Linear Algebra</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00-start-here.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01-vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02-matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-gauss-method.html">Gauss Method</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Solution Sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-vector-spaces.html">Vector Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-linear-dependence.html">Linear Dependence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-span.html">Span</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08-basis.html">Basis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09-subspaces.html">Subspaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10-homogenous-ls.html">Homogenous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11-matrixspaces.html">Matrix Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12-transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13-nullspace.html">Nullspace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14-projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15-orthogonality.html">Orthogonality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16-determinants.html">Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17-eigenvalues.html">Eingenvalues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18-matrix-decomp.html">Matrix Decompositions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19-svd.html">SVD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="98-leftovers.html">Left overs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="99-quickref.html">Quick Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/04-solution-sets.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Solution Sets</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#determining-how-many-solutions-exist">Determining how many solutions exist</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unique-solution">Unique Solution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#infinite-solutions">Infinite Solutions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#no-solution">No Solution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solution-automation">Solution automation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Unique Solution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Infinite Solutions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">No Solution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="solution-sets">
+<h1>Solution Sets<a class="headerlink" href="#solution-sets" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>In linear algebra, a <strong>solution set</strong> is the collection of all possible values for variables that satisfy a system of linear equations. A solution set can represent a <strong>unique solution</strong>, <strong>infinitely many solutions</strong>, or can be empty, meaning <strong>no solutions</strong> exist. Solution sets help understand the relationships between equations and characterize the properties of linear systems. It’s called a “set” because it contains all valid solutions for a linear system.</p>
+<p>Let’s begin with our augmented RREF matrix from the previous section:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\displaystyle \left(\begin{array}{rrr|r}
+1 &amp; 0 &amp; 0 &amp; \frac{8}{9} \\
+0 &amp; 1 &amp; 0 &amp; \frac{7}{3} \\
+0 &amp; 0 &amp; 1 &amp; \frac{14}{9}
+\end{array}\right)
+\end{split}\]</div>
+<div style="background-color:yellow; padding: 5px 10px 0px 10px; border: 1px solid black;">
+Definitions:
+<ul class="simple">
+<li><p><strong>Coefficients</strong>: the columns to the left of the vertical bar</p></li>
+<li><p><strong>Constants</strong>: the column to the right of the vertical bar</p></li>
+<li><p><strong>Pivots</strong>:  a pivot element is a nonzero element that is the first nonzero entry in its row when using the Gaussian elimination method to convert the matrix into row echelon form or reduced row echelon form</p></li>
+</ul>
+</div>
+<br/>
+<p>In the above example, we have a pivot in each <strong>coefficient</strong> column.</p>
+<p>SageMath has a method <code class="docutils literal notranslate"><span class="pre">pivots()</span></code> to return the pivot locations for a matrix:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="o">/</span><span class="mi">9</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="o">/</span><span class="mi">3</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">14</span><span class="o">/</span><span class="mi">9</span><span class="p">]])</span>
+
+<span class="n">A</span><span class="o">.</span><span class="n">pivots</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0, 1, 2)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="determining-how-many-solutions-exist">
+<h2>Determining how many solutions exist<a class="headerlink" href="#determining-how-many-solutions-exist" title="Link to this heading">#</a></h2>
+<p>The following RREF’s show the three types of solutions that are possible:</p>
+<div style="display: flex;">
+<div style="flex: 1;">
+$$
+\left(\begin{array}{rr|r}
+1 & 0 & \frac{-2}{7} \\
+0 & 1 & \frac{4}{7} \\
+\end{array}\right)
+$$
+Unique Solution
+</div>
+<div style="margin-left: 20px; flex: 1;">
+$$
+\left(\begin{array}{rr|r}
+1 & \frac{2}{3} & \frac{7}{3} \\
+0 & 0 & 0
+\end{array}\right)
+$$
+Infinite Solutions
+</div>
+<div style="margin-left: 20px; flex: 1;">
+$$
+\left(\begin{array}{rr|r}
+1 & 0 & 2 \\
+0 & 1 & 3 \\
+0 & 0 & 1 \\
+\end{array}\right)
+$$
+No solutions
+</div>
+</div>
+<div style="background-color:yellow; padding: 5px 10px 0px 10px; border: 1px solid black;">
+Definitions:
+<ul class="simple">
+<li><p><strong>Unique Solution</strong>:  a unique solution has a pivot in all <strong>coefficient columns</strong></p></li>
+<li><p><strong>Infinite Solutions</strong>: infinite solutions have a <strong>row with no pivots</strong></p></li>
+<li><p><strong>No Solution</strong>: there are no solutions if there is a pivot in the <strong>constant column</strong></p></li>
+<li><p><strong>Consistent System</strong>:  a system of linear equations is considered consistent if it has at least one solution. This means there exists a set of values for the variables that satisfies all equations simultaneously</p></li>
+</ul>
+</div><p>Let’s elaborate on each of these</p>
+</section>
+<section id="unique-solution">
+<h2>Unique Solution<a class="headerlink" href="#unique-solution" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="n">A_aug</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">augment</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">subdivide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A_aug</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rr|r}
+3 & -2 & -2 \\
+1 & 4 & 2
+\end{array}\right)\)</html></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A_rref</span> <span class="o">=</span> <span class="n">A_aug</span><span class="o">.</span><span class="n">rref</span><span class="p">()</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A_rref</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rr|r}
+1 & 0 & -\frac{2}{7} \\
+0 & 1 & \frac{4}{7}
+\end{array}\right)\)</html></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A_rref</span><span class="o">.</span><span class="n">pivots</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0, 1)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We have a pivot in each coefficient column so this is a unique solution.</p>
+<p>Let’s verify there is only one solution, using <code class="docutils literal notranslate"><span class="pre">solve_right()</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">solve_right</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1"># note we are using the A matrix, not the augmented matrix A_aug</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-2/7, 4/7)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The solution to this linear system is:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x = -2/7\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(y = 4/7\)</span></p></li>
+</ul>
+<p>If we plot the linear system, we can see that the lines meet at exactly one point <span class="math notranslate nohighlight">\(x = -2/7, y = 4/7\)</span> and is therefore a unique solution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var</span><span class="p">(</span><span class="s1">&#39;x y&#39;</span><span class="p">)</span>
+
+<span class="n">equation1</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span> <span class="o">==</span> <span class="o">-</span><span class="mi">2</span>
+<span class="n">equation2</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="n">y</span> <span class="o">==</span> <span class="mi">2</span>
+
+<span class="c1"># Create the plots using implicit_plot</span>
+<span class="n">plot1</span> <span class="o">=</span> <span class="n">implicit_plot</span><span class="p">(</span><span class="n">equation1</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">gridlines</span><span class="o">=</span><span class="s1">&#39;faint&#39;</span><span class="p">)</span>
+<span class="n">plot2</span> <span class="o">=</span> <span class="n">implicit_plot</span><span class="p">(</span><span class="n">equation2</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">gridlines</span><span class="o">=</span><span class="s1">&#39;faint&#39;</span><span class="p">)</span>
+
+<span class="c1"># Combine plots and show with intersection point</span>
+<span class="p">(</span><span class="n">plot1</span> <span class="o">+</span> <span class="n">plot2</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Linear System Plot&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c6f9605aa5c2df5183ecefcae4737e41a6fcd0541b564672ca3c8a64ebc8b76f.png" src="../_images/c6f9605aa5c2df5183ecefcae4737e41a6fcd0541b564672ca3c8a64ebc8b76f.png" />
+</div>
+</div>
+</section>
+<section id="infinite-solutions">
+<h2>Infinite Solutions<a class="headerlink" href="#infinite-solutions" title="Link to this heading">#</a></h2>
+<p>Let’s start with this linear system.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+3x + 2y = 7 \\
+6x + 4y = 14
+\end{split}\]</div>
+<p>In this system, if you divide the second equation by 2, you get the first equation. However, the second equation is not a multiple of the first. These equations represent parallel lines with the same slope but different y-intercepts. Since they never intersect, they have infinitely many solutions, meaning any point on one of the lines satisfies both equations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">7</span><span class="p">,</span> <span class="mi">14</span><span class="p">])</span>
+
+<span class="n">A_aug</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">augment</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">subdivide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A_aug</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rr|r}
+3 & 2 & 7 \\
+6 & 4 & 14
+\end{array}\right)\)</html></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A_rref</span> <span class="o">=</span> <span class="n">A_aug</span><span class="o">.</span><span class="n">rref</span><span class="p">()</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A_rref</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rr|r}
+1 & \frac{2}{3} & \frac{7}{3} \\
+0 & 0 & 0
+\end{array}\right)\)</html></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A_rref</span><span class="o">.</span><span class="n">pivots</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0,)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can see that there is only one pivot - for the variable <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+<p>Because there is a <strong>row with no pivots</strong> this system has infinite solutions.</p>
+<p>In this case <code class="docutils literal notranslate"><span class="pre">y</span></code> is a <strong>free variable</strong> as it doesn’t have a pivot.</p>
+<p>By swapping terms so that <span class="math notranslate nohighlight">\(x\)</span> is dependent on <span class="math notranslate nohighlight">\(y\)</span>, we can see that: <span class="math notranslate nohighlight">\(x == -2/3*y + 7/3\)</span></p>
+<div style="background-color:yellow; padding: 5px 10px 0px 10px; border: 1px solid black;">
+<p>Definition: <strong>Free variable</strong></p>
+<p>In linear algebra, a free variable is a variable that can take on any value independently of other variables in a system of linear equations.</p>
+</div><p>When you have an equation like <span class="math notranslate nohighlight">\(x = -\frac{2}{3}y + \frac{7}{3}\)</span>, it represents a linear relationship between the variables <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>. In this equation, <span class="math notranslate nohighlight">\(x\)</span> is expressed in terms of <span class="math notranslate nohighlight">\(y\)</span>.</p>
+<p>For any real number you choose for <span class="math notranslate nohighlight">\(y\)</span>, you can calculate the corresponding value of <span class="math notranslate nohighlight">\(x\)</span> using the given relationship. Therefore, <strong>every real number you choose for <span class="math notranslate nohighlight">\(y\)</span> will yield a corresponding solution for <span class="math notranslate nohighlight">\(x\)</span></strong>, making the solution set infinite and continuous along a line with slope <span class="math notranslate nohighlight">\(-\frac{2}{3}\)</span> and y-intercept <span class="math notranslate nohighlight">\(\frac{7}{3}\)</span>.</p>
+<p>Here are two example solutions in this infinite solution set:</p>
+<p><strong>Example 1.</strong></p>
+<p>Let’s choose <span class="math notranslate nohighlight">\( y = 0 \)</span>. Using the equation <span class="math notranslate nohighlight">\( x = -\frac{2}{3}y + \frac{7}{3} \)</span>, we can calculate <span class="math notranslate nohighlight">\( x \)</span>:</p>
+<p><span class="math notranslate nohighlight">\(x = -\frac{2}{3}(0) + \frac{7}{3} = \frac{7}{3}\)</span>
+So, when <span class="math notranslate nohighlight">\( y = 0 \)</span>, <span class="math notranslate nohighlight">\( x = \frac{7}{3} \)</span>. Therefore, one solution is <span class="math notranslate nohighlight">\( (x, y) = \left(\frac{7}{3}, 0\right) \)</span>.</p>
+<p><strong>Example 2.</strong></p>
+<p>Now, let’s choose <span class="math notranslate nohighlight">\( y = 3 \)</span>. Using the same equation:</p>
+<p><span class="math notranslate nohighlight">\(x = -\frac{2}{3}(3) + \frac{7}{3} = -2 + \frac{7}{3} = \frac{1}{3}\)</span>
+So, when <span class="math notranslate nohighlight">\( y = 3 \)</span>, <span class="math notranslate nohighlight">\( x = \frac{1}{3} \)</span>. Another solution is <span class="math notranslate nohighlight">\( (x, y) = \left(\frac{1}{3}, 3\right) \)</span>.</p>
+<p>If we plot the linear system, we can see the lines overlap exactly, hence infinite solutions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the symbolic variables</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">var</span><span class="p">(</span><span class="s1">&#39;x y&#39;</span><span class="p">)</span>
+
+<span class="c1"># Define the equations</span>
+<span class="n">equation1</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">y</span> <span class="o">==</span> <span class="mi">6</span>
+<span class="n">equation2</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">6</span><span class="o">*</span><span class="n">y</span> <span class="o">==</span> <span class="mi">12</span>
+
+<span class="c1"># Create the plots using implicit_plot</span>
+<span class="n">plot1</span> <span class="o">=</span> <span class="n">implicit_plot</span><span class="p">(</span><span class="n">equation1</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">gridlines</span><span class="o">=</span><span class="s1">&#39;faint&#39;</span><span class="p">)</span>
+<span class="n">plot2</span> <span class="o">=</span> <span class="n">implicit_plot</span><span class="p">(</span><span class="n">equation2</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">gridlines</span><span class="o">=</span><span class="s1">&#39;faint&#39;</span><span class="p">)</span>
+
+<span class="c1"># Show plots side by side with equation text</span>
+<span class="p">(</span><span class="n">graphics_array</span><span class="p">([[</span><span class="n">plot1</span><span class="p">,</span> <span class="n">plot2</span><span class="p">]]))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/117077d1b1d9bbdfe2d717f265d97544f30e5d41e3352be4f4a9e3ffdfc6a3e6.png" src="../_images/117077d1b1d9bbdfe2d717f265d97544f30e5d41e3352be4f4a9e3ffdfc6a3e6.png" />
+</div>
+</div>
+</section>
+<section id="no-solution">
+<h2>No Solution<a class="headerlink" href="#no-solution" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">7</span><span class="p">,</span><span class="mi">12</span><span class="p">])</span>
+
+<span class="n">A_aug</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">augment</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">subdivide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A_aug</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rr|r}
+3 & 2 & 7 \\
+6 & 4 & 12
+\end{array}\right)\)</html></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A_rref</span> <span class="o">=</span> <span class="n">A_aug</span><span class="o">.</span><span class="n">rref</span><span class="p">()</span>
+<span class="n">show</span><span class="p">(</span><span class="n">A_rref</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rr|r}
+1 & \frac{2}{3} & 0 \\
+0 & 0 & 1
+\end{array}\right)\)</html></div></div>
+</div>
+<p>There is a pivot is in the <strong>constant column</strong> so there is no solution.</p>
+<p>We can also use the <code class="docutils literal notranslate"><span class="pre">pivots()</span></code> method to show this.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A_rref</span><span class="o">.</span><span class="n">pivots</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0, 2)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># if there is no solution solve_right raises &#39;ValueError: matrix equation has no solutions&#39;</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">A</span><span class="o">.</span><span class="n">solve_right</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1"># note we are using the A matrix, not the augmented matrix A_aug</span>
+<span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;matrix equation has no solutions&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>matrix equation has no solutions
+</pre></div>
+</div>
+</div>
+</div>
+<p>If we plot the linear system, we can see the lines are parallel and will never overlap.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var</span><span class="p">(</span><span class="s1">&#39;x y&#39;</span><span class="p">)</span>
+
+<span class="n">equation1</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span> <span class="o">==</span> <span class="mi">7</span>
+<span class="n">equation2</span> <span class="o">=</span> <span class="mi">6</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="n">y</span> <span class="o">==</span> <span class="mi">12</span>
+
+<span class="c1"># Create the plots using implicit_plot</span>
+<span class="n">plot1</span> <span class="o">=</span> <span class="n">implicit_plot</span><span class="p">(</span><span class="n">equation1</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">gridlines</span><span class="o">=</span><span class="s1">&#39;faint&#39;</span><span class="p">)</span>
+<span class="n">plot2</span> <span class="o">=</span> <span class="n">implicit_plot</span><span class="p">(</span><span class="n">equation2</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">gridlines</span><span class="o">=</span><span class="s1">&#39;faint&#39;</span><span class="p">)</span>
+
+<span class="c1"># Combine plots and show with intersection point</span>
+<span class="p">(</span><span class="n">plot1</span> <span class="o">+</span> <span class="n">plot2</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Linear System Plot&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ec6063f885ca0da614a79e9d79cf9db81b8020560786ddf4c6cc10341525326b.png" src="../_images/ec6063f885ca0da614a79e9d79cf9db81b8020560786ddf4c6cc10341525326b.png" />
+</div>
+</div>
+</section>
+<section id="solution-automation">
+<h2>Solution automation<a class="headerlink" href="#solution-automation" title="Link to this heading">#</a></h2>
+<p>This section shows a utility function for describing solution sets.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">solution_details</span><span class="p">(</span><span class="n">augmented_matrix</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">num_coeff_cols</span> <span class="o">=</span> <span class="n">augmented_matrix</span><span class="o">.</span><span class="n">subdivisions</span><span class="p">()[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">num_coeff_cols</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Subdivided augmented matrix required.&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Subdivided augmented matrix required.&quot;</span><span class="p">)</span>
+
+    <span class="n">pivots</span> <span class="o">=</span> <span class="n">augmented_matrix</span><span class="o">.</span><span class="n">pivots</span><span class="p">()</span>
+    <span class="n">const_col</span> <span class="o">=</span> <span class="n">num_coeff_cols</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix and RREF:&quot;</span><span class="p">)</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+
+    <span class="n">u</span> <span class="o">=</span> <span class="p">[</span><span class="n">augmented_matrix</span><span class="p">,</span> <span class="n">augmented_matrix</span><span class="o">.</span><span class="n">rref</span><span class="p">()]</span>
+    <span class="n">show</span><span class="p">(</span><span class="n">augmented_matrix</span><span class="p">,</span> <span class="n">augmented_matrix</span><span class="o">.</span><span class="n">rref</span><span class="p">())</span>
+
+    <span class="nb">print</span><span class="p">()</span>
+    
+    <span class="c1"># is RHS all zeros</span>
+    <span class="n">is_zero</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">component</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">augmented_matrix</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">is_zero</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Matrix is homogeneous, must be consistent (always at least one soln - the 0 vector).&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Matrix is not homogeneous - can be inconsistent.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">const_col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">in</span> <span class="n">pivots</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No Solution (Inconsistent - const col has pivot)&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pivots</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_coeff_cols</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unique Solution (Consistent, pivot position in each col)&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">pivots</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">num_coeff_cols</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Infinitely Many Solutions (Consistent, &gt;= 1 coeff col with no pivots)&#39;</span><span class="p">)</span>
+
+    <span class="n">solution</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">X_pivots</span><span class="p">,</span> <span class="n">X_free</span><span class="p">,</span> <span class="n">param_sol_dict</span> <span class="o">=</span> <span class="n">my_solve</span><span class="p">(</span><span class="n">augmented_matrix</span><span class="p">,</span> <span class="nb">vars</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Variables: &quot;</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Pivots (leading) variables: &quot;</span><span class="p">,</span> <span class="n">X_pivots</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Free variables: &quot;</span><span class="p">,</span> <span class="n">X_free</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">solution</span><span class="p">:</span>
+        <span class="c1"># flatten solution list</span>
+        <span class="kn">import</span> <span class="nn">operator</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">concat</span><span class="p">,</span> <span class="n">solution</span><span class="p">)</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Solution: &quot;</span><span class="p">)</span>
+        <span class="p">[</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">solution</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="p">)]</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">param_sol_dict</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Parametized solution vectors&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(particular + unrestricted combination)&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">param_sol_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">my_solve</span><span class="p">(</span><span class="n">augmented_matrix</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">augmented_matrix</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">augmented_matrix</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">dimensions</span><span class="p">()</span>
+    <span class="n">p</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">dimensions</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">m</span> <span class="o">!=</span> <span class="n">p</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;The matrices have different numbers of rows&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">vars</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="nb">vars</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Provided variables &#39;</span><span class="si">{</span><span class="nb">vars</span><span class="si">}</span><span class="s2">&#39; != number of columns &#39;</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">vars</span><span class="p">:</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="n">var</span><span class="p">(</span><span class="nb">vars</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="n">var</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)])</span>
+
+    <span class="n">X_pivots</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="n">var</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">A</span><span class="o">.</span><span class="n">pivots</span><span class="p">()])</span>
+    <span class="n">X_free</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="n">var</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">A</span><span class="o">.</span><span class="n">pivots</span><span class="p">()])</span>
+
+    <span class="n">sols</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">param_sol_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+        <span class="n">system</span> <span class="o">=</span> <span class="p">[</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">X</span> <span class="o">==</span> <span class="n">Y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">)]</span>
+        <span class="n">sol</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="o">*</span><span class="n">X_pivots</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sol</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sol</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">coefficients</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">rhs</span><span class="p">()</span><span class="o">.</span><span class="n">coefficient</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">X_free</span><span class="p">]</span>
+                <span class="n">constant_term</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">rhs</span><span class="p">()</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">(</span><span class="n">coeff</span> <span class="o">*</span> <span class="n">var</span> <span class="k">for</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">coefficients</span><span class="p">,</span> <span class="n">X_free</span><span class="p">))</span>
+                
+                <span class="n">coeff_var_pairs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">coeff</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span> <span class="k">for</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">coefficients</span><span class="p">,</span> <span class="n">X_free</span><span class="p">)]</span>
+                <span class="n">coeff_var_strings</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">coeff</span><span class="si">}{</span><span class="n">var</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">coeff_var_pairs</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_free</span><span class="p">):</span>
+                    <span class="n">param_sol_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">lhs</span><span class="p">())]</span> <span class="o">=</span> <span class="p">[</span><span class="n">constant_term</span><span class="p">,</span> <span class="n">coeff_var_strings</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_free</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">free_var</span> <span class="ow">in</span> <span class="n">X_free</span><span class="p">:</span>
+                    <span class="n">param_sol_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">free_var</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;1</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="n">free_var</span> <span class="k">else</span> <span class="sa">f</span><span class="s1">&#39;0</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">X_free</span><span class="p">]]</span>
+
+            <span class="n">sols</span> <span class="o">+=</span> <span class="n">sol</span>
+
+    <span class="k">return</span> <span class="n">sols</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">X_pivots</span><span class="p">,</span> <span class="n">X_free</span><span class="p">,</span> <span class="n">param_sol_dict</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id1">
+<h3>Unique Solution<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">vector</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">Maug</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">augment</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">subdivide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">solution_details</span><span class="p">(</span><span class="n">Maug</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matrix and RREF:
+</pre></div>
+</div>
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr|r}
+1 & 2 & 3 & 4 \\
+0 & 1 & 2 & 3 \\
+0 & 0 & 1 & 2
+\end{array}\right) \left(\begin{array}{rrr|r}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & -1 \\
+0 & 0 & 1 & 2
+\end{array}\right)\)</html></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matrix is not homogeneous - can be inconsistent.
+Unique Solution (Consistent, pivot position in each col)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variables: 
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> (x_0, x_1, x_2)
+Pivots (leading) variables:  (x_0, x_1, x_2)
+Free variables:  ()
+
+Solution: 
+  x_0 == 0
+  x_1 == -1
+  x_2 == 2
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id2">
+<h3>Infinite Solutions<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span>   <span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">vector</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">Maug</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">augment</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">subdivide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">solution_details</span><span class="p">(</span><span class="n">Maug</span><span class="p">,</span> <span class="n">var</span><span class="p">(</span><span class="s1">&#39;x y z w u&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matrix and RREF:
+</pre></div>
+</div>
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrrrr|r}
+2 & 1 & 0 & -1 & 0 & 4 \\
+0 & 1 & 0 & 1 & 1 & 4 \\
+1 & 0 & -1 & 2 & 0 & 0
+\end{array}\right) \left(\begin{array}{rrrrr|r}
+1 & 0 & 0 & -1 & -\frac{1}{2} & 0 \\
+0 & 1 & 0 & 1 & 1 & 4 \\
+0 & 0 & 1 & -3 & -\frac{1}{2} & 0
+\end{array}\right)\)</html></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matrix is not homogeneous - can be inconsistent.
+Infinitely Many Solutions (Consistent, &gt;= 1 coeff col with no pivots)
+Variables:  (x, y, z, w, u)
+Pivots (leading) variables:  (x, y, z)
+Free variables:  (w, u)
+
+Solution: 
+  x == 1/2*u + w
+  y == -u - w + 4
+  z == 1/2*u + 3*w
+
+Parametized solution vectors
+(particular + unrestricted combination)
+x:          0         1w       1/2u
+y:          4        -1w        -1u
+z:          0         3w       1/2u
+w:          0         1w         0u
+u:          0         0w         1u
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id3">
+<h3>No Solution<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">vector</span><span class="p">(</span><span class="n">QQ</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">Maug</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">augment</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">subdivide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">solution_details</span><span class="p">(</span><span class="n">Maug</span><span class="p">,</span> <span class="n">var</span><span class="p">(</span><span class="s1">&#39;a b c&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matrix and RREF:
+</pre></div>
+</div>
+<div class="output text_html"><html>\(\displaystyle \left(\begin{array}{rrr|r}
+1 & 2 & 3 & 4 \\
+0 & 1 & 2 & 3 \\
+0 & 0 & 0 & 1
+\end{array}\right) \left(\begin{array}{rrr|r}
+1 & 0 & -1 & 0 \\
+0 & 1 & 2 & 0 \\
+0 & 0 & 0 & 1
+\end{array}\right)\)</html></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matrix is not homogeneous - can be inconsistent.
+No Solution (Inconsistent - const col has pivot)
+Variables:  (a, b, c)
+Pivots (leading) variables:  (a, b)
+Free variables:  (c)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Infinitely many solutions are typically associated with underdetermined systems, where there are fewer equations than variables.</p></li>
+<li><p>No solutions are usually associated with overdetermined systems, where there are more equations than variables.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "sagemath"
+        },
+        kernelOptions: {
+            name: "sagemath",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'sagemath'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="03-gauss-method.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Gauss Method</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="05-vector-spaces.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Vector Spaces</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#determining-how-many-solutions-exist">Determining how many solutions exist</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unique-solution">Unique Solution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#infinite-solutions">Infinite Solutions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#no-solution">No Solution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solution-automation">Solution automation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Unique Solution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Infinite Solutions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">No Solution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Chris Snow
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

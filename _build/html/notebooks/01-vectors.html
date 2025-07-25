@@ -1,0 +1,1257 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Vectors &#8212; Learn Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/01-vectors';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Matrices" href="02-matrices.html" />
+    <link rel="prev" title="Introduction" href="00-start-here.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00-start-here.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Learn Linear Algebra</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00-start-here.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02-matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-gauss-method.html">Gauss Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-solution-sets.html">Solution Sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-vector-spaces.html">Vector Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-linear-dependence.html">Linear Dependence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-span.html">Span</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08-basis.html">Basis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09-subspaces.html">Subspaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10-homogenous-ls.html">Homogenous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11-matrixspaces.html">Matrix Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12-transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13-nullspace.html">Nullspace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14-projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15-orthogonality.html">Orthogonality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16-determinants.html">Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17-eigenvalues.html">Eingenvalues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18-matrix-decomp.html">Matrix Decompositions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19-svd.html">SVD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="98-leftovers.html">Left overs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="99-quickref.html">Quick Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/01-vectors.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Vectors</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#d-vector">2D Vector</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graphics">Graphics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-combinations">Linear Combinations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalar-multiplication">Scalar multiplication</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-addition">Vector addition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalar-multiplication-and-vector-addition-combined">Scalar multiplication and Vector Addition “Combined”</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#n-dim-vectors">n-Dim Vectors</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="vectors">
+<h1>Vectors<a class="headerlink" href="#vectors" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Welcome to the fundamentals of linear algebra! This section will introduce you to the basic concepts and operations that are essential for understanding linear algebra. Whether you’re new to the subject or looking to refresh your knowledge, this guide will help you grasp the core ideas through both theoretical explanations and practical examples.</p>
+<div style="background-color:yellow; padding: 5px 10px 0px 10px; border: 1px solid black;">
+<p>Definition: <strong>Vector</strong></p>
+<p>We begin with the basics of vectors. A vector in mathematics is an object that has both magnitude and direction. In the context of linear algebra, vectors are essential building blocks used in various operations and applications.</p>
+</div></section>
+<section id="d-vector">
+<h2>2D Vector<a class="headerlink" href="#d-vector" title="Link to this heading">#</a></h2>
+<p>First start with 2D to keep concepts simple for understanding basic functionality.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">v</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;sage.modules.vector_integer_dense.Vector_integer_dense&#39;&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Sagemath vector() docs: <a class="reference external" href="https://doc.sagemath.org/html/en/reference/modules/sage/modules/vector_integer_dense.html">sage.modules.vector_integer_dense.Vector_integer_dense</a></p>
+</section>
+<section id="graphics">
+<h2>Graphics<a class="headerlink" href="#graphics" title="Link to this heading">#</a></h2>
+<p>Plot our vector.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">v</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b201091520e77cf7eb6ab85960fb72f54d1b12745228b0fb1e90bc0f00bb3884.png" src="../_images/b201091520e77cf7eb6ab85960fb72f54d1b12745228b0fb1e90bc0f00bb3884.png" />
+</div>
+</div>
+<p>Sagemath Graphics docs: <a class="reference external" href="https://doc.sagemath.org/html/en/reference/plotting/sage/plot/graphics.html">sage.plot.graphics.Graphics</a></p>
+</section>
+<section id="linear-combinations">
+<h2>Linear Combinations<a class="headerlink" href="#linear-combinations" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><p>The linear combination of the vectors  <span class="math notranslate nohighlight">\(𝐯_1,𝐯_2,…,𝐯_𝑛\)</span> with scalars  <span class="math notranslate nohighlight">\(𝑐_1,𝑐_2,…,𝑐_𝑛\)</span> is the vector</p>
+<p><span class="math notranslate nohighlight">\(𝑐_1𝐯_1+𝑐_2𝐯_2+…+𝑐_𝑛𝐯_𝑛.\)</span></p>
+<p>The scalars <span class="math notranslate nohighlight">\(𝑐_1,𝑐_2,…,𝑐_𝑛\)</span> are called the weights of the linear combination.</p>
+</div></blockquote>
+<section id="scalar-multiplication">
+<h3>Scalar multiplication<a class="headerlink" href="#scalar-multiplication" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">v1</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">c1</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">v1xc1</span> <span class="o">=</span> <span class="n">c1</span><span class="o">*</span><span class="n">v1</span>
+
+<span class="n">plots</span> <span class="o">=</span> <span class="n">v1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">v1xc1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span> 
+<span class="n">show</span><span class="p">(</span><span class="n">plots</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/5488c92727b9dc7a142b50f486813161f869a29691e43c6b69729417ea8eaaa8.png" src="../_images/5488c92727b9dc7a142b50f486813161f869a29691e43c6b69729417ea8eaaa8.png" />
+</div>
+</div>
+</section>
+<section id="vector-addition">
+<h3>Vector addition<a class="headerlink" href="#vector-addition" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">v1</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">v2</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">v1_v2</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v2</span>
+
+<span class="n">plots</span> <span class="o">=</span> <span class="n">v1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">v2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">v1_v2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">plots</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7f685ec6ec06fd7adaaf224a1d75e460c58c3dd30f4b5829b5b08a711760fe42.png" src="../_images/7f685ec6ec06fd7adaaf224a1d75e460c58c3dd30f4b5829b5b08a711760fe42.png" />
+</div>
+</div>
+</section>
+<section id="scalar-multiplication-and-vector-addition-combined">
+<h3>Scalar multiplication and Vector Addition “Combined”<a class="headerlink" href="#scalar-multiplication-and-vector-addition-combined" title="Link to this heading">#</a></h3>
+<p>Linear Combination = both Scalar multiplication and Vector Addition</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">v1</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">c1</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">v2</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">lin_combination</span> <span class="o">=</span> <span class="n">c1</span><span class="o">*</span><span class="n">v1</span> <span class="o">+</span> <span class="n">c2</span><span class="o">*</span><span class="n">v2</span>
+
+<span class="n">plots</span> <span class="o">=</span> \
+    <span class="n">v1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span> <span class="o">+</span> \
+    <span class="p">(</span><span class="n">c1</span><span class="o">*</span><span class="n">v1</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span> <span class="o">+</span> \
+    <span class="n">v2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span> <span class="o">+</span> \
+    <span class="n">lin_combination</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+
+<span class="n">show</span><span class="p">(</span><span class="n">plots</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/37419e3c004d9d64353b0541fa7e9db5bf091c34eff78532a35e7999caecd7c6.png" src="../_images/37419e3c004d9d64353b0541fa7e9db5bf091c34eff78532a35e7999caecd7c6.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="n-dim-vectors">
+<h2>n-Dim Vectors<a class="headerlink" href="#n-dim-vectors" title="Link to this heading">#</a></h2>
+<p>Let’s extend to 3D to</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">vector</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vplot</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="n">ticks</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+
+<span class="c1"># the following code only works when the notebook is run in the sagemath environment</span>
+<span class="n">show</span><span class="p">(</span><span class="n">vplot</span><span class="p">,</span> <span class="n">gridlines</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;&lt;/title&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=viewport content=&quot;width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0&quot;&gt;
+&lt;style&gt;
+
+    body { margin: 0px; overflow: hidden; }
+
+    #menu-container { position: absolute; bottom: 30px; right: 40px; cursor: default; }
+
+    #menu-message { position: absolute; bottom: 0px; right: 0px; white-space: nowrap;
+                    display: none; background-color: #F5F5F5; padding: 10px; }
+
+    #menu-content { position: absolute; bottom: 0px; right: 0px;
+                    display: none; background-color: #F5F5F5; border-bottom: 1px solid black;
+                    border-right: 1px solid black; border-left: 1px solid black; }
+
+    #menu-content div { border-top: 1px solid black; padding: 10px; white-space: nowrap; }
+
+    #menu-content div:hover { background-color: #FEFEFE; }
+
+    .dark-theme #menu-container { color: white; }
+
+    .dark-theme #menu-message { background-color: #181818; }
+
+    .dark-theme #menu-content { background-color: #181818; border-color: white; }
+
+    .dark-theme #menu-content div { border-color: white; }
+
+    .dark-theme #menu-content div:hover { background-color: #303030; }
+
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;script src=&quot;/nbextensions/threejs-sage/r122/three.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  if ( !window.THREE ) document.write(&#x27; \
+&lt;script src=&quot;https://cdn.jsdelivr.net/gh/sagemath/threejs-sage@r122/build/three.min.js&quot;&gt;&lt;\/script&gt; \
+            &#x27;);
+&lt;/script&gt;
+        
+&lt;script&gt;
+
+    var options = {&quot;animate&quot;: false, &quot;animationControls&quot;: true, &quot;aspectRatio&quot;: [1.0, 1.0, 1.0], &quot;autoScaling&quot;: [false, false, false], &quot;autoPlay&quot;: true, &quot;axes&quot;: false, &quot;axesLabels&quot;: [&quot;x&quot;, &quot;y&quot;, &quot;z&quot;], &quot;axesLabelsStyle&quot;: null, &quot;decimals&quot;: 2, &quot;delay&quot;: 20, &quot;frame&quot;: true, &quot;loop&quot;: true, &quot;projection&quot;: &quot;perspective&quot;, &quot;theme&quot;: &quot;light&quot;, &quot;viewpoint&quot;: false};
+    var animate = options.animate;
+
+    if ( options.theme === &#x27;dark&#x27; )
+        document.body.className = &#x27;dark-theme&#x27;;
+
+    var scene = new THREE.Scene();
+
+    var renderer = new THREE.WebGLRenderer( { antialias: true, preserveDrawingBuffer: true } );
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setClearColor( options.theme === &#x27;dark&#x27; ? 0 : 0xffffff, 1 );
+    document.body.appendChild( renderer.domElement );
+
+    var b = [{&quot;x&quot;:-1.0, &quot;y&quot;:0.0, &quot;z&quot;:0.0}, {&quot;x&quot;:1.0, &quot;y&quot;:4.0, &quot;z&quot;:0.0}]; // bounds
+
+    if ( b[0].x === b[1].x ) {
+        b[0].x -= 1;
+        b[1].x += 1;
+    }
+    if ( b[0].y === b[1].y ) {
+        b[0].y -= 1;
+        b[1].y += 1;
+    }
+    if ( b[0].z === b[1].z ) {
+        b[0].z -= 1;
+        b[1].z += 1;
+    }
+
+    var rxRange = Math.sqrt( Math.pow( b[1].z - b[0].z, 2 )
+                            + Math.pow( b[1].y - b[0].y, 2 ) );
+    var ryRange = Math.sqrt( Math.pow( b[1].x - b[0].x, 2 )
+                            + Math.pow( b[1].z - b[0].z, 2 ) );
+    var rzRange = Math.sqrt( Math.pow( b[1].x - b[0].x, 2 )
+                            + Math.pow( b[1].y - b[0].y, 2 ) );
+    var xRange = b[1].x - b[0].x;
+    var yRange = b[1].y - b[0].y;
+    var zRange = b[1].z - b[0].z;
+
+    var ar = options.aspectRatio;
+    var a = [ ar[0], ar[1], ar[2] ]; // aspect multipliers
+
+    var autoScaling = options.autoScaling;
+    var autoAspect = 2.5;
+    if ( xRange &gt; autoAspect * rxRange &amp;&amp; autoScaling[0] ) a[0] = autoAspect * rxRange / xRange;
+    if ( yRange &gt; autoAspect * ryRange &amp;&amp; autoScaling[1] ) a[1] = autoAspect * ryRange / yRange;
+    if ( zRange &gt; autoAspect * rzRange &amp;&amp; autoScaling[2] ) a[2] = autoAspect * rzRange / zRange;
+
+    // Distance from (xMid,yMid,zMid) to any corner of the bounding box, after applying aspectRatio
+    var midToCorner = Math.sqrt( a[0]*a[0]*xRange*xRange + a[1]*a[1]*yRange*yRange + a[2]*a[2]*zRange*zRange ) / 2;
+
+    var xMid = ( b[0].x + b[1].x ) / 2;
+    var yMid = ( b[0].y + b[1].y ) / 2;
+    var zMid = ( b[0].z + b[1].z ) / 2;
+
+    var box = new THREE.Geometry();
+    box.vertices.push( new THREE.Vector3( a[0]*b[0].x, a[1]*b[0].y, a[2]*b[0].z ) );
+    box.vertices.push( new THREE.Vector3( a[0]*b[1].x, a[1]*b[1].y, a[2]*b[1].z ) );
+    var boxMesh = new THREE.Line( box );
+    var boxColor = options.theme === &#x27;dark&#x27; ? &#x27;white&#x27; : &#x27;black&#x27;;
+    if ( options.frame ) scene.add( new THREE.BoxHelper( boxMesh, boxColor ) );
+
+    if ( options.axesLabels ) {
+
+        var d = options.decimals; // decimals
+        var offsetRatio = 0.1;
+        var al = options.axesLabels;
+        var als = options.axesLabelsStyle || [{}, {}, {}];
+
+        var offset = offsetRatio * a[1]*( b[1].y - b[0].y );
+        var xm = xMid.toFixed(d);
+        if ( /^-0.?0*$/.test(xm) ) xm = xm.substr(1);
+        addLabel( al[0] + &#x27;=&#x27; + xm, a[0]*xMid, a[1]*b[1].y+offset, a[2]*b[0].z, als[0] );
+        addLabel( ( b[0].x ).toFixed(d), a[0]*b[0].x, a[1]*b[1].y+offset, a[2]*b[0].z, als[0] );
+        addLabel( ( b[1].x ).toFixed(d), a[0]*b[1].x, a[1]*b[1].y+offset, a[2]*b[0].z, als[0] );
+
+        var offset = offsetRatio * a[0]*( b[1].x - b[0].x );
+        var ym = yMid.toFixed(d);
+        if ( /^-0.?0*$/.test(ym) ) ym = ym.substr(1);
+        addLabel( al[1] + &#x27;=&#x27; + ym, a[0]*b[1].x+offset, a[1]*yMid, a[2]*b[0].z, als[1] );
+        addLabel( ( b[0].y ).toFixed(d), a[0]*b[1].x+offset, a[1]*b[0].y, a[2]*b[0].z, als[1] );
+        addLabel( ( b[1].y ).toFixed(d), a[0]*b[1].x+offset, a[1]*b[1].y, a[2]*b[0].z, als[1] );
+
+        var offset = offsetRatio * a[1]*( b[1].y - b[0].y );
+        var zm = zMid.toFixed(d);
+        if ( /^-0.?0*$/.test(zm) ) zm = zm.substr(1);
+        addLabel( al[2] + &#x27;=&#x27; + zm, a[0]*b[1].x, a[1]*b[0].y-offset, a[2]*zMid, als[2] );
+        addLabel( ( b[0].z ).toFixed(d), a[0]*b[1].x, a[1]*b[0].y-offset, a[2]*b[0].z, als[2] );
+        addLabel( ( b[1].z ).toFixed(d), a[0]*b[1].x, a[1]*b[0].y-offset, a[2]*b[1].z, als[2] );
+
+    }
+
+    function addLabel( text, x, y, z, style ) {
+
+        var color = style.color || &#x27;black&#x27;;
+        var fontSize = style.fontSize || 14;
+        var fontFamily = style.fontFamily || &#x27;monospace&#x27;;
+        var fontStyle = style.fontStyle || &#x27;normal&#x27;;
+        var fontWeight = style.fontWeight || &#x27;normal&#x27;;
+        var opacity = style.opacity || 1;
+
+        if ( options.theme === &#x27;dark&#x27; )
+            if ( color === &#x27;black&#x27; || color === &#x27;#000000&#x27; )
+                color = &#x27;white&#x27;;
+
+        if ( Array.isArray( fontStyle ) ) {
+            fontFamily = fontFamily.map( function( f ) {
+                // Need to put quotes around fonts that have whitespace in their names.
+                return /\s/.test( f ) ? &#x27;&quot;&#x27; + f + &#x27;&quot;&#x27; : f;
+            }).join(&#x27;, &#x27;);
+        }
+
+        var canvas = document.createElement( &#x27;canvas&#x27; );
+        var context = canvas.getContext( &#x27;2d&#x27; );
+        var pixelRatio = Math.round( window.devicePixelRatio );
+
+        // For example: italic bold 20px &quot;Times New Roman&quot;, Georgia, serif
+        var font = [fontStyle, fontWeight, fontSize + &#x27;px&#x27;, fontFamily].join(&#x27; &#x27;);
+
+        context.font = font;
+        var width = context.measureText( text ).width;
+        var height = fontSize;
+
+        // The dimensions of the canvas&#x27;s underlying image data need to be powers
+        // of two in order for the resulting texture to support mipmapping.
+        canvas.width = THREE.MathUtils.ceilPowerOfTwo( width * pixelRatio );
+        canvas.height = THREE.MathUtils.ceilPowerOfTwo( height * pixelRatio );
+
+        // Re-compute the unscaled dimensions after the power of two conversion.
+        width = canvas.width / pixelRatio;
+        height = canvas.height / pixelRatio;
+
+        canvas.style.width = width + &#x27;px&#x27;;
+        canvas.style.height = height + &#x27;px&#x27;;
+
+        context.scale( pixelRatio, pixelRatio );
+        context.fillStyle = color;
+        context.font = font; // Must be set again after measureText.
+        context.textAlign = &#x27;center&#x27;;
+        context.textBaseline = &#x27;middle&#x27;;
+        context.fillText( text, width/2, height/2 );
+
+        var texture = new THREE.Texture( canvas );
+        texture.needsUpdate = true;
+
+        var materialOptions = { map: texture, sizeAttenuation: false, depthWrite: false };
+        if ( opacity &lt; 1 ) {
+            // Setting opacity=1 would cause the texture&#x27;s alpha component to be
+            // discarded, giving the text a black background instead of the
+            // background being transparent.
+            materialOptions.opacity = opacity;
+        }
+        var sprite = new THREE.Sprite( new THREE.SpriteMaterial( materialOptions ) );
+        sprite.position.set( x, y, z );
+
+        // Scaling factor, chosen somewhat arbitrarily so that the size of the text
+        // is consistent with previously generated plots.
+        var scale = 1/625;
+        if ( options.projection === &#x27;orthographic&#x27; ) {
+            scale = midToCorner/256; // Needs to scale along with the plot itself.
+        }
+        sprite.scale.set( scale * width, scale * height, 1 );
+
+        scene.add( sprite );
+
+        return sprite;
+
+    }
+
+    if ( options.axes ) scene.add( new THREE.AxesHelper( Math.min( a[0]*b[1].x, a[1]*b[1].y, a[2]*b[1].z ) ) );
+
+    var camera = createCamera();
+    camera.up.set( 0, 0, 1 );
+    camera.position.set( a[0]*xMid, a[1]*yMid, a[2]*zMid );
+
+    // camera is positioned so that the line from the camera to the center
+    // of the bounding sphere of the objects makes an angle of 60 degrees with x-axis
+    // and an angle of 30 degrees with z-axis and the field of view of the camera looking
+    // at the center has an angle of 45 degrees.
+    const sin8 = Math.sin(Math.PI / 8);
+    const sin5 = Math.sin(Math.PI / 5);
+    const cos5 = Math.cos(Math.PI / 5);
+    const sin3 = Math.sin(Math.PI / 3);
+    const cos3 = Math.cos(Math.PI / 3);
+    var r = midToCorner / sin8;
+    var offset = new THREE.Vector3( r * sin3 * cos5, r * sin3 * sin5, r * cos3 );
+
+    if ( options.viewpoint ) {
+
+        var aa = options.viewpoint;
+        var axis = new THREE.Vector3( aa[0][0], aa[0][1], aa[0][2] ).normalize();
+        var angle = aa[1] * Math.PI / 180;
+        var q = new THREE.Quaternion().setFromAxisAngle( axis, angle ).inverse();
+
+        offset.set( 0, 0, offset.length() );
+        offset.applyQuaternion( q );
+
+    }
+
+    camera.position.add( offset );
+
+    function createCamera() {
+
+        var aspect = window.innerWidth / window.innerHeight;
+
+        // Scale the near and far clipping planes along with the overall plot size.
+        var nearClip = 0.01 * midToCorner;
+        var farClip = 100 * midToCorner;
+
+        if ( options.projection === &#x27;orthographic&#x27; ) {
+            var camera = new THREE.OrthographicCamera( -1, 1, 1, -1, -farClip, farClip );
+            updateCameraAspect( camera, aspect );
+            return camera;
+        }
+
+        return new THREE.PerspectiveCamera( 45, aspect, nearClip, farClip );
+
+    }
+
+    function updateCameraAspect( camera, aspect ) {
+
+        if ( camera.isPerspectiveCamera ) {
+            camera.aspect = aspect;
+        } else if ( camera.isOrthographicCamera ) {
+            // Fit the camera frustum to the bounding box&#x27;s diagonal so that the entire plot fits
+            // within at the default zoom level and camera position.
+            if ( aspect &gt; 1 ) { // Wide window
+                camera.top = midToCorner;
+                camera.right = midToCorner * aspect;
+            } else { // Tall or square window
+                camera.top = midToCorner / aspect;
+                camera.right = midToCorner;
+            }
+            camera.bottom = -camera.top;
+            camera.left = -camera.right;
+        }
+
+        camera.updateProjectionMatrix();
+
+    }
+
+    var lights = [{&quot;x&quot;:-5, &quot;y&quot;:3, &quot;z&quot;:0, &quot;color&quot;:&quot;#7f7f7f&quot;, &quot;parent&quot;:&quot;camera&quot;}];
+    for ( var i=0 ; i &lt; lights.length ; i++ ) {
+        var light = new THREE.DirectionalLight( lights[i].color, 1 );
+        light.position.set( a[0]*lights[i].x, a[1]*lights[i].y, a[2]*lights[i].z );
+        if ( lights[i].parent === &#x27;camera&#x27; ) {
+            light.target.position.set( a[0]*xMid, a[1]*yMid, a[2]*zMid );
+            scene.add( light.target );
+            camera.add( light );
+        } else scene.add( light );
+    }
+    scene.add( camera );
+
+    var ambient = {&quot;color&quot;:&quot;#7f7f7f&quot;};
+    scene.add( new THREE.AmbientLight( ambient.color, 1 ) );
+
+    var controls = new THREE.OrbitControls( camera, renderer.domElement );
+    controls.target.set( a[0]*xMid, a[1]*yMid, a[2]*zMid );
+    controls.addEventListener( &#x27;change&#x27;, function() { if ( !animate ) render(); } );
+
+    window.addEventListener( &#x27;resize&#x27;, function() {
+
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        updateCameraAspect( camera, window.innerWidth / window.innerHeight );
+        if ( window.rescaleFatLines ) rescaleFatLines();
+        if ( !animate ) render();
+
+    } );
+
+    var texts = [];
+    for ( var i=0 ; i &lt; texts.length ; i++ ) addText( texts[i] );
+
+    function addText( json ) {
+        var sprite = addLabel( json.text, a[0]*json.x, a[1]*json.y, a[2]*json.z, json );
+        sprite.userData = json;
+    }
+
+    var points = [];
+    for ( var i=0 ; i &lt; points.length ; i++ ) addPoint( points[i] );
+
+    function addPoint( json ) {
+
+        var geometry = new THREE.Geometry();
+        var v = json.point;
+        geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
+
+        var canvas = document.createElement( &#x27;canvas&#x27; );
+        canvas.width = 128;
+        canvas.height = 128;
+
+        var context = canvas.getContext( &#x27;2d&#x27; );
+        context.arc( 64, 64, 64, 0, 2 * Math.PI );
+        context.fillStyle = json.color;
+        context.fill();
+
+        var texture = new THREE.Texture( canvas );
+        texture.needsUpdate = true;
+
+        var transparent = json.opacity &lt; 1 ? true : false;
+        var size = camera.isOrthographicCamera ? json.size : json.size/100;
+        var material = new THREE.PointsMaterial( { size: size, map: texture,
+                                                   transparent: transparent, opacity: json.opacity,
+                                                   alphaTest: .1 } );
+
+        var c = new THREE.Vector3();
+        geometry.computeBoundingBox();
+        geometry.boundingBox.getCenter( c );
+        geometry.translate( -c.x, -c.y, -c.z );
+
+        var mesh = new THREE.Points( geometry, material );
+        mesh.position.set( c.x, c.y, c.z );
+        mesh.userData = json;
+        scene.add( mesh );
+
+    }
+
+    var lines = [];
+    for ( var i=0 ; i &lt; lines.length ; i++ ) addLine( lines[i] );
+
+    function addLine( json ) {
+
+        var geometry = new THREE.Geometry();
+        for ( var i=0 ; i &lt; json.points.length ; i++ ) {
+            var v = json.points[i];
+            geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
+        }
+
+        var c = new THREE.Vector3();
+        geometry.computeBoundingBox();
+        geometry.boundingBox.getCenter( c );
+        geometry.translate( -c.x, -c.y, -c.z );
+
+        var transparent = json.opacity &lt; 1 ? true : false;
+        var materialOptions = { color: json.color, linewidth: json.linewidth,
+                                transparent: transparent, opacity: json.opacity };
+
+        var mesh;
+        if ( json.linewidth &gt; 1 &amp;&amp; window.createFatLineStrip ) {
+            mesh = createFatLineStrip( geometry, materialOptions );
+        } else {
+            var material = new THREE.LineBasicMaterial( materialOptions );
+            mesh = new THREE.Line( geometry, material );
+        }
+
+        mesh.position.set( c.x, c.y, c.z );
+        mesh.userData = json;
+        scene.add( mesh );
+
+    }
+
+    var surfaces = [{&quot;vertices&quot;: [{&quot;x&quot;: 0.9597507764050038, &quot;y&quot;: 1.9195015528100077, &quot;z&quot;: 1.3140876396988758e-16}, {&quot;x&quot;: 0.9661231605578653, &quot;y&quot;: 1.916315360733577, &quot;z&quot;: -0.007017186064260278}, {&quot;x&quot;: 0.9557507764050038, &quot;y&quot;: 1.9215015528100077, &quot;z&quot;: -0.008944271909999028}, {&quot;x&quot;: 0.9676891264008435, &quot;y&quot;: 1.9155323778120878, &quot;z&quot;: 0.004607412416904252}, {&quot;x&quot;: 0.9582845623641639, &quot;y&quot;: 1.9202346598304278, &quot;z&quot;: 0.00986472353809559}, {&quot;x&quot;: 0.9509062562971429, &quot;y&quot;: 1.9239238128639382, &quot;z&quot;: 0.0014893220192601227}, {&quot;x&quot;: 0.006372384152861439, &quot;y&quot;: -0.0031861920764307185, &quot;z&quot;: -0.00701718606426041}, {&quot;x&quot;: -0.003999999999999999, &quot;y&quot;: 0.0020000000000000005, &quot;z&quot;: -0.00894427190999916}, {&quot;x&quot;: 0.007938349995839575, &quot;y&quot;: -0.003969174997919787, &quot;z&quot;: 0.004607412416904121}, {&quot;x&quot;: -0.0014662140408399952, &quot;y&quot;: 0.0007331070204199966, &quot;z&quot;: 0.009864723538095458}, {&quot;x&quot;: -0.008844520107861017, &quot;y&quot;: 0.004422260053930508, &quot;z&quot;: 0.0014893220192599913}, {&quot;x&quot;: 0.0, &quot;y&quot;: 0.0, &quot;z&quot;: 0.0}], &quot;faces&quot;: [[0, 1, 2], [0, 3, 1], [0, 4, 3], [0, 5, 4], [0, 2, 5], [2, 1, 6, 7], [1, 3, 8, 6], [3, 4, 9, 8], [4, 5, 10, 9], [5, 2, 7, 10], [7, 6, 11], [6, 8, 11], [8, 9, 11], [9, 10, 11], [10, 7, 11]], &quot;color&quot;: &quot;#ff0000&quot;, &quot;opacity&quot;: 1.0}, {&quot;vertices&quot;: [{&quot;x&quot;: 1.0, &quot;y&quot;: 2.0, &quot;z&quot;: 1.3691967456605067e-16}, {&quot;x&quot;: 0.9788679288635882, &quot;y&quot;: 1.9099429765807154, &quot;z&quot;: -0.021051558192781098}, {&quot;x&quot;: 0.9477507764050038, &quot;y&quot;: 1.9255015528100077, &quot;z&quot;: -0.026832815729997343}, {&quot;x&quot;: 0.9835658263925225, &quot;y&quot;: 1.9075940278162482, &quot;z&quot;: 0.013822237250712492}, {&quot;x&quot;: 0.9553521342824839, &quot;y&quot;: 1.9217008738712678, &quot;z&quot;: 0.029594170614286503}, {&quot;x&quot;: 0.9332172160814208, &quot;y&quot;: 1.9327683329717993, &quot;z&quot;: 0.004467966057780106}, {&quot;x&quot;: 0.9597507764050038, &quot;y&quot;: 1.9195015528100077, &quot;z&quot;: 1.3140876396988758e-16}], &quot;faces&quot;: [[0, 1, 2], [0, 3, 1], [0, 4, 3], [0, 5, 4], [0, 2, 5], [2, 1, 6], [1, 3, 6], [3, 4, 6], [4, 5, 6], [5, 2, 6]], &quot;color&quot;: &quot;#ff0000&quot;, &quot;opacity&quot;: 1.0}, {&quot;vertices&quot;: [{&quot;x&quot;: -0.97817179374673, &quot;y&quot;: 3.91268717498692, &quot;z&quot;: 2.4695649475179257e-16}, {&quot;x&quot;: -0.96849357478307, &quot;y&quot;: 3.9151067297278352, &quot;z&quot;: -0.0006912543288576033}, {&quot;x&quot;: -0.9758188525702595, &quot;y&quot;: 3.913275410281038, &quot;z&quot;: -0.009701425001453073}, {&quot;x&quot;: -0.9745432666530949, &quot;y&quot;: 3.913594306760329, &quot;z&quot;: 0.009274206331348915}, {&quot;x&quot;: -0.9856074596374238, &quot;y&quot;: 3.910828258514247, &quot;z&quot;: 0.006423029060311044}, {&quot;x&quot;: -0.9863958150898022, &quot;y&quot;: 3.910631169651152, &quot;z&quot;: -0.00530455606134805}, {&quot;x&quot;: 0.009678218963660145, &quot;y&quot;: 0.0024195547409150363, &quot;z&quot;: -0.0006912543288578503}, {&quot;x&quot;: 0.002352941176470588, &quot;y&quot;: 0.0005882352941176477, &quot;z&quot;: -0.00970142500145332}, {&quot;x&quot;: 0.0036285270936351655, &quot;y&quot;: 0.0009071317734087908, &quot;z&quot;: 0.009274206331348669}, {&quot;x&quot;: -0.007435665890693739, &quot;y&quot;: -0.0018589164726734353, &quot;z&quot;: 0.0064230290603107965}, {&quot;x&quot;: -0.008224021343072157, &quot;y&quot;: -0.002056005335768039, &quot;z&quot;: -0.005304556061348297}, {&quot;x&quot;: 0.0, &quot;y&quot;: 0.0, &quot;z&quot;: 0.0}], &quot;faces&quot;: [[0, 1, 2], [0, 3, 1], [0, 4, 3], [0, 5, 4], [0, 2, 5], [2, 1, 6, 7], [1, 3, 8, 6], [3, 4, 9, 8], [4, 5, 10, 9], [5, 2, 7, 10], [7, 6, 11], [6, 8, 11], [8, 9, 11], [9, 10, 11], [10, 7, 11]], &quot;color&quot;: &quot;#008000&quot;, &quot;opacity&quot;: 1.0}, {&quot;vertices&quot;: [{&quot;x&quot;: -1.0, &quot;y&quot;: 4.0, &quot;z&quot;: 2.5246740534795566e-16}, {&quot;x&quot;: -0.9491371368557496, &quot;y&quot;: 3.919945839209665, &quot;z&quot;: -0.0020737629865733038}, {&quot;x&quot;: -0.9711129702173182, &quot;y&quot;: 3.914451880869273, &quot;z&quot;: -0.02910427500435971}, {&quot;x&quot;: -0.9672862124658246, &quot;y&quot;: 3.9154085703071466, &quot;z&quot;: 0.027822618994046255}, {&quot;x&quot;: -1.0004787914188111, &quot;y&quot;: 3.9071104255689, &quot;z&quot;: 0.01926908718093264}, {&quot;x&quot;: -1.0028438577759464, &quot;y&quot;: 3.906519158979616, &quot;z&quot;: -0.015913668184044646}, {&quot;x&quot;: -0.97817179374673, &quot;y&quot;: 3.91268717498692, &quot;z&quot;: 2.4695649475179257e-16}], &quot;faces&quot;: [[0, 1, 2], [0, 3, 1], [0, 4, 3], [0, 5, 4], [0, 2, 5], [2, 1, 6], [1, 3, 6], [3, 4, 6], [4, 5, 6], [5, 2, 6]], &quot;color&quot;: &quot;#008000&quot;, &quot;opacity&quot;: 1.0}];
+    for ( var i=0 ; i &lt; surfaces.length ; i++ ) addSurface( surfaces[i] );
+
+    function addSurface( json ) {
+
+        var useFaceColors = &#x27;faceColors&#x27; in json ? true : false;
+
+        var geometry = new THREE.Geometry();
+        for ( var i=0 ; i &lt; json.vertices.length ; i++ ) {
+            var v = json.vertices[i];
+            geometry.vertices.push( new THREE.Vector3( a[0]*v.x, a[1]*v.y, a[2]*v.z ) );
+        }
+        for ( var i=0 ; i &lt; json.faces.length ; i++ ) {
+            var f = json.faces[i];
+            for ( var j=0 ; j &lt; f.length - 2 ; j++ ) {
+                var face = new THREE.Face3( f[0], f[j+1], f[j+2] );
+                if ( useFaceColors ) face.color.set( json.faceColors[i] );
+                geometry.faces.push( face );
+            }
+        }
+        geometry.computeVertexNormals();
+
+        var side = json.singleSide ? THREE.FrontSide : THREE.DoubleSide;
+        var transparent = json.opacity &lt; 1 ? true : false;
+        var depthWrite = &#x27;depthWrite&#x27; in json ? json.depthWrite : !transparent;
+        var flatShading = json.useFlatShading ? json.useFlatShading : false;
+
+        var material = new THREE.MeshPhongMaterial( { side: side,
+                                     color: useFaceColors ? &#x27;white&#x27; : json.color,
+                                     vertexColors: useFaceColors ? THREE.FaceColors : THREE.NoColors,
+                                     transparent: transparent, opacity: json.opacity,
+                                     shininess: 20, flatShading: flatShading,
+                                     depthWrite: depthWrite } );
+
+        var c = new THREE.Vector3();
+        geometry.computeBoundingBox();
+        geometry.boundingBox.getCenter( c );
+        geometry.translate( -c.x, -c.y, -c.z );
+
+        var mesh = new THREE.Mesh( geometry, material );
+        mesh.position.set( c.x, c.y, c.z );
+        if ( transparent &amp;&amp; json.renderOrder ) mesh.renderOrder = json.renderOrder;
+        mesh.userData = json;
+        scene.add( mesh );
+
+        if ( json.showMeshGrid ) addSurfaceMeshGrid( json );
+
+    }
+
+    function addSurfaceMeshGrid( json ) {
+
+        var geometry = new THREE.Geometry();
+
+        for ( var i=0 ; i &lt; json.faces.length ; i++ ) {
+            var f = json.faces[i];
+            for ( var j=0 ; j &lt; f.length ; j++ ) {
+                var k = j === f.length-1 ? 0 : j+1;
+                var v1 = json.vertices[f[j]];
+                var v2 = json.vertices[f[k]];
+                // vertices in opposite directions on neighboring faces
+                var nudge = f[j] &lt; f[k] ? .0005*zRange : -.0005*zRange;
+                geometry.vertices.push( new THREE.Vector3( a[0]*v1.x, a[1]*v1.y, a[2]*(v1.z+nudge) ) );
+                geometry.vertices.push( new THREE.Vector3( a[0]*v2.x, a[1]*v2.y, a[2]*(v2.z+nudge) ) );
+            }
+        }
+
+        var c = new THREE.Vector3();
+        geometry.computeBoundingBox();
+        geometry.boundingBox.getCenter( c );
+        geometry.translate( -c.x, -c.y, -c.z );
+
+        var gridColor = options.theme === &#x27;dark&#x27; ? &#x27;white&#x27; : &#x27;black&#x27;;
+        var linewidth = json.linewidth || 1;
+        var materialOptions = { color: gridColor, linewidth: linewidth };
+
+        var mesh;
+        if ( linewidth &gt; 1 &amp;&amp; window.createFatLineSegments ) {
+            mesh = createFatLineSegments( geometry, materialOptions );
+        } else {
+            var material = new THREE.LineBasicMaterial( materialOptions );
+            mesh = new THREE.LineSegments( geometry, material );
+        }
+
+        mesh.position.set( c.x, c.y, c.z );
+        mesh.userData = json;
+        scene.add( mesh );
+
+    }
+
+    function render() {
+
+        if ( window.updateAnimation ) animate = updateAnimation();
+        if ( animate ) requestAnimationFrame( render );
+
+        renderer.render( scene, camera );
+
+    }
+
+    render();
+    controls.update();
+    if ( !animate ) render();
+
+
+    // menu functions
+
+    function toggleMenu() {
+
+        var m = document.getElementById( &#x27;menu-content&#x27; );
+        if ( m.style.display === &#x27;block&#x27; ) m.style.display = &#x27;none&#x27;
+        else m.style.display = &#x27;block&#x27;;
+
+    }
+
+
+    function saveAsPNG() {
+
+        var a = document.body.appendChild( document.createElement( &#x27;a&#x27; ) );
+        a.href = renderer.domElement.toDataURL( &#x27;image/png&#x27; );
+        a.download = &#x27;screenshot&#x27;;
+        a.click();
+
+    }
+
+    function saveAsHTML() {
+
+        toggleMenu(); // otherwise visible in output
+        event.stopPropagation();
+
+        var blob = new Blob( [ &#x27;&lt;!DOCTYPE html&gt;\n&#x27; + document.documentElement.outerHTML ] );
+        var a = document.body.appendChild( document.createElement( &#x27;a&#x27; ) );
+        a.href = window.URL.createObjectURL( blob );
+        a.download = suggestFilename();
+        a.click();
+
+        function suggestFilename() {
+            if ( !document.title ) {
+                return &#x27;graphic.html&#x27;;
+            } else if ( /\.html?$/i.test( document.title ) ) {
+                return document.title; // already ends in .htm or .html
+            } else {
+                return document.title + &#x27;.html&#x27;;
+            }
+        }
+
+    }
+
+    function getViewpoint() {
+
+        function roundTo( x, n ) { return +x.toFixed(n); }
+
+        var v = camera.quaternion.inverse();
+        var r = Math.sqrt( v.x*v.x + v.y*v.y + v.z*v.z );
+        var axis = [ roundTo( v.x / r, 4 ), roundTo( v.y / r, 4 ), roundTo( v.z / r, 4 ) ];
+        var angle = roundTo( 2 * Math.atan2( r, v.w ) * 180 / Math.PI, 2 );
+
+        var textArea = document.createElement( &#x27;textarea&#x27; );
+        textArea.textContent = JSON.stringify( axis ) + &#x27;,&#x27; + angle;
+        textArea.style.csstext = &#x27;position: absolute; top: -100%&#x27;;
+        document.body.append( textArea );
+        textArea.select();
+        document.execCommand( &#x27;copy&#x27; );
+
+        var m = document.getElementById( &#x27;menu-message&#x27; );
+        m.innerHTML = &#x27;Viewpoint copied to clipboard&#x27;;
+        m.style.display = &#x27;block&#x27;;
+        setTimeout( function() { m.style.display = &#x27;none&#x27;; }, 2000 );
+
+    }
+
+    function getCamera() {
+
+        function roundTo( x, n ) { return +x.toFixed(n); }
+
+        var pos = camera.position;
+        var pos_r = [ roundTo( pos.x, 4 ), roundTo( pos.y, 4 ), roundTo( pos.z, 4 ) ];
+   //     var up = camera.up; // up is always (0,0,1)
+        var textArea = document.createElement(&#x27;textarea&#x27;);
+        var cam_position = JSON.stringify(pos_r);
+        textArea.textContent = &#x27;,camera_position=&#x27; + cam_position;
+        textArea.style.csstext = &#x27;position: absolute; top: -100%&#x27;;
+        document.body.append( textArea );
+        textArea.select();
+        document.execCommand( &#x27;copy&#x27; );
+
+        var m = document.getElementById( &#x27;menu-message&#x27; );
+        m.innerHTML = &#x27;Camera position &#x27;+ cam_position+&#x27; copied to clipboard&#x27;;
+        m.style.display = &#x27;block&#x27;;
+        setTimeout( function() { m.style.display = &#x27;none&#x27;; }, 2000 );
+
+    }
+
+&lt;/script&gt;
+
+&lt;div id=&quot;menu-container&quot; onclick=&quot;toggleMenu()&quot;&gt;&amp;#x24d8;
+&lt;div id=&quot;menu-message&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;menu-content&quot;&gt;
+&lt;div onclick=&quot;saveAsPNG()&quot;&gt;Save as PNG&lt;/div&gt;
+&lt;div onclick=&quot;saveAsHTML()&quot;&gt;Save as HTML&lt;/div&gt;
+&lt;div onclick=&quot;getCamera()&quot;&gt;Get camera&lt;/div&gt;
+&lt;div onclick=&quot;getViewpoint()&quot;&gt;Get viewpoint&lt;/div&gt;
+&lt;div&gt;Close Menu&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+
+
+&lt;/body&gt;
+&lt;/html&gt;
+"
+        width="100%"
+        height="400"
+        style="border: 0;">
+</iframe>
+</div></div>
+</div>
+<p style="text-align: center;">
+    (You can interactively rotate, zoom, and pan the above 3D plots using the mouse)
+</p></section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "sagemath"
+        },
+        kernelOptions: {
+            name: "sagemath",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'sagemath'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="00-start-here.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="02-matrices.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Matrices</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#d-vector">2D Vector</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graphics">Graphics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-combinations">Linear Combinations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalar-multiplication">Scalar multiplication</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-addition">Vector addition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalar-multiplication-and-vector-addition-combined">Scalar multiplication and Vector Addition “Combined”</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#n-dim-vectors">n-Dim Vectors</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Chris Snow
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
