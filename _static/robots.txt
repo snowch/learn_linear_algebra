@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://snowch.github.io/learn_linear_algebra/sitemap.xml
