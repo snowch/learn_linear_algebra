@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>SageMathCell</title>
+    <script src="https://sagecell.sagemath.org/static/embedded_sagecell.js"></script>
+    <script>
+    // Make the div with id 'mycell' a Sage cell
+    sagecell.makeSagecell({inputLocation:  '#mycell',
+                           template:       sagecell.templates.minimal,
+                           evalButtonText: 'Activate',
+			 linked: true});
+    // Make *any* div with class 'compute' a Sage cell
+    sagecell.makeSagecell({inputLocation: 'div.compute',
+                           evalButtonText: 'Evaluate',
+			 linked: true});
+    </script>
+  </head>
+  <body>
+  <h1>Embedded Sage Cells</h1>
+
+
+<h2>Your own computations</h2>
+Type your own Sage computation below and click “Evaluate”.
+    <div class="compute"><script type="text/x-sage">
+def solution_details(augmented_matrix, vars=None):
+    try:
+        num_coeff_cols = augmented_matrix.subdivisions()[1][0]
+        if not num_coeff_cols > 0:
+            raise ValueError("Subdivided augmented matrix required.")
+    except (AttributeError, IndexError):
+        raise ValueError("Subdivided augmented matrix required.")
+
+    pivots = augmented_matrix.pivots()
+    const_col = num_coeff_cols + 1
+
+    print("Matrix and RREF:")
+    import sys
+
+    u = [augmented_matrix, augmented_matrix.rref()]
+    show(augmented_matrix, augmented_matrix.rref())
+
+    print()
+    
+    # is RHS all zeros
+    is_zero = all(component == 0 for component in augmented_matrix[:, -1])
+    if is_zero:
+        print('Matrix is homogeneous, must be consistent (always at least one soln - the 0 vector).')
+    else:
+        print('Matrix is not homogeneous - can be inconsistent.')
+
+    if (const_col - 1) in pivots:
+        print('No Solution (Inconsistent - const col has pivot)')
+    else:
+        if len(pivots) == num_coeff_cols:
+            print("Unique Solution (Consistent, pivot position in each col)")
+        elif len(pivots) < num_coeff_cols:
+            print('Infinitely Many Solutions (Consistent, >= 1 coeff col with no pivots)')
+
+    solution, X, X_pivots, X_free, param_sol_dict = my_solve(augmented_matrix, vars)
+    
+    print("Variables: ", X)
+    print("Pivots (leading) variables: ", X_pivots)
+    print("Free variables: ", X_free)
+    print()
+
+    if solution:
+        # flatten solution list
+        import operator
+        solution = reduce(operator.concat, solution)
+        
+        print("Solution: ")
+        [print(f'  {s}') for s in solution if len(solution)]
+        print()
+
+    if param_sol_dict:
+        print("Parametized solution vectors")
+        print("(particular + unrestricted combination)")
+        for key, value in param_sol_dict.items():
+            print(f"{key}: {str(value[0]).rjust(10)} {' '.join(str(v).rjust(10) for v in value[1])}")
+        print()
+
+def my_solve(augmented_matrix, vars=None):
+    A = augmented_matrix[:, :-1]
+    Y = augmented_matrix[:, -1]
+
+    m, n = A.dimensions()
+    p, q = Y.dimensions()
+
+    if m != p:
+        raise RuntimeError("The matrices have different numbers of rows")
+
+    if vars and len(vars) != n:
+        raise RuntimeError(f"Provided variables '{vars}' != number of columns '{n}'")
+
+    if vars:
+        X = vector([var(vars[i]) for i in range(n)])
+    else:
+        X = vector([var(f"x_{i}") for i in range(n)])
+
+    X_pivots = vector([var(X[i]) for i in range(n) if i in A.pivots()])
+    X_free = vector([var(X[i]) for i in range(n) if i not in A.pivots()])
+
+    sols = []
+    param_sol_dict = {}
+    for j in range(q):
+        system = [A[i] * X == Y[i, j] for i in range(m)]
+        sol = solve(system, *X_pivots)
+
+        if len(sol):
+            for s in sol[0]:
+                coefficients = [s.rhs().coefficient(var) for var in X_free]
+                constant_term = s.rhs() - sum(coeff * var for coeff, var in zip(coefficients, X_free))
+                
+                coeff_var_pairs = [(coeff, var) for coeff, var in zip(coefficients, X_free)]
+                coeff_var_strings = [f"{coeff}{var}" for coeff, var in coeff_var_pairs]
+
+                if len(X_free):
+                    param_sol_dict[str(s.lhs())] = [constant_term, coeff_var_strings]
+
+            if len(X_free):
+                for free_var in X_free:
+                    param_sol_dict[str(free_var)] = [0, [f'1{var}' if var == free_var else f'0{var}' for var in X_free]]
+
+            sols += sol
+
+    return sols, X, X_pivots, X_free, param_sol_dict
+</script></div>
+
+
+    <div class="compute"><script type="text/x-sage">
+M = matrix(QQ, 3, [1,2,3,0,1,2,0,0,1])
+v = vector(QQ, [4,3,2])
+Maug = M.augment(v, subdivide=True)
+solution_details(Maug)
+</script></div>
+  </body>
+</html>
