@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Learn linear algebra by moving vectors, exploring span, and transforming space. Twenty-one guided lessons from vectors to PCA. No code required. Optional Python runs locally in your browser.">
+<meta name="theme-color" content="#f7f8f5"><title>Learn Linear Algebra — Interactive course</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23284033'/%3E%3Cpath d='M10 29V13m0 16h19M10 29L28 10' stroke='%23d5f59b' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<noscript><p class="noscript">Enable JavaScript to use the interactive course. Python remains optional.</p></noscript>
+<a class="skip" href="#main">Skip to lesson</a>
+<aside class="sidebar" aria-label="Course navigation">
+<a class="brand" href="#vectors" aria-label="Learn Linear Algebra home"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#284033"/><path d="M10 25V12m0 13h14M10 25L24 10m-6 0h6v6" fill="none" stroke="#d5f59b" stroke-width="1.8"/></svg><span class="brand-title">Learn<br>Linear Algebra<span class="brand-dot">.</span></span></a>
+<div class="course-label">THE INTERACTIVE COURSE</div><h2 class="course-name">Linear algebra,<br>one discovery at a time.</h2>
+<div class="progress-label"><span>Your progress</span><span id="progress-text">0 / 21</span></div><div class="progress-track"><div id="progress-bar"></div></div>
+<label class="course-search"><span class="sr-only">Find a lesson</span><input type="search" id="lesson-search" placeholder="Find a lesson…" autocomplete="off"></label>
+<nav id="lessons" aria-label="All 21 lessons"></nav><p id="lessons-empty" hidden>No matching lesson. Try another term.</p>
+<label class="mobile-lesson-picker">YOUR COURSE<select id="lesson-select" aria-label="Choose a lesson"></select></label>
+<div class="sidebar-bottom"><button id="export" data-export class="text-button">↓ Export your progress</button><span id="save-state">Saved on this device</span><a href="https://snowch.github.io/learn_linear_algebra/notebooks/00-start-here.html" target="_blank" rel="noopener">Inspired by Chris Snow’s course ↗</a></div>
+</aside>
+<div class="workspace">
+<header class="topbar"><span>THE LEARNING LAB <span class="breadcrumb">/ <span id="breadcrumb">Vectors & combinations</span></span></span><div class="topbar-actions"><button class="reference-button" id="quick-reference" data-reference>Quick reference ↗</button><span class="local-badge"><i></i> Runs in your browser</span></div></header>
+<main id="main" tabindex="-1"><div class="course-complete" id="course-complete" hidden><strong>All 21 lessons completed.</strong> You have checked 21 experiments and 42 questions. Revisit any playground to keep exploring.</div>
+<div class="lesson-meta"><span id="lesson-index">LESSON 01</span><span class="meta-line"></span><span id="duration">~8 MINUTES</span><span class="no-code">No code needed</span></div>
+<h1 id="title">Small arrows.<br>Big ideas.</h1><p class="intro" id="intro"></p><p class="lesson-path" id="lesson-path"></p>
+<div class="lesson-tabs" role="tablist" aria-label="Lesson sections"><button role="tab" id="tab-explore" aria-selected="true" aria-controls="panel-explore" data-tab="explore">Explore <span>01</span></button><button role="tab" id="tab-practice" aria-selected="false" aria-controls="panel-practice" data-tab="practice" tabindex="-1">Check your understanding <span>02</span></button><button role="tab" id="tab-notes" aria-selected="false" aria-controls="panel-notes" data-tab="notes" tabindex="-1">The idea, in words <span>03</span></button></div>
+<section role="tabpanel" id="panel-explore" aria-labelledby="tab-explore">
+<div class="experiment-head"><div><span class="eyebrow">YOUR PLAYGROUND</span><h2 id="experiment-title"></h2></div><button id="reset" class="subtle-button">↺ Reset</button></div>
+<div class="experiment">
+<div class="graph-wrap"><div class="graph-toolbar"><span id="graph-type">THE COORDINATE PLANE</span><label><input type="checkbox" id="show-grid" checked> Grid</label></div><svg id="graph" viewBox="0 0 640 480" role="img" aria-labelledby="graph-title graph-description"><title id="graph-title">Interactive vector diagram</title><desc id="graph-description"></desc></svg><div class="graph-legend" id="legend"></div></div>
+<div class="controls"><div class="controls-heading"><h3 id="controls-title">Mix your vectors</h3><span class="small-symbol">↗</span></div><div id="controls-body"></div><div class="result-box"><span class="eyebrow" id="result-label">THE RESULT</span><div id="result-equation"></div><p id="result-caption"></p></div></div>
+</div>
+<p class="graph-description" id="graph-text" aria-live="polite"></p>
+<div class="discovery"><span class="discovery-icon">✧</span><div><span class="eyebrow">SOMETHING TO NOTICE</span><p id="discovery-text"></p></div></div>
+<section class="experiment-mission" aria-labelledby="mission-heading"><span class="eyebrow">MAKE IT HAPPEN</span><h3 id="mission-heading">Your experiment challenge</h3><p id="mission-text"></p><div class="question-actions"><button id="check-mission" class="primary-button">Check my experiment</button><button id="mission-hint" class="text-button">Give me a hint</button></div><div class="feedback" id="mission-feedback" role="status" hidden></div></section>
+<div class="explore-bottom"><p id="prompt"></p><button class="primary-button" id="go-practice">Test your intuition <span>→</span></button></div>
+</section>
+<section role="tabpanel" id="panel-practice" aria-labelledby="tab-practice" hidden><div class="section-intro"><span class="eyebrow">PAUSE. PREDICT. THEN CHECK.</span><h2>Make the idea your own.</h2><p>You don’t need Python—or a perfect first answer.</p></div><div id="questions"></div><div class="practice-footer"><span id="practice-status" aria-live="polite"></span><button id="next-lesson" class="primary-button">Next lesson →</button></div></section>
+<section role="tabpanel" id="panel-notes" aria-labelledby="tab-notes" hidden><div class="section-intro"><span class="eyebrow">CONNECT THE PICTURE TO THE MATH</span><h2 id="notes-title"></h2></div><div id="notes-body" class="notes-body"></div><button class="primary-button" id="notes-practice">Try the questions →</button></section>
+<section class="python-section" aria-label="Optional Python playground"><button id="python-toggle" class="python-toggle" aria-expanded="false" aria-controls="python-panel"><span class="code-icon">&lt;/&gt;</span><span><strong>Curious what this looks like in Python?</strong><small>Same mathematics. An optional new perspective.</small></span><span class="optional">OPTIONAL</span><span id="python-chevron">＋</span></button><div id="python-panel" hidden><div class="python-notice"><span id="python-status" role="status">Python starts when you open this panel.</span><span>Pyodide · WebAssembly · local execution</span></div><p class="editor-help">This starts with your exploration values. Edits run in a separate workspace and won’t change the diagram. First load downloads Python from jsDelivr.</p><label for="python-code" class="sr-only">Editable Python code</label><textarea maxlength="100000" id="python-code" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea><div class="python-actions"><button id="run-python" class="primary-button" disabled>Run Python ▷</button><button id="stop-python" class="subtle-button" disabled>Stop</button><button id="restore-python" class="text-button">Restore exploration values</button><span id="code-saved">Edits saved on this device</span></div><pre id="python-output" aria-label="Python output" aria-live="polite">Your output will appear here.</pre></div></section>
+<div class="lesson-navigation"><button id="previous-lesson" class="subtle-button">← Previous lesson</button><span id="lesson-position"></span><button id="next-bottom" class="primary-button">Continue to next lesson →</button></div>
+<footer class="page-footer"><span>A little exploration goes a long way.</span><div class="progress-tools"><button class="footer-export" data-export>↓ Export progress</button><button class="footer-export" id="import-button">↑ Import progress</button><input id="import-file" type="file" accept="application/json,.json" hidden></div><span>LINEAR ALGEBRA / <span id="footer-lesson">01</span></span></footer><p class="import-status" id="import-status" role="status"></p>
+</main></div>
+<dialog id="reference-dialog" aria-labelledby="reference-title"><div class="reference-header"><div><span class="eyebrow">KEEP THE CONNECTIONS CLOSE</span><h2 id="reference-title">Your linear algebra reference</h2></div><button id="close-reference" class="subtle-button">Close ×</button></div><div id="reference-body" class="notes-body"></div></dialog>
+<script type="module" src="./app.js"></script>
+</body></html>

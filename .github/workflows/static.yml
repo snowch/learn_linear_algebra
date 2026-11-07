@@ -1,28 +1,20 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Deploy book and interactive course to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
@@ -32,23 +24,50 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Set up Node for the interactive course
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Verify the interactive course
+        working-directory: interactive
+        run: |
+          npm test
+          node --check dist/app.js
+          node --check dist/python-worker.js
+
+      - name: Set up Python for the original book
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          pip install jupyter-book
+      - name: Install the compatible Jupyter Book renderer
+        run: pip install 'jupyter-book>=1,<2'
 
-      - name: Build JupyterBook
+      - name: Render the original book using stored notebook outputs
         run: |
-          jupyter-book build .
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+          config = yaml.safe_load(Path('_config.yml').read_text())
+          config.setdefault('execute', {})['execute_notebooks'] = 'off'
+          config['exclude_patterns'] = [*config.get('exclude_patterns', []), 'interactive/**']
+          Path('/tmp/linear-algebra-pages.yml').write_text(yaml.safe_dump(config))
+          PY
+          jupyter-book build . --config /tmp/linear-algebra-pages.yml
 
-      - name: Setup Pages
+      - name: Add the browser-local interactive course
+        run: |
+          mkdir -p _build/html/interactive
+          cp -R interactive/dist/. _build/html/interactive/
+          touch _build/html/.nojekyll
+          test -s _build/html/interactive/index.html
+          test -s _build/html/interactive/python-worker.js
+
+      - name: Set up Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Upload the complete site
         uses: actions/upload-pages-artifact@v3
         with:
           path: '_build/html'
