@@ -8,3 +8,4 @@ execute:
 exclude_patterns: ['README.md']
 html:
   extra_path: ['_static']
+  extra_footer: 'Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license">CC BY-NC-SA 4.0</a>. See the <a href="https://github.com/snowch/learn_linear_algebra/blob/main/LICENSE">repository license</a>.'
