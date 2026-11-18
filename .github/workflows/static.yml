@@ -3,22 +3,19 @@ name: Deploy book and interactive course to Pages
 on:
   push:
     branches: ["main"]
+  pull_request:
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,6 +32,8 @@ jobs:
           npm test
           node --check dist/app.js
           node --check dist/python-worker.js
+          npm install --prefix "$RUNNER_TEMP/linear-algebra-tests" --no-audit --no-fund linkedom@0.18.12
+          node scripts/verify-dom.mjs "$RUNNER_TEMP/linear-algebra-tests/node_modules/linkedom/worker.js"
 
       - name: Set up Python for the original book
         uses: actions/setup-python@v5
@@ -64,14 +63,23 @@ jobs:
           test -s _build/html/interactive/index.html
           test -s _build/html/interactive/python-worker.js
 
-      - name: Set up Pages
-        uses: actions/configure-pages@v5
-
       - name: Upload the complete site
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
           path: '_build/html'
 
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

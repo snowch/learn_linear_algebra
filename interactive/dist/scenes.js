@@ -48,15 +48,25 @@ export function renderScene(id,lesson,s,grid=true){
  if(mode==='arithmetic'){
   const products={ab:multiply(s.m,s.n),ba:multiply(s.n,s.m),add:s.m.map((v,i)=>v+s.n[i]),transpose:transpose(s.m)};
   const names={ab:'A × B',ba:'B × A',add:'A + B',transpose:'Aᵀ'},out=products[s.operation];
-  let svg=matrixAt(s.m,80,80,'A',150)+matrixAt(s.n,400,80,'B',150)+text(320,120,s.operation==='add'?'+':s.operation==='transpose'?'→':'×','#8a9d77',26,'text-anchor="middle"');
+  let svg;
+  if(s.operation==='transpose')svg=matrixAt(s.m,220,80,'A',200);
+  else {
+    const left=s.operation==='ba'?['B',s.n]:['A',s.m];
+    const right=s.operation==='ba'?['A',s.m]:['B',s.n];
+    svg=matrixAt(left[1],80,80,left[0],150)+matrixAt(right[1],400,80,right[0],150)+
+      text(320,120,s.operation==='add'?'+':'×','#8a9d77',26,'text-anchor="middle"');
+  }
   svg+=text(320,235,`${names[s.operation]} =`,'#8a9d77',15,'text-anchor="middle"')+matrixAt(out,220,290,'Result',200);
   const mismatch=norm(sub(products.ab,products.ba));
-  return result(svg,`${names[s.operation]} = ${matrixText(out)}. Difference between AB and BA has Frobenius norm ${fmt(mismatch)}.`,names[s.operation]+' = '+matrixText(out),mismatch>1e-9?'For this pair, A × B ≠ B × A.':'These particular matrices commute; that does not hold for every pair.');
+  const caption=s.operation==='transpose'?'Each row of A becomes a column of Aᵀ.':
+    s.operation==='add'?'Each result entry adds the two entries in the same position.':
+    mismatch>1e-9?'For this pair, A × B ≠ B × A.':'The two product orders give equal results for this pair.';
+  return result(svg,`${names[s.operation]} = ${matrixText(out)}. ${caption}`,names[s.operation]+' = '+matrixText(out),caption);
  }
  if(mode==='elimination'){
   const c=classify(s.rows),svg=matrixAt(s.rows,130,160,'Your current augmented matrix',380)+text(320,330,c.type==='unique'?`Solution: ${c.solution.join(', ')}`:c.type==='none'?'No solution: an inconsistent row':'Infinitely many solutions','#637c51',17,'text-anchor="middle"');
-  const history=s.history.length?s.history.at(-1).label:'Start with a pivot in column 1.';
-  return result(svg,`Rows: ${s.rows.map(r=>r.join(', ')).join('; ')}. ${history}`,c.type==='unique'?`(x, y) = (${c.solution.join(', ')})`:c.type==='none'?'No solution':'Infinitely many solutions',`${history} Exact fractions are preserved.`);
+  const rows=s.rows.map(([x,y,b],i)=>`Row ${i+1}: [${x}, ${y} | ${b}]`).join(' · ');
+  return result(svg,`Rows: ${s.rows.map(r=>r.join(', ')).join('; ')}.`,c.type==='unique'?`(x, y) = (${c.solution.join(', ')})`:c.type==='none'?'No solution':'Infinitely many solutions',rows);
  }
  if(mode==='systems'){
   const rows=[[s.m[0],s.m[1],s.b[0]],[s.m[2],s.m[3],s.b[1]]],c=classify(rows),solution=c.solution?.map(x=>Number(Fraction.from(x)));
@@ -73,7 +83,7 @@ export function renderScene(id,lesson,s,grid=true){
   const p=plot({extent:extentFor([u,v,sum,scaled],5),grid});
   let points=[];for(let x=-8;x<=8;x+=.05)points.push(p.point([x,y(x)]).join(','));p.add(`<polyline points="${points.join(' ')}" fill="none" stroke="#c5d8b0" stroke-width="6"/>`);
   p.dot(u,'teal','u');p.dot(v,'purple','v');p.dot(sum,'orange','u + v',5);p.arrow(scaled,'gray','c u',[0,0],true);
-  const tests=`Zero: ${contains([0,0])?'inside':'outside'}. u + v: ${contains(sum)?'inside':'outside'}. c u: ${contains(scaled)?'inside':'outside'}.`;
+  const tests=`Zero: ${contains([0,0])?'inside':'outside'}. u + v: ${contains(sum)?'inside':'outside'} at ${vec(sum)}. c u: ${contains(scaled)?'inside':'outside'} at ${vec(scaled)}.`;
   return result(p.finish(),`${tests} u = ${vec(u)}, v = ${vec(v)}, c = ${s.c}.`,s.family==='line'?'This set is a subspace':'This set is not a subspace',tests+' Sample successes alone do not prove closure.',[['teal','u'],['purple','v'],['orange','u + v'],['gray','c u']]);
  }
  if(mode==='coordinates'){
@@ -81,14 +91,14 @@ export function renderScene(id,lesson,s,grid=true){
   p.arrow(s.u,'teal','u');p.arrow(s.v,'purple','v');p.arrow(s.w,'orange','w');
   if(c){const a=scale(c[0],s.u);p.arrow(a,'teal','',[0,0],true);p.arrow(scale(c[1],s.v),'purple','',a,true);}
   const cExact=classify([[B[0],B[1],s.w[0]],[B[2],B[3],s.w[1]]]);
-  return result(p.finish(),c?`w has coordinates ${vec(c)} in the ordered basis (u, v).`:`Candidate pair has rank ${rank(B)}. The representation is ${cExact.type==='none'?'impossible':'nonunique'}.`,c?`w = ${fmt(c[0])} u + ${fmt(c[1])} v`:cExact.type==='none'?'Target is unreachable':'Coefficients are not unique',c?`${id==='dependence'?'The three-vector set is dependent.':'The pair is a basis of ℝ².'} Coordinates are unique in this pair.`:'The pair is dependent. It cannot serve as a basis of ℝ².',[['teal','First basis candidate'],['purple','Second basis candidate'],['orange','Target']]);
+  return result(p.finish(),c?`w has coordinates ${vec(c)} in the ordered basis (u, v).`:`Candidate pair has rank ${rank(B)}. The representation is ${cExact.type==='none'?'impossible':'nonunique'}.`,c?`w = ${fmt(c[0])} u ${c[1]<0?'−':'+'} ${fmt(Math.abs(c[1]))} v`:cExact.type==='none'?'Target is unreachable':'Coefficients are not unique',c?`${id==='dependence'?'The three-vector set is dependent.':'The pair is a basis of ℝ².'} These coefficients are unique for this ordered pair.`:'The pair is dependent. It cannot serve as a basis of ℝ².',[['teal','First basis candidate'],['purple','Second basis candidate'],['orange','Target']]);
  }
  if(mode==='matrixspace'){
   const m=s.family==='symmetric'?[s.a,s.b,s.b,s.c]:s.family==='skew'?[0,-s.a,s.a,0]:[s.a,s.b,s.c,-s.a];
   const basis=s.family==='symmetric'?[[1,0,0,0],[0,1,1,0],[0,0,0,1]]:s.family==='skew'?[[0,-1,1,0]]:[[1,0,0,-1],[0,1,0,0],[0,0,1,0]];
   let svg=matrixAt(m,230,90,'Your matrix',180)+text(320,238,`${basis.length} independent parameter${basis.length===1?'':'s'}`,'#7c906a',14,'text-anchor="middle"');
   basis.forEach((b,i)=>svg+=matrixAt(b,basis.length===1?245:50+i*190,310,`Basis ${i+1}`,basis.length===1?150:140));
-  return result(svg,`${s.family} matrix ${matrixText(m)}. Vector-space dimension ${basis.length}. Trace ${fmt(m[0]+m[3])}.`,`Dimension = ${basis.length}`,`Trace = ${fmt(m[0]+m[3])}. Matrix shape is 2 × 2; vector-space dimension is ${basis.length}.`);
+  return result(svg,`${s.family} matrix ${matrixText(m)}. Vector-space dimension ${basis.length}. Trace ${fmt(m[0]+m[3])}.`,`Dimension = ${basis.length}`,`Trace = ${fmt(m[0]+m[3])}. Matrix ${matrixText(m)}.`);
  }
  if(mode==='homogeneous'){
   const basis=kernel(s.m),x=basis.length?scale(s.t,basis[0]):[0,0],second=basis[1]?scale(s.z,basis[1]):[0,0],input=[x[0]+second[0],x[1]+second[1]],p=plot({extent:extentFor([input]),grid});
@@ -129,7 +139,7 @@ export function renderScene(id,lesson,s,grid=true){
   p.arrow(v,'teal','v');p.arrow(out,'orange','Av');
   const cross=v[0]*out[1]-v[1]*out[0],aligned=Math.abs(cross)<1e-7,lambda=dot(v,out)/dot(v,v);
   const values=e.complex?`${fmt(e.real)} ± ${fmt(e.imag)}i`:e.values.map(fmt).join(', ');
-  return result(p.finish(),`Eigenvalues ${values}. Candidate v = ${vec(v)}; Av = ${vec(out)}. ${aligned?'Candidate is an eigenvector.':'Candidate is not an eigenvector.'}`,`λ = ${values}`,`${e.complex?'No real eigenvectors':e.scalar?'Every nonzero real vector is an eigenvector':e.vectors.length===1?'Only one independent real eigenvector':'Two independent real eigenvectors'} · ${aligned?`Candidate: Av = ${fmt(lambda)}v`:'Turn the candidate arrow to find a line.'}`,[['teal','Candidate v'],['orange','Av'],['green','Real eigenline']]);
+  return result(p.finish(),`Eigenvalues ${values}. Candidate v = ${vec(v)}; Av = ${vec(out)}. ${aligned?'Candidate is an eigenvector.':'Candidate is not an eigenvector.'}`,`λ = ${values}`,`${e.complex?'No real eigenvectors':e.scalar?'Every nonzero real vector is an eigenvector':e.vectors.length===1?'One real eigenline':'Two independent real eigenvector directions'} · ${aligned?`Candidate: Av = ${fmt(lambda)}v`:'The candidate and its image are not parallel.'}`,[['teal','Candidate v'],['orange','Av'],['green','Real eigenline']]);
  }
  if(mode==='decomposition'){
   let factors=[],equation='',reconstructed=null,warning='';

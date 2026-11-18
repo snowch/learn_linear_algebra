@@ -1,14 +1,19 @@
 import {combine,scale,det,rank,transform,fmt,vec,validState,presets} from './math.js';
 import {lessons} from './lessons.js';
-import {advancedControls,validateAdvanced,performAction,advancedPresets,missions} from './labs.js';
+import {experiments} from './experiments.js';
+import {advancedControls,validateAdvanced,performAction,advancedPresets,systemPresets,missions} from './labs.js';
 import {renderScene,colors} from './scenes.js';
 import {pythonFor} from './python-examples.js';
 import {quickReference} from './reference.js';
 const $ = selector => document.querySelector(selector);
 const ids = Object.keys(lessons);
 const STORAGE_KEY='basis-lab-v1';
-let storageAvailable=true, saved={};
-try { saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); if(!saved || typeof saved!=='object' || Array.isArray(saved)) saved={}; } catch { storageAvailable=false; }
+let saved={}, lastSaved;
+try {
+  lastSaved=localStorage.getItem(STORAGE_KEY);
+  const record=JSON.parse(lastSaved||'{}');
+  if(record && typeof record==='object' && !Array.isArray(record)) saved=record;
+} catch { /* The export still works if local storage is unavailable. */ }
 const pilotIds=['vectors','span','transformations'];
 const validFor=(id,state)=>pilotIds.includes(id)?validState(id,state):validateAdvanced(lessons[id],state);
 const states=Object.fromEntries(ids.map(id=>[id,validFor(id,saved.states?.[id]) ? structuredClone(saved.states[id]) : structuredClone(lessons[id].initial)]));
@@ -16,12 +21,35 @@ const progress=Object.fromEntries(ids.map(id=>[id,Array.isArray(saved.progress?.
 const codes=Object.fromEntries(ids.map(id=>[id,typeof saved.codes?.[id]==='string' ? saved.codes[id].slice(0,100000) : null]));
 const missionProgress=Object.fromEntries(ids.map(id=>[id,saved.missions?.[id]===true||(!saved.missions&&pilotIds.includes(id)&&progress[id].length===2)]));
 const completed=id=>progress[id].length===2&&missionProgress[id];
-let current='vectors',tab='explore',worker=null,pythonReady=false,pythonBusy=false,workerTimer=null;
+// Keep the active draft and its recovery copy in one write. A refused write
+// leaves the last durable snapshot intact, even if the starter is smaller.
+const settingBackups=Object.fromEntries(ids.map(id=>[id,validFor(id,saved.settingBackups?.[id])?structuredClone(saved.settingBackups[id]):null]));
+const codeBackups=Object.fromEntries(ids.map(id=>{
+  const backup=saved.codeBackups?.[id];
+  return [id,backup&&(backup.code===null||typeof backup.code==='string')?{code:backup.code?.slice(0,100000)??null}:null];
+}));
+const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+let current='vectors', worker=null, pythonReady=false, pythonBusy=false, workerTimer=null;
+const pythonResults=new Map();
+let pythonRun=null;
+function snapshot(){
+  return {schemaVersion:2,states,progress,missions:missionProgress,codes,settingBackups,codeBackups,current};
+}
 function persist(){
-  try { localStorage.setItem(STORAGE_KEY,JSON.stringify({schemaVersion:2,states,progress,missions:missionProgress,codes,current})); storageAvailable=true; }
-  catch { storageAvailable=false; }
-  $('#save-state').textContent=storageAvailable ? 'Saved on this device' : 'Storage unavailable · use export';
-  $('#code-saved').textContent=storageAvailable ? 'Edits saved on this device' : 'Not saved · use export';
+  const status=$('#save-state');
+  try {
+    const latest=localStorage.getItem(STORAGE_KEY);
+    if(lastSaved!==undefined && latest!==lastSaved){
+      status.textContent='Another tab saved newer progress. Export this tab’s changes to keep a copy.';
+      return;
+    }
+    const next=JSON.stringify(snapshot());
+    if(latest!==next)localStorage.setItem(STORAGE_KEY,next);
+    lastSaved=next;
+    status.textContent='';
+  } catch {
+    status.textContent='Changes are available in this tab. Use Export progress before reloading or closing it.';
+  }
 }
 function updateProgress(){
   const done=ids.filter(completed).length;
@@ -34,29 +62,49 @@ function updateProgress(){
     link.querySelector('.completion').textContent=completed(id) ? '✓' : '';
     link.setAttribute('aria-label',`${lessons[id].name}${completed(id) ? ', completed' : ''}`);
   });
-  $('#practice-status').textContent=completed(current) ? '✓ Lesson complete. Your understanding is growing.' : `${progress[current].length+(missionProgress[current]?1:0)} of 3 checks completed · 1 experiment + 2 questions`;
+  $('#practice-status').textContent=completed(current) ? 'Lesson complete. All three checks passed.' : `${progress[current].length+(missionProgress[current]?1:0)} of 3 lesson checks passed.`;
   $('#course-complete').hidden=done!==ids.length;
   $('#lesson-select').value=current;
   $('#previous-lesson').disabled=ids.indexOf(current)===0;
-  $('#next-bottom').textContent=ids.indexOf(current)===ids.length-1?'Review your course →':'Continue to next lesson →';
-  $('#lesson-position').textContent=`${ids.indexOf(current)+1} of ${ids.length}`;
+  $('#next-bottom').textContent=ids.indexOf(current)===ids.length-1?'Review course':'Next lesson →';
 }
+const vectorPairs={independent:[[1,0],[0,1]],parallel:[[1,1],[2,2]],zero:[[0,0],[0,0]]};
 const numInput=(label,field,value,index)=>`<input type="number" min="-3" max="3" step="0.5" value="${value}" data-field="${field}" data-index="${index}" aria-label="${label}">`;
 function vectorControl(name,field,v,color){return `<div class="vector-row"><div class="vector-label"><span style="color:${color}">${name}</span><span class="vector-pair">[ ${numInput(name+' x coordinate',field,v[0],0)} ${numInput(name+' y coordinate',field,v[1],1)} ]</span></div></div>`;}
 function slider(name,label,value){return `<div class="coefficient"><label for="coefficient-${name}">${label}<output id="value-${name}" for="coefficient-${name}">${fmt(value)}</output></label><input id="coefficient-${name}" type="range" min="-3" max="3" step="0.5" value="${value}" data-scalar="${name}"><div class="range-ticks"><span>−3</span><span>0</span><span>3</span></div></div>`;}
-function renderControls(){
+function renderControls(retain=false){
+  const body=$('#controls-body'), active=document.activeElement;
+  const query=active?.id ? '#'+active.id : active && ['key','labAction','field'].find(key=>active.dataset?.[key]);
+  const focus=retain&&body.contains(active)&&query ? query.startsWith('#') ? query :
+    Object.entries(active.dataset).map(([key,value])=>`[data-${key.replace(/[A-Z]/g,l=>'-'+l.toLowerCase())}="${value}"]`).join('') : null;
+  const rowFields=['[data-key="rowOp"]','[data-key="rowSource"]','[data-key="rowTarget"]','#row-factor'];
+  const rowValues=retain&&current==='elimination'?rowFields.map(selector=>$(selector)?.value):[];
+  drawControls();
+  $('#input-message').hidden=true;
+  rowValues.forEach((value,i)=>{if(value!==undefined)$(rowFields[i]).value=value;});
+  updateRowFields();
+  if(focus)body.querySelector(focus)?.focus({preventScroll:true});
+}
+function updateRowFields(){
+  if(current!=='elimination')return;
+  const op=$('[data-key="rowOp"]').value;
+  $('[data-key="rowSource"]').closest('label').hidden=op!=='add';
+  $('[data-key="rowTarget"]').closest('label').hidden=op==='swap';
+  $('#row-factor').closest('label').hidden=op==='swap';
+}
+function drawControls(){
   const s=states[current];
   $('#controls-body').classList.toggle('advanced-controls',!pilotIds.includes(current));
   if(!pilotIds.includes(current)){
-    $('#controls-title').textContent=lessons[current].controls;
+    $('#controls-title').textContent=current==='elimination'?'Row operation':'Settings';
     $('#controls-body').innerHTML=advancedControls(lessons[current],s);return;
   }
-  $('#controls-title').textContent=lessons[current].controls;
+  $('#controls-title').textContent=current==='elimination'?'Row operation':'Settings';
   if(current==='transformations'){
-    $('#controls-body').innerHTML=`<div><span class="matrix-label">Matrix A</span><div class="matrix-grid">${s.m.map((value,i)=>`<input class="matrix-input" type="number" min="-3" max="3" step="0.5" value="${value}" data-field="m" data-index="${i}" aria-label="Matrix row ${Math.floor(i/2)+1} column ${i%2+1}">`).join('')}</div></div><div>${vectorControl('Input v','u',s.u,'#7a8473')}<label class="preset-label" for="preset">TRY A TRANSFORMATION</label><select class="preset-select" id="preset"><option value="custom">Custom matrix</option><option value="identity">Identity</option><option value="stretch">Horizontal stretch</option><option value="shear">Shear</option><option value="rotate">90° counterclockwise</option><option value="reflect">Reflect across y-axis</option><option value="collapse">Collapse to a line</option></select></div>`;
+    $('#controls-body').innerHTML=`<div><span class="matrix-label">Matrix A</span><div class="matrix-grid">${s.m.map((value,i)=>`<input class="matrix-input" type="number" min="-3" max="3" step="0.5" value="${value}" data-field="m" data-index="${i}" aria-label="Matrix row ${Math.floor(i/2)+1} column ${i%2+1}">`).join('')}</div></div><div>${vectorControl('Input v','u',s.u,'#7a8473')}<label class="preset-label" for="preset">Transformation preset</label><select class="preset-select" id="preset"><option value="custom">Custom matrix</option><option value="identity">Identity</option><option value="stretch">Horizontal stretch</option><option value="shear">Shear</option><option value="rotate">90° counterclockwise</option><option value="reflect">Reflect across y-axis</option><option value="collapse">Collapse to a line</option></select></div>`;
     $('#preset').value=Object.keys(presets).find(key=>presets[key].every((v,i)=>v===s.m[i]))||'custom';
   }else{
-    $('#controls-body').innerHTML=vectorControl('Vector v₁','u',s.u,'#348a83')+vectorControl('Vector v₂','v',s.v,'#9270ba')+slider('a','Weight a · first vector',s.a)+slider('b','Weight b · second vector',s.b)+(current==='span'?`<div style="grid-column:1/-1"><label class="preset-label" for="preset">COMPARE TWO PAIRS</label><select class="preset-select" id="preset"><option value="custom">Custom pair</option><option value="independent">Independent pair</option><option value="parallel">Parallel pair</option><option value="zero">Two zero vectors</option></select></div>`:'');
+    $('#controls-body').innerHTML=vectorControl('Vector v₁','u',s.u,'#348a83')+vectorControl('Vector v₂','v',s.v,'#9270ba')+slider('a','Coefficient a · first vector',s.a)+slider('b','Coefficient b · second vector',s.b)+(current==='span'?`<div style="grid-column:1/-1"><label class="preset-label" for="preset">Vector pair</label><select class="preset-select" id="preset"><option value="custom">Custom pair</option><option value="independent">Independent pair</option><option value="parallel">Parallel pair</option><option value="zero">Two zero vectors</option></select></div>`:'');
     if(current==='span') $('#preset').value=s.u.join()==='1,1'&&s.v.join()==='2,2' ? 'parallel' : s.u.join()==='1,0'&&s.v.join()==='0,1' ? 'independent' : s.u.every(v=>v===0)&&s.v.every(v=>v===0) ? 'zero' : 'custom';
   }
 }
@@ -65,7 +113,7 @@ function draw(){
   if(!pilotIds.includes(current)){
     const scene=renderScene(current,lessons[current],states[current],$('#show-grid').checked);
     $('#graph').innerHTML=scene.svg;$('#graph-text').textContent=scene.description;
-    $('#result-label').textContent='LIVE RESULT';$('#result-equation').textContent=scene.equation;$('#result-caption').textContent=scene.caption;
+    $('#result-label').textContent=current==='elimination'||current==='solutions'?'Solution':'Result';$('#result-equation').textContent=scene.equation;$('#result-caption').textContent=scene.caption;
     $('#legend').innerHTML=scene.legend.map(([color,label])=>`<span class="legend-item"><span class="legend-line" style="color:${colors[color]}"></span>${label}</span>`).join('');
     return;
   }
@@ -119,7 +167,7 @@ function draw(){
   const description=matrixMode ? `Input v = ${vec(s.u)}. Transformed vector Av = ${vec(result)}. Determinant ${fmt(det(s.m))}; rank ${r}.` : `a = ${fmt(s.a)}, b = ${fmt(s.b)}. v₁ = ${vec(s.u)}, v₂ = ${vec(s.v)}. Result = ${vec(result)}.${current==='span'?` The span has dimension ${r}.`:''}`;
   $('#graph-description').textContent=description;
   $('#graph-text').textContent=description;
-  $('#result-label').textContent=matrixMode ? 'TRANSFORMED VECTOR' : 'THE RESULT · a v₁ + b v₂';
+  $('#result-label').textContent=matrixMode ? 'Transformed vector' : 'Combination';
   $('#result-equation').textContent=matrixMode ? `Av = ${vec(result)}` : `${fmt(s.a)} v₁ + ${fmt(s.b)} v₂ = ${vec(result)}`;
   $('#result-caption').textContent=matrixMode ? `det(A) = ${fmt(det(s.m))} · Area scale ${fmt(Math.abs(det(s.m)))} · ${r===2?'Invertible':r===1?'Plane collapses to a line':'Everything maps to the origin'}` : current==='span' ? `Span dimension: ${r} · ${r===2?'Independent pair · the whole plane':r===1?'Dependent pair · one line':'Dependent pair · just the origin'}` : 'Scale each vector, then add the coordinates. Dashed arrows show how the steps connect.';
   const legend=matrixMode ? [['teal','First column'],['purple','Second column'],['orange','Transformed v']] : [['teal','a × first vector'],['purple','b × second vector'],['orange','Your combination']];
@@ -128,128 +176,213 @@ function draw(){
 function renderQuestions(){
   $('#questions').innerHTML=lessons[current].questions.map((q,i)=>{
     const order=i===0 ? [1,0,2] : [2,1,0];
-    return `<form class="question${progress[current].includes(i)?' question-correct':''}" data-question="${i}"><span class="eyebrow">QUESTION 0${i+1}</span><h3>${q.title}</h3><p class="context">${q.context}</p><fieldset style="border:0;padding:0;margin:0"><legend class="sr-only">${q.title} ${q.context}</legend><div class="answer-options">${order.map(j=>`<label><input type="radio" name="question-${i}" value="${j}" ${progress[current].includes(i)&&j===q.correct?'checked':''}>${q.options[j]}</label>`).join('')}</div></fieldset><div class="question-actions"><button type="submit" class="primary-button">Check my answer</button><button type="button" class="text-button" data-hint="${i}">Give me a hint</button></div><div class="feedback" role="status" ${progress[current].includes(i)?'':'hidden'}>${progress[current].includes(i)?q.feedback[q.correct]:''}</div></form>`;
+    return `<form class="question${progress[current].includes(i)?' question-correct':''}" data-question="${i}"><h3>${q.title}</h3><p class="context">${q.context}</p><fieldset style="border:0;padding:0;margin:0"><legend class="sr-only">${q.title} ${q.context}</legend><div class="answer-options">${order.map(j=>`<label><input type="radio" name="question-${i}" value="${j}" ${progress[current].includes(i)&&j===q.correct?'checked':''}>${q.options[j]}</label>`).join('')}</div></fieldset><div class="question-actions"><button type="submit" class="primary-button">Check answer</button><button type="button" class="text-button" data-hint="${i}">Show hint</button></div><div class="feedback" role="status" ${progress[current].includes(i)?'':'hidden'}>${progress[current].includes(i)?q.feedback[q.correct]:''}</div></form>`;
   }).join('');
-  $('#next-lesson').textContent=ids.indexOf(current)===ids.length-1 ? 'Review your course →' : 'Next lesson →';
-}
-function setTab(next,focus=false){
-  tab=next;
-  document.querySelectorAll('[data-tab]').forEach(button=>{const active=button.dataset.tab===next;button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;});
-  ['explore','practice','notes'].forEach(name=>{$(`#panel-${name}`).hidden=name!==next;});
-  if(focus) $(`#tab-${next}`).focus();
 }
 function loadLesson(id,scroll=false){
-  if(pythonBusy)stopPython('Stopped on lesson change. Your edited code is saved.');
-  current=id;const lesson=lessons[id],number=String(ids.indexOf(id)+1).padStart(2,'0');
-  $('#breadcrumb').textContent=lesson.name;$('#lesson-index').textContent=`LESSON ${number}`;$('#footer-lesson').textContent=number;
-  $('#duration').textContent=lesson.time;$('#title').innerHTML=lesson.title;$('#intro').textContent=lesson.intro;
-  $('#experiment-title').textContent=lesson.experiment;$('#discovery-text').textContent=lesson.discovery;$('#prompt').textContent=lesson.prompt;
-  $('#notes-title').textContent=lesson.notesTitle;$('#notes-body').innerHTML=lesson.notes;
-  $('#graph-type').textContent=id==='transformations'?'THE TRANSFORMED PLANE':pilotIds.includes(id)?'THE COORDINATE PLANE':'YOUR MATHEMATICAL EXPERIMENT';
-  $('#lesson-path').innerHTML=lesson.prereq?.length?'Builds on '+lesson.prereq.map(key=>`<a href="#${key}">${lessons[key].name}</a>`).join(' · '):'Start here. No previous linear algebra needed.';
+  if(pythonBusy)stopPython('Run stopped on lesson change.');
+  current=id;
+  const lesson=lessons[id], activity=experiments[id];
+  const number=ids.indexOf(id)+1;
+  $('#lesson-index').textContent=`Lesson ${number} of ${ids.length}`;
+  $('#title').textContent=lesson.name;
+  $('#intro').textContent=activity.purpose;
+  $('#experiment-title').textContent=activity.question;
+  $('#prepared').textContent=activity.prepared;
+  $('#action').textContent=activity.action;
+  $('#comparison').textContent=activity.compare;
+  $('#notes-title').textContent=activity.notes;
+  $('#notes-body').innerHTML=lesson.notes;
+  $('#graph-type').textContent=id==='transformations'?'Transformed plane':pilotIds.includes(id)?'Coordinate diagram':'Experiment diagram';
+  $('#lesson-path').innerHTML=lesson.prereq?.length?'Builds on '+lesson.prereq.map(key=>`<a href="#${key}">${lessons[key].name}</a>`).join(' · '):'No prior linear algebra needed. The course introduces coordinates, vectors and matrices here.';
+  $('#grid-option').hidden=['arithmetic','elimination','matrixspace','decomposition'].includes(lesson.lab);
   $('#mission-text').textContent=missions[id].prompt;
   $('#mission-feedback').hidden=!missionProgress[id];
   $('#mission-feedback').classList.remove('incorrect');
-  $('#mission-feedback').textContent=missionProgress[id]?'✓ Experiment check completed. Try another variation if you like.':'';
-  renderControls();draw();renderQuestions();updateProgress();setTab('explore');persist();
-  if(!$('#python-panel').hidden) restoreCode(false);
+  $('#mission-feedback').textContent=missionProgress[id]?'You passed this experiment check earlier.':'';
+  $('#input-message').hidden=true;
+  $('#resume-settings').hidden=same(states[id],lesson.initial);
+  $('#undo-settings').hidden=!settingBackups[id];
+  renderControls();draw();renderQuestions();updateProgress();persist();
+  if(!$('#python-panel').hidden){
+    syncPythonEditor();
+    showPythonResult();
+    showPythonStatus();
+  }
   document.title=`${lesson.name} — Learn Linear Algebra`;
   if(scroll){$('#main').focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});}
 }
 function codeForExploration(){
   return pythonFor(current,lessons[current],states[current]);
 }
-function restoreCode(force){
-  const value=force||codes[current]===null?codeForExploration():codes[current];
-  $('#python-code').value=value;
-  if(force){codes[current]=value;persist();}
+function syncPythonEditor(){
+  $('#python-code').value=codes[current]??codeForExploration();
+  $('#undo-python').hidden=codeBackups[current]===null;
 }
-function output(text,append=true){
-  const el=$('#python-output');
-  if(el.textContent.length>50000&&append)return;
-  el.textContent=append?el.textContent+text+'\n':text;
+function showPythonResult(){
+  const result=pythonResults.get(current);
+  const message=result?.error??'';
+  const previous=Boolean(result && result.source!==$('#python-code').value);
+  $('#python-result').hidden=!result || !result.output;
+  $('#python-output').textContent=result?.output??'';
+  $('#python-output-context').hidden=!previous;
+  $('#python-output-context').textContent='Output from the previous source. Run Python to update it.';
+  $('#python-error').hidden=!message || previous;
+  $('#python-error').textContent=message;
+  if(pythonBusy && result?.source===pythonRun?.source)$('#python-output-context').hidden=true;
 }
-function finishPython(text){
-  clearTimeout(workerTimer);pythonBusy=false;
-  $('#run-python').disabled=!pythonReady;$('#stop-python').disabled=!worker;
-  $('#python-status').textContent=text;
+function showPythonStatus(){
+  if(pythonBusy)return;
+  const result=pythonResults.get(current);
+  $('#python-status').textContent=result?.status??(pythonReady?'Choose Run Python to calculate.':'The first run downloads Python from jsDelivr.');
 }
-function stopPython(message='Stopped. Run Python to start a fresh runtime.'){
-  if(worker)worker.terminate();worker=null;pythonReady=false;pythonBusy=false;
-  clearTimeout(workerTimer);$('#run-python').disabled=false;$('#stop-python').disabled=true;$('#python-status').textContent=message;
+function finishPython(message){
+  clearTimeout(workerTimer);
+  const result=pythonResults.get(pythonRun?.id);
+  if(result)result.status=message;
+  pythonBusy=false;
+  pythonRun=null;
+  $('#run-python').disabled=false;
+  $('#stop-python').hidden=true;
+  $('#python-code').readOnly=false;
+  for(const id of ['restore-python','undo-python'])$('#'+id).disabled=false;
+  $('#python-status').textContent=message;
+  if(codes[current]===null)syncPythonEditor();
+  showPythonResult();
+}
+function stopPython(message='Run stopped. Choose Run Python to start again.'){
+  worker?.terminate();
+  worker=null;
+  pythonReady=false;
+  const focus=$('#stop-python')===document.activeElement;
+  finishPython(message);
+  if(focus)$('#run-python').focus({preventScroll:true});
+}
+function executePython(){
+  const {id,source}=pythonRun;
+  pythonResults.set(id,{source,output:'',error:''});
+  showPythonResult();
+  $('#python-status').textContent='Running Python in this browser…';
+  worker.postMessage({type:'run',code:source});
+  clearTimeout(workerTimer);
+  workerTimer=setTimeout(()=>stopPython('Execution stopped after 60 seconds. Choose Run Python to start again.'),60000);
 }
 function startPython(){
-  if(worker)return;
-  $('#python-status').textContent='Loading Python locally… first load may take a moment.';
-  $('#run-python').disabled=true;$('#stop-python').disabled=false;
+  $('#python-status').textContent='Downloading or loading Python…';
   try {
-    worker=new Worker(new URL('./python-worker.js',import.meta.url));
-    worker.onmessage=({data})=>{
-      if(data.type==='ready'){pythonReady=true;finishPython('Python ready · runs locally in your browser');}
-      if(data.type==='stdout')output(data.text);
+    const runtime=new Worker(new URL('./python-worker.js',import.meta.url));
+    worker=runtime;
+    runtime.onmessage=({data})=>{
+      if(worker!==runtime || !pythonRun)return;
+      if(data.type==='ready'){pythonReady=true;executePython();return;}
+      if(data.type==='init-error'){stopPython('Python could not load. Check the connection and choose Run Python again.');return;}
+      const result=pythonResults.get(pythonRun.id);
+      if(data.type==='stdout'&&result.output.length<50000){result.output+=data.text+'\n';showPythonResult();}
       if(data.type==='status')$('#python-status').textContent=data.text;
-      if(data.type==='done'){if(!$('#python-output').textContent)output('Finished. Use print(...) to show a result.');finishPython('Finished · Python stays ready for your next experiment');}
-      if(data.type==='error'){output(data.text);finishPython('Your code raised an error. Edit it and try again.');}
-      if(data.type==='init-error'){output(data.text,false);stopPython('Could not load Python. Check your connection, then Run Python to retry.');}
+      if(data.type==='done'){
+        if(!result.output)result.output='The code finished without printing a value.';
+        finishPython('Python run finished.');
+      }
+      if(data.type==='error'){result.error=data.text;finishPython('Python run ended with an error.');}
     };
-    worker.onerror=()=>{output('Python could not start. Check your connection and try again.',false);stopPython('Runtime unavailable. Run Python to retry.');};
-    worker.postMessage({type:'init'});
-    workerTimer=setTimeout(()=>{stopPython('Loading took too long. Run Python to retry.');},90000);
-  }catch(error){output(String(error),false);stopPython('Python is unavailable in this browser. The visual lessons still work.');}
+    runtime.onerror=()=>stopPython('Python could not start. Check the connection and choose Run Python again.');
+    runtime.postMessage({type:'init'});
+    workerTimer=setTimeout(()=>stopPython('Python took too long to load. Choose Run Python to try again.'),90000);
+  } catch {
+    stopPython('Python is unavailable in this browser. The visual experiments remain available.');
+  }
+}
+function updateExperiment(){
+  draw();
+  if(!$('#python-panel').hidden && !pythonBusy){
+    if(codes[current]===null)syncPythonEditor();
+    showPythonResult();
+  }
+  persist();
+}
+function explainInput(input,message){
+  input.setCustomValidity(message);
+  input.setAttribute('aria-invalid',String(Boolean(message)));
+  const status=$('#input-message');
+  const invalid=$('#controls-body [aria-invalid="true"]');
+  status.hidden=!invalid;
+  status.textContent=invalid ? invalid.validationMessage+' The result uses the last accepted settings.' : '';
 }
 $('#controls-body').addEventListener('input',event=>{
   const input=event.target,s=states[current];
   if(input.dataset.key&&input.type!=='select-one'&&(input.type==='number'||input.type==='range')){
     const key=input.dataset.key;if(!(key in s))return;
     const value=input.valueAsNumber,min=Number(input.getAttribute('min')),max=Number(input.getAttribute('max')),step=Number(input.getAttribute('step'));
-    if(!Number.isFinite(value)||value<min||value>max||(step&&Math.abs((value-min)/step-Math.round((value-min)/step))>1e-6)){input.setCustomValidity(`Use a value from ${min} to ${max}${step?` in steps of ${step}`:""}.`);input.reportValidity();return;}
-    input.setCustomValidity('');
+    if(!Number.isFinite(value)||value<min||value>max||(step&&Math.abs((value-min)/step-Math.round((value-min)/step))>1e-6)){explainInput(input,`Use a value from ${min} to ${max}${step?` in steps of ${step}`:""}.`);return;}
+    explainInput(input,'');
     if(input.dataset.arrayIndex!==undefined)s[key][Number(input.dataset.arrayIndex)]=value;else s[key]=value;
-    const valueLabel=$(`#lab-value-${key}`);if(valueLabel)valueLabel.textContent=fmt(value);draw();persist();return;
+    if(key==='m'||key==='b'){
+      const field=key==='m'&&$('[data-key="matrixPreset"]')?'matrixPreset':'systemPreset';
+      const preset=$(`[data-key="${field}"]`);
+      if(preset){
+        const choices=field==='matrixPreset'?advancedPresets:systemPresets;
+        preset.value=Object.keys(choices).find(id=>field==='matrixPreset'?same(choices[id],s.m):
+          same(choices[id].m,s.m)&&same(choices[id].b,s.b))||'custom';
+      }
+    }
+    const valueLabel=$(`#lab-value-${key}`);if(valueLabel)valueLabel.textContent=fmt(value);updateExperiment();return;
   }
-  if(input.dataset.scalar){s[input.dataset.scalar]=Number(input.value);$(`#value-${input.dataset.scalar}`).textContent=fmt(Number(input.value));draw();persist();}
+  if(input.dataset.scalar){s[input.dataset.scalar]=Number(input.value);$(`#value-${input.dataset.scalar}`).textContent=fmt(Number(input.value));updateExperiment();}
   if(input.dataset.field){
     const value=input.valueAsNumber;
-    if(!Number.isFinite(value)||Math.abs(value)>3||!Number.isInteger(value*2)){input.setCustomValidity('Use a number from −3 to 3 in steps of 0.5.');input.reportValidity();return;}
-    input.setCustomValidity('');s[input.dataset.field][Number(input.dataset.index)]=value;
-    if($('#preset'))$('#preset').value='custom';draw();persist();
+    if(!Number.isFinite(value)||Math.abs(value)>3||!Number.isInteger(value*2)){explainInput(input,'Use a number from −3 to 3 in steps of 0.5.');return;}
+    explainInput(input,'');s[input.dataset.field][Number(input.dataset.index)]=value;
+    if($('#preset')){
+      const choices=current==='transformations'?presets:vectorPairs;
+      const values=current==='transformations'?s.m:[s.u,s.v];
+      $('#preset').value=Object.keys(choices).find(key=>same(choices[key],values))||'custom';
+    }
+    updateExperiment();
   }
 });
 $('#controls-body').addEventListener('change',event=>{
   const key=event.target.dataset.key,s=states[current];
   if(key&&!pilotIds.includes(current)){
-    if(event.target.tagName!=='SELECT'){if(key==='m'&&lessons[current].lab==='homogeneous')renderControls();return;}
+    if(event.target.tagName!=='SELECT'){if(key==='m'&&lessons[current].lab==='homogeneous'&&event.target.checkValidity())renderControls(true);return;}
     const value=event.target.value;
+    if(key==='rowOp'){updateRowFields();return;}
     if(key==='matrixPreset'){if(value==='custom')return;s.m=[...advancedPresets[value]];}
-    else if(key==='systemPreset'){if(value==='custom')return;const cases={unique:{m:[1,1,1,-1],b:[3,1]},infinite:{m:[1,1,2,2],b:[2,4]},none:{m:[1,1,2,2],b:[2,3]},free:{m:[0,0,0,0],b:[0,0]}};Object.assign(s,structuredClone(cases[value]));}
+    else if(key==='systemPreset'){if(value==='custom')return;Object.assign(s,structuredClone(systemPresets[value]));}
     else if(key in s)s[key]=typeof s[key]==='number'?Number(value):value;
     else return;
-    renderControls();draw();persist();return;
+    renderControls(true);updateExperiment();return;
   }
   if(event.target.id!=='preset'||event.target.value==='custom')return;
   const preset=event.target.value;
   if(current==='transformations')states[current].m=[...presets[preset]];
   else {
-    const pairs={independent:[[1,0],[0,1]],parallel:[[1,1],[2,2]],zero:[[0,0],[0,0]]};
-    [states[current].u,states[current].v]=structuredClone(pairs[preset]);
+    [states[current].u,states[current].v]=structuredClone(vectorPairs[preset]);
     states[current].a=1;states[current].b=0;
   }
-  renderControls();draw();persist();
+  renderControls(true);updateExperiment();
 });
-$('#reset').addEventListener('click',()=>{states[current]=structuredClone(lessons[current].initial);renderControls();draw();persist();});
+$('#reset').addEventListener('click',()=>{
+  if(!same(states[current],lessons[current].initial))settingBackups[current]=structuredClone(states[current]);
+  states[current]=structuredClone(lessons[current].initial);
+  $('#resume-settings').hidden=true;
+  $('#undo-settings').hidden=!settingBackups[current];
+  $('#input-message').hidden=true;
+  renderControls();updateExperiment();
+});
+$('#undo-settings').addEventListener('click',()=>{
+  if(!settingBackups[current])return;
+  states[current]=settingBackups[current];
+  settingBackups[current]=null;
+  $('#undo-settings').hidden=true;
+  $('#input-message').hidden=true;
+  $('#reset').focus({preventScroll:true});
+  renderControls();updateExperiment();
+});
 $('#show-grid').addEventListener('change',draw);
-$('.lesson-tabs').addEventListener('click',event=>{const button=event.target.closest('[data-tab]');if(button)setTab(button.dataset.tab);});
-$('.lesson-tabs').addEventListener('keydown',event=>{
-  const names=['explore','practice','notes'];let index=names.indexOf(tab);
-  if(event.key==='ArrowRight')index=(index+1)%3;else if(event.key==='ArrowLeft')index=(index+2)%3;else if(event.key==='Home')index=0;else if(event.key==='End')index=2;else return;
-  event.preventDefault();setTab(names[index],true);
-});
-$('#go-practice').addEventListener('click',()=>setTab('practice',true));
-$('#notes-practice').addEventListener('click',()=>setTab('practice',true));
 $('#questions').addEventListener('submit',event=>{
   event.preventDefault();const form=event.target,index=Number(form.dataset.question),q=lessons[current].questions[index];
   const selected=form.querySelector('input:checked'),feedback=form.querySelector('.feedback');feedback.hidden=false;
-  if(!selected){feedback.textContent='Choose your prediction first. It’s fine to be unsure.';feedback.classList.add('incorrect');return;}
+  if(!selected){feedback.textContent='Choose an answer before checking.';feedback.classList.add('incorrect');return;}
   const correct=Number(selected.value)===q.correct;
   feedback.textContent=q.feedback[Number(selected.value)];feedback.classList.toggle('incorrect',!correct);
   if(correct&&!progress[current].includes(index)){progress[current].push(index);persist();updateProgress();}
@@ -260,30 +393,49 @@ $('#questions').addEventListener('click',event=>{
   const feedback=hint.closest('form').querySelector('.feedback');feedback.hidden=false;feedback.classList.remove('incorrect');feedback.textContent=lessons[current].questions[Number(hint.dataset.hint)].hint;
 });
 function goNext(){const index=ids.indexOf(current);if(index<ids.length-1)location.hash=ids[index+1];else{const unfinished=ids.find(id=>!completed(id));if(unfinished)location.hash=unfinished;else openReference();}}
-$('#next-lesson').addEventListener('click',goNext);
 $('#next-bottom').addEventListener('click',goNext);
 $('#previous-lesson').addEventListener('click',()=>{const index=ids.indexOf(current);if(index>0)location.hash=ids[index-1];});
 $('#python-toggle').addEventListener('click',()=>{
   const opening=$('#python-panel').hidden;
-  $('#python-panel').hidden=!opening;$('#python-toggle').setAttribute('aria-expanded',String(opening));$('#python-chevron').textContent=opening?'−':'＋';
-  if(opening){restoreCode(false);startPython();}
+  $('#python-panel').hidden=!opening;
+  $('#python-toggle').setAttribute('aria-expanded',String(opening));
+  $('#python-chevron').textContent=opening?'−':'＋';
+  if(opening){if(!pythonBusy)syncPythonEditor();showPythonResult();showPythonStatus();}
 });
-$('#restore-python').addEventListener('click',()=>{restoreCode(true);output('Restored the current exploration values. Run the code to calculate.',false);});
-$('#python-code').addEventListener('input',()=>{codes[current]=$('#python-code').value;persist();});
+$('#restore-python').addEventListener('click',()=>{
+  if(codes[current]!==null)codeBackups[current]={code:codes[current]};
+  codes[current]=null;
+  syncPythonEditor();showPythonResult();persist();
+  $('#python-status').textContent='Code restored from the current settings. Choose Run Python to calculate.';
+});
+$('#undo-python').addEventListener('click',()=>{
+  if(!codeBackups[current])return;
+  codes[current]=codeBackups[current].code;
+  codeBackups[current]=null;
+  syncPythonEditor();showPythonResult();persist();
+  $('#python-code').focus({preventScroll:true});
+  $('#python-status').textContent='Previous Python draft restored.';
+});
+$('#python-code').addEventListener('input',()=>{
+  codes[current]=$('#python-code').value;
+  showPythonResult();persist();
+});
 $('#python-code').addEventListener('keydown',event=>{
   if((event.ctrlKey||event.metaKey)&&event.key==='Enter'){event.preventDefault();$('#run-python').click();}
 });
 $('#run-python').addEventListener('click',()=>{
-  if(!worker){startPython();return;}
-  if(!pythonReady||pythonBusy)return;
-  codes[current]=$('#python-code').value;persist();pythonBusy=true;$('#run-python').disabled=true;$('#stop-python').disabled=false;
-  output('',false);$('#python-status').textContent='Running locally…';
-  worker.postMessage({type:'run',code:$('#python-code').value});
-  workerTimer=setTimeout(()=>{stopPython('Execution exceeded 60 seconds. Run Python to start a fresh runtime.');output('Execution stopped after 60 seconds. Your code is still in the editor.');},60000);
+  if(pythonBusy)return;
+  pythonRun={id:current,source:$('#python-code').value};
+  pythonBusy=true;
+  $('#run-python').disabled=true;
+  $('#stop-python').hidden=false;
+  $('#python-code').readOnly=true;
+  for(const id of ['restore-python','undo-python'])$('#'+id).disabled=true;
+  if(pythonReady)executePython();else startPython();
 });
 $('#stop-python').addEventListener('click',()=>stopPython());
 document.querySelectorAll('[data-export]').forEach(button=>button.addEventListener('click',()=>{
-  const blob=new Blob([JSON.stringify({format:'basis-lab-v1',schemaVersion:2,exportedAt:new Date().toISOString(),states,progress,missions:missionProgress,codes},null,2)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify({format:STORAGE_KEY,exportedAt:new Date().toISOString(),...snapshot()},null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='linear-algebra-progress.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }));
 function renderNavigation(){
@@ -303,7 +455,7 @@ $('#controls-body').addEventListener('click',event=>{
   try{
     const context=button.dataset.labAction==='apply-row'?{op:$('[data-key="rowOp"]').value,source:Number($('[data-key="rowSource"]').value),target:Number($('[data-key="rowTarget"]').value),factor:$('#row-factor').value}:{};
     const message=performAction(button.dataset.labAction,lessons[current],states[current],context);
-    renderControls();draw();persist();
+    renderControls(true);updateExperiment();
     if($('#row-operation-status')&&message)$('#row-operation-status').textContent=message;
   }catch(error){if($('#row-operation-status'))$('#row-operation-status').textContent=error.message;}
 });
@@ -313,7 +465,7 @@ $('#check-mission').addEventListener('click',()=>{
   if(invalid){feedback.textContent='Correct the highlighted input before checking the experiment.';feedback.classList.add('incorrect');invalid.reportValidity();return;}
   const success=missions[current].check(states[current]);
   feedback.classList.toggle('incorrect',!success);
-  feedback.textContent=success?'✓ Your experiment satisfies the challenge. Try explaining why it works.':'Not yet. '+missions[current].hint;
+  feedback.textContent=success?'Your settings satisfy this challenge.':'The result above describes the current settings. To satisfy this challenge, try the hint. '+missions[current].hint;
   if(success){missionProgress[current]=true;persist();updateProgress();}
 });
 $('#mission-hint').addEventListener('click',()=>{const feedback=$('#mission-feedback');feedback.hidden=false;feedback.classList.remove('incorrect');feedback.textContent=missions[current].hint;});
@@ -331,13 +483,25 @@ $('#import-file').addEventListener('change',async event=>{
     if(file.size>5*1024*1024)throw new Error('Choose a progress file smaller than 5 MB.');
     const imported=JSON.parse(await file.text());
     if(imported?.format!=='basis-lab-v1')throw new Error('This is not a Learn Linear Algebra progress export.');
+    let kept=0;
     for(const id of ids){
-      if(validFor(id,imported.states?.[id]))states[id]=structuredClone(imported.states[id]);
+      if(validFor(id,imported.states?.[id])){
+        if(same(states[id],lessons[id].initial))states[id]=structuredClone(imported.states[id]);
+        else if(!same(states[id],imported.states[id]))kept++;
+      }
+      if(!settingBackups[id]&&validFor(id,imported.settingBackups?.[id]))settingBackups[id]=structuredClone(imported.settingBackups[id]);
       if(Array.isArray(imported.progress?.[id]))progress[id]=[...new Set([...progress[id],...imported.progress[id].filter(n=>n===0||n===1)])];
-      if(imported.missions?.[id]===true||(!imported.missions&&pilotIds.includes(id)&&imported.progress?.[id]?.length===2))missionProgress[id]=true;
-      if(typeof imported.codes?.[id]==='string')codes[id]=imported.codes[id].slice(0,100000);
+      if(imported.missions?.[id]===true||(!imported.missions&&pilotIds.includes(id)&&[0,1].every(index=>imported.progress?.[id]?.includes(index))))missionProgress[id]=true;
+      if(typeof imported.codes?.[id]==='string'){
+        const code=imported.codes[id].slice(0,100000);
+        if(codes[id]===null)codes[id]=code;
+        else if(codes[id]!==code)kept++;
+      }
+      const backup=imported.codeBackups?.[id];
+      if(!codeBackups[id]&&backup&&(backup.code===null||typeof backup.code==='string'))codeBackups[id]={code:backup.code?.slice(0,100000)??null};
     }
-    loadLesson(current);$('#import-status').textContent='Progress imported and merged on this device. Python was not executed.';
+    loadLesson(current);
+    $('#import-status').textContent='Progress imported and merged.'+(kept?` Kept ${kept} current ${kept===1?'edit':'edits'} where this file contains a different version.`:'');
   }catch(error){$('#import-status').textContent='Import failed: '+error.message;}
   importInput.value='';
 });
