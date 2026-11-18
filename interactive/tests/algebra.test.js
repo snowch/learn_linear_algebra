@@ -20,6 +20,7 @@ test('the full course has 21 substantive lessons, 42 questions, challenges and o
 });
 test('exact row arithmetic preserves thirds, halves, swaps, and reversible operations',()=>{
  assert.equal(String(Fraction.from('1/3').add('1/2')),'5/6');assert.equal(String(Fraction.from('-0.5')),'-1/2');
+ assert.equal(String(Fraction.from('−1/2')),'-1/2');
  assert.throws(()=>Fraction.from('1/0'));assert.throws(()=>rowOperation([['1','2','5'],['2','-1','0']],'scale',0,0,'0'));
  assert.throws(()=>rowOperation([['1','2','5'],['2','-1','0']],'add',0,0,'-1'));
  const input=[['1','2','5'],['2','-1','0']],next=rowOperation(input,'add',0,1,'-2');

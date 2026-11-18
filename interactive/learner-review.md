@@ -14,7 +14,7 @@ Chromium replayed the supplied settings and edits through the normal controls. E
 | Matrix arithmetic | Reversing the product changed row 1, column 2 from 2 to 1. Transposing the diagonal A gave A again. |
 | Matrix transformations | Collapse to a line changed the area scale from 1 to 0. |
 | Span and dimension | The parallel and independent pairs reported dimensions 1 and 2. The independent pair reached (2, 1). |
-| Gaussian elimination | Applying the instructed row addition gave [0, −5, −10] and retained (1, 2). Zero scaling left the rows intact. Undo restored the starting rows. |
+| Gaussian elimination | Pasting the shown multiplier −2 and applying the row addition gave [0, −5, −10] and retained (1, 2). Zero scaling left the rows intact. Undo restored the starting rows. |
 | Solution sets | The starting lines met at (2, 1). The preset had infinitely many solutions and editing its right-hand side produced no solution. |
 | Vector spaces | Shifting y = x by one moved both zero and the sample sum outside the set. |
 | Linear dependence | Editing w changed its representation from u + v to 2u − v. |

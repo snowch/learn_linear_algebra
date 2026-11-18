@@ -43,7 +43,8 @@ for(const id of courseOrder){
  if(id==='span'){select('#preset','independent');input('#coefficient-a',2);input('#coefficient-b',1);}
  if(id==='elimination'){
   $('#row-factor').value='0';select('[data-key="rowOp"]','scale');$('[data-lab-action="apply-row"]').click();assert.match($('#row-operation-status').textContent,/zero/);
-  $('#reset').click();const before=$('#graph-text').textContent;$('[data-lab-action="apply-row"]').click();assert.notEqual($('#graph-text').textContent,before);
+  $('#reset').click();const before=$('#graph-text').textContent;
+  $('#row-factor').value='−2';$('[data-lab-action="apply-row"]').click();assert.match($('#graph-text').textContent,/0, -5, -10/);
   $('[data-lab-action="undo-row"]').click();assert.equal($('#graph-text').textContent,before);
   for(let i=0;i<8;i++)$('[data-lab-action="next-row"]').click();
  }
