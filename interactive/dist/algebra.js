@@ -73,7 +73,7 @@ export function pca(points,center=true){
 const gcd=(a,b)=>{a=a<0n?-a:a;b=b<0n?-b:b;while(b){[a,b]=[b,a%b]}return a||1n;};
 export class Fraction{
  constructor(n,d=1n){n=BigInt(n);d=BigInt(d);if(!d)throw new Error('A denominator cannot be zero.');if(d<0n){n=-n;d=-d;}const g=gcd(n,d);this.n=n/g;this.d=d/g;if(this.n.toString().length+this.d.toString().length>80)throw new Error('Values are too large. Undo or reset and try smaller factors.');}
- static from(value){if(value instanceof Fraction)return value;const s=String(value).trim();if(s.length>90||!/^[-+]?\d+(?:\/[-+]?\d+|\.\d+)?$/.test(s))throw new Error('Use an integer, decimal, or fraction such as −1/2 (with a normal minus sign).');if(s.includes('/')){const [n,d]=s.split('/');return new Fraction(n,d);}if(s.includes('.')){const [a,b]=s.split('.');return new Fraction(BigInt(a+b),10n**BigInt(b.length));}return new Fraction(s);}
+ static from(value){if(value instanceof Fraction)return value;const s=String(value).trim().replaceAll('−','-');if(s.length>90||!/^[-+]?\d+(?:\/[-+]?\d+|\.\d+)?$/.test(s))throw new Error('Use an integer, decimal or fraction such as −1/2.');if(s.includes('/')){const [n,d]=s.split('/');return new Fraction(n,d);}if(s.includes('.')){const [a,b]=s.split('.');return new Fraction(BigInt(a+b),10n**BigInt(b.length));}return new Fraction(s);}
  add(x){x=Fraction.from(x);return new Fraction(this.n*x.d+x.n*this.d,this.d*x.d)}
  neg(){return new Fraction(-this.n,this.d)}
  mul(x){x=Fraction.from(x);return new Fraction(this.n*x.n,this.d*x.d)}
