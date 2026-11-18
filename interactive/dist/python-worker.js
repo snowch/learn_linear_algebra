@@ -18,8 +18,8 @@ self.onmessage = async ({data}) => {
   if(data.type==='run') {
     try {
       await ready;
-      if(!pyodide) throw new Error('Python is not ready. Stop and reopen the panel to retry.');
-      postMessage({type:'status',text:'Loading any required packages…'});
+      if(!pyodide) throw new Error('Python could not start. Choose Run Python to retry.');
+      postMessage({type:'status',text:'Loading the packages used by this code…'});
       await pyodide.loadPackagesFromImports(data.code);
       postMessage({type:'status',text:'Running locally…'});
       const result = await pyodide.runPythonAsync(data.code);

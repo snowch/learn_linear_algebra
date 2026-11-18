@@ -40,7 +40,7 @@ The exact row-operation engine uses reduced BigInt fractions. Legal row operatio
 
 ## Optional Python
 
-Opening the panel loads pinned Pyodide 0.27.7 from jsDelivr into a dedicated worker. Running an example loads SymPy or NumPy as needed. Code is generated from the current exploration state. Edited code occupies a separate workspace and does not mutate the diagram. Restore exploration values replaces the editor contents with the current example. Edits are stored per lesson. Navigation and progress imports never execute code.
+Open Python workspace to inspect the generated example. The first Run Python starts pinned Pyodide 0.27.7 from jsDelivr in a dedicated worker and loads the packages used by the program. The generated editor text follows the diagram settings until the learner edits it. Edits are saved per lesson and run separately from the diagram. Restore code from settings replaces the editor with a fresh example and saves a recovery copy of the previous draft. Results stay with the lesson and identify output from earlier code. Navigation and progress imports never execute code.
 
 Stop terminates the runtime; starting again creates a fresh one. Navigating to a different lesson stops an active execution. Startup times out after 90 seconds and execution after 60 seconds. Downloads require network access; visual exploration and course assessment do not depend on Python loading. Google Fonts is optional and has system fallbacks.
 
@@ -48,16 +48,16 @@ Stop terminates the runtime; starting again creates a fresh one. Navigating to a
 
 The existing `basis-lab-v1` localStorage key is retained with schema version 2. Previously completed pilot lessons retain their completed status; existing exploration state and Python edits are preserved. New lessons require an experiment check plus two questions for completion. Progress records successful checks, rather than locking chapters or preventing later experimentation.
 
-JSON export and import support moving progress between browsers. Import validates known states, merges completed checks, limits file/code size, and does not run Python. All saved state remains in the current browser; there are no analytics or application data APIs. Storage failures are surfaced so export remains available. Browser-local Python is not network-isolated: learner-authored Python may use browser networking APIs.
+JSON export and import support moving progress between browsers. Import validates known states, merges completed checks and fills untouched lessons while keeping conflicting local edits. All saved state remains in the current browser. Storage failures show a warning, preserve the previous saved snapshot and leave export available. Learner-authored Python can use browser networking APIs.
 
 ## Validation
 
 - `npm test`: 18 mathematical/curriculum tests, including QR, pivoted LU, SVD, eigenvector and kernel identities for all 625 small integer 2 × 2 matrices. Also checks exact fractions, degenerate solution sets, projection properties, PCA centering, every scene, all challenge witnesses, prerequisites, and saved-state validation.
-- `node scripts/verify-dom.mjs /absolute/path/to/linkedom-worker.mjs`: the complete 21-lesson interaction flow, all 63 checks without initializing Python, old-progress migration, search, mobile selection, navigation, reference, code restoration, worker controls, import/export, and reload persistence. The external testing utility is LinkeDOM 0.18.12; no test dependency is shipped to visitors.
+- `node scripts/verify-dom.mjs /absolute/path/to/linkedom-worker.mjs` exercises all 21 lesson routes and 63 checks, old-progress migration, search, mobile selection, navigation, the reference, Python worker controls, recovery after storage failure, merging progress, and reload persistence. CI installs LinkeDOM 0.18.12 for this check. The published site has no dependency on LinkeDOM.
 - `node scripts/verify-course-python.mjs /absolute/path/to/pyodide-runtime`: all 21 generated Python examples and 39 edge cases through the actual application worker, plus SymPy/NumPy exact-fraction, SVD reconstruction, and PCA variance assertions. The directory needs the pinned core assets, lockfile, and SymPy, mpmath, and NumPy wheels from jsDelivr. The script substitutes local cached assets for runtime loading; it does not test browser networking.
 - `node --check dist/app.js` and `node --check dist/python-worker.js`: syntax checks.
 
-The managed environment did not expose the `cua_repl.js` browser tool required by Sites. Browser rendering and real assistive-technology behavior remain unverified; the DOM checks and real Wasm execution checks are distinct from a browser accessibility audit.
+See the [learner review](learner-review.md) for the Chromium walkthrough and verification scope.
 
 ## Attribution
 
@@ -65,4 +65,4 @@ Course scope and the redesign are informed by [Chris Snow's Learn Linear Algebra
 
 ## GitHub Pages publication
 
-The interactive version is published at https://snowch.github.io/learn_linear_algebra/interactive/ from `interactive/dist/` in `snowch/learn_linear_algebra`. The existing notebook book remains available at its original routes. The Pages workflow renders those notebooks from their stored outputs, tests the interactive course with Node 24, and includes the interactive assets in the same Pages artifact. The opaque `basis-lab-v1` storage/export identifier is retained for backward compatibility; the product name is Learn Linear Algebra.
+The interactive version is published at https://snowch.github.io/learn_linear_algebra/interactive/ from `interactive/dist/` in `snowch/learn_linear_algebra`. The Pages workflow checks the interactive course with Node 24 and renders the original notebooks from their stored outputs for both pull requests and main. Successful main builds include both courses in the Pages deployment. The `basis-lab-v1` storage and export identifier is retained for backward compatibility.
