@@ -1,0 +1,70 @@
+{
+  "version": "0.27.7",
+  "packages": [
+    "mpmath",
+    "numpy",
+    "sympy"
+  ],
+  "files": [
+    {
+      "path": "pyodide.js",
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js",
+      "sha256": "b4cb23a53aba19c221659b9fb40a2f18281d685691dc06647fb0afd0681baf98",
+      "bytes": 14913
+    },
+    {
+      "path": "pyodide.mjs",
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.mjs",
+      "sha256": "04c052c815abb0bf2981fa38c2dfa58e3120ee5288c956df2b2a15e301782c5f",
+      "bytes": 13931
+    },
+    {
+      "path": "pyodide.asm.js",
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.asm.js",
+      "sha256": "6b4c90de5b7172873f04f21884d0e9d2274e305fe32116558fe3e4fbe3618d51",
+      "bytes": 1255688
+    },
+    {
+      "path": "pyodide.asm.wasm",
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.asm.wasm",
+      "sha256": "a50dd1843f805a0b7c45b61037ee0d7b26dfe85efe0e18ef95a34ad24e401f5f",
+      "bytes": 10105545
+    },
+    {
+      "path": "python_stdlib.zip",
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.27.7/full/python_stdlib.zip",
+      "sha256": "16611534726e5d8ac2bd8f926410b2dcb8d6f49aa24913463533b457a2115c16",
+      "bytes": 2360737
+    },
+    {
+      "path": "pyodide-lock.json",
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide-lock.json",
+      "sha256": "9c45b916001a750f4102fc287494f3eab215909c7535c626a20db80fd6333e2c",
+      "bytes": 112205
+    },
+    {
+      "path": "mpmath-1.3.0-py3-none-any.whl",
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.27.7/full/mpmath-1.3.0-py3-none-any.whl",
+      "sha256": "5c8b3c27ea61c54b90c56a5adf9ddb07d7c3591b80e9f83d4f03009bba6f5ac5",
+      "bytes": 418000
+    },
+    {
+      "path": "numpy-2.0.2-cp312-cp312-pyodide_2024_0_wasm32.whl",
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.27.7/full/numpy-2.0.2-cp312-cp312-pyodide_2024_0_wasm32.whl",
+      "sha256": "ebb61241d962b98b21597d7ce43b67668a6d5bab3acec4fbe958657320d7cd08",
+      "bytes": 3061133
+    },
+    {
+      "path": "sympy-1.13.3-py3-none-any.whl",
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.27.7/full/sympy-1.13.3-py3-none-any.whl",
+      "sha256": "f36c07ec53e3992f8d02ea833e4e277c51138791f07b508677dd37ef5c2965dd",
+      "bytes": 4119974
+    },
+    {
+      "path": "PYODIDE-LICENSE",
+      "url": "https://raw.githubusercontent.com/pyodide/pyodide/0.27.7/LICENSE",
+      "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+      "bytes": 16725
+    }
+  ]
+}

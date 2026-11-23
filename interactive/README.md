@@ -66,3 +66,11 @@ Course scope and the redesign are informed by [Chris Snow's Learn Linear Algebra
 ## GitHub Pages publication
 
 The interactive version is published at https://snowch.github.io/learn_linear_algebra/interactive/ from `interactive/dist/` in `snowch/learn_linear_algebra`. The Pages workflow checks the interactive course with Node 24 and renders the original notebooks from their stored outputs for both pull requests and main. Successful main builds include both courses in the Pages deployment. The `basis-lab-v1` storage and export identifier is retained for backward compatibility.
+
+## Self-hosted Python dependencies
+
+Run `python tools/vendor-python.py` before serving `dist/`. The committed
+checksum lock bundles Pyodide 0.27.7, NumPy, SymPy and mpmath inside this course.
+The worker loads packages only from `dist/vendor/pyodide/`, with no CDN fallback.
+Upstream licence files remain in the wheels and `PYODIDE-LICENSE`. Build-time
+package downloads do not send learner code to a package service.

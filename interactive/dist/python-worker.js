@@ -6,8 +6,9 @@ self.onmessage = async ({data}) => {
     if(ready) return;
     ready = (async()=>{
       try {
-        importScripts('https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js');
-        pyodide = await loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.27.7/full/'});
+        const base = new URL('./vendor/pyodide/', self.location.href).href;
+        importScripts(base + 'pyodide.js');
+        pyodide = await loadPyodide({indexURL:base});
         pyodide.setStdout({batched:text=>postMessage({type:'stdout',text})});
         pyodide.setStderr({batched:text=>postMessage({type:'stdout',text})});
         postMessage({type:'ready'});

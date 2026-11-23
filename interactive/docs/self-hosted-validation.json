@@ -1,0 +1,25 @@
+{
+  "kind": "linear",
+  "runs": [
+    {
+      "type": "done",
+      "output": [
+        "Loading mpmath, sympy",
+        "Loaded mpmath, sympy",
+        "-2"
+      ]
+    },
+    {
+      "type": "done",
+      "output": [
+        "Loading numpy",
+        "Loaded numpy",
+        "[1. 1.]"
+      ]
+    }
+  ],
+  "blocked": [],
+  "failures": [],
+  "date": "2026-11-23",
+  "scope": "Fresh browser profile; all provided Python examples (probability) or SymPy/NumPy cold package paths (linear). Requests outside the lab denied. This is functional evidence, not evidence of learning effectiveness or complete offline support."
+}

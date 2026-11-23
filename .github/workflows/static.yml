@@ -55,6 +55,16 @@ jobs:
           PY
           jupyter-book build . --config /tmp/linear-algebra-pages.yml
 
+      - name: Bundle the interactive Python runtime
+        run: python interactive/tools/vendor-python.py
+
+      - name: Verify cold self-hosted Python startup
+        working-directory: interactive
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npm run test:runtime
+
       - name: Add the browser-local interactive course
         run: |
           mkdir -p _build/html/interactive
@@ -62,6 +72,9 @@ jobs:
           touch _build/html/.nojekyll
           test -s _build/html/interactive/index.html
           test -s _build/html/interactive/python-worker.js
+
+      - name: Bundle the original book browser assets
+        run: python scripts/vendor-browser-assets.py _build/html /learn_linear_algebra
 
       - name: Upload the complete site
         if: github.ref == 'refs/heads/main'
