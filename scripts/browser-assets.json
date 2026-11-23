@@ -1,0 +1,14 @@
+[
+  {
+    "name": "mathjax",
+    "version": "3.2.2",
+    "url": "https://registry.npmjs.org/mathjax/-/mathjax-3.2.2.tgz",
+    "sha256": "1b9c0a1c44df864e915690558e72adb9cc5203360daefd385084ced3b6c64c09"
+  },
+  {
+    "name": "thebe",
+    "version": "0.8.2",
+    "url": "https://registry.npmjs.org/thebe/-/thebe-0.8.2.tgz",
+    "sha256": "9c8b28a9703459d34f15074380cfa5c0939468529ff8135a7ae3242523db08d8"
+  }
+]

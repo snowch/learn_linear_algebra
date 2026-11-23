@@ -1,139 +1,31 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>SageMathCell</title>
-    <script src="https://sagecell.sagemath.org/static/embedded_sagecell.js"></script>
-    <script>
-    // Make the div with id 'mycell' a Sage cell
-    sagecell.makeSagecell({inputLocation:  '#mycell',
-                           template:       sagecell.templates.minimal,
-                           evalButtonText: 'Activate',
-			 linked: true});
-    // Make *any* div with class 'compute' a Sage cell
-    sagecell.makeSagecell({inputLocation: 'div.compute',
-                           evalButtonText: 'Evaluate',
-			 linked: true});
-    </script>
-  </head>
-  <body>
-  <h1>Embedded Sage Cells</h1>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linear algebra · local Python runner</title><style>body{font:18px/1.6 system-ui;max-width:850px;margin:40px auto;padding:0 20px;color:#19332d;background:#f6f9f7}textarea,pre{box-sizing:border-box;width:100%;padding:16px;font:16px/1.5 monospace;background:#10221d;color:#e0efe6;border:1px solid #648474;border-radius:8px}button{font:inherit;padding:10px 22px;margin:12px 0;background:#17684e;color:white;border:0;border-radius:6px}pre{white-space:pre-wrap}a{color:#17684e}label{display:block;font-weight:bold}</style></head><body><h1>Solve a linear system in your browser</h1><p>This runner uses Python and SymPy, a Python library for exact symbolic mathematics. The original notebooks use SageMath, whose syntax differs. Use the Python starter below here; run the notebooks themselves in a local SageMath installation.</p><p>The page prepares an augmented matrix: three coefficient columns followed by the right-hand side. Click <strong>Run Python</strong>. Inspect the reduced matrix, pivot columns, free variables and solution. Change a matrix entry and run again to see whether the system still has a unique solution.</p><label for="code">Python source</label><textarea id="code" rows="20" spellcheck="false">from sympy import Matrix, linsolve, symbols, pprint
 
-
-<h2>Your own computations</h2>
-Type your own Sage computation below and click “Evaluate”.
-    <div class="compute"><script type="text/x-sage">
-def solution_details(augmented_matrix, vars=None):
-    try:
-        num_coeff_cols = augmented_matrix.subdivisions()[1][0]
-        if not num_coeff_cols > 0:
-            raise ValueError("Subdivided augmented matrix required.")
-    except (AttributeError, IndexError):
-        raise ValueError("Subdivided augmented matrix required.")
-
-    pivots = augmented_matrix.pivots()
-    const_col = num_coeff_cols + 1
-
-    print("Matrix and RREF:")
-    import sys
-
-    u = [augmented_matrix, augmented_matrix.rref()]
-    show(augmented_matrix, augmented_matrix.rref())
-
-    print()
-    
-    # is RHS all zeros
-    is_zero = all(component == 0 for component in augmented_matrix[:, -1])
-    if is_zero:
-        print('Matrix is homogeneous, must be consistent (always at least one soln - the 0 vector).')
-    else:
-        print('Matrix is not homogeneous - can be inconsistent.')
-
-    if (const_col - 1) in pivots:
-        print('No Solution (Inconsistent - const col has pivot)')
-    else:
-        if len(pivots) == num_coeff_cols:
-            print("Unique Solution (Consistent, pivot position in each col)")
-        elif len(pivots) < num_coeff_cols:
-            print('Infinitely Many Solutions (Consistent, >= 1 coeff col with no pivots)')
-
-    solution, X, X_pivots, X_free, param_sol_dict = my_solve(augmented_matrix, vars)
-    
-    print("Variables: ", X)
-    print("Pivots (leading) variables: ", X_pivots)
-    print("Free variables: ", X_free)
-    print()
-
-    if solution:
-        # flatten solution list
-        import operator
-        solution = reduce(operator.concat, solution)
-        
-        print("Solution: ")
-        [print(f'  {s}') for s in solution if len(solution)]
-        print()
-
-    if param_sol_dict:
-        print("Parametized solution vectors")
-        print("(particular + unrestricted combination)")
-        for key, value in param_sol_dict.items():
-            print(f"{key}: {str(value[0]).rjust(10)} {' '.join(str(v).rjust(10) for v in value[1])}")
-        print()
-
-def my_solve(augmented_matrix, vars=None):
-    A = augmented_matrix[:, :-1]
-    Y = augmented_matrix[:, -1]
-
-    m, n = A.dimensions()
-    p, q = Y.dimensions()
-
-    if m != p:
-        raise RuntimeError("The matrices have different numbers of rows")
-
-    if vars and len(vars) != n:
-        raise RuntimeError(f"Provided variables '{vars}' != number of columns '{n}'")
-
-    if vars:
-        X = vector([var(vars[i]) for i in range(n)])
-    else:
-        X = vector([var(f"x_{i}") for i in range(n)])
-
-    X_pivots = vector([var(X[i]) for i in range(n) if i in A.pivots()])
-    X_free = vector([var(X[i]) for i in range(n) if i not in A.pivots()])
-
-    sols = []
-    param_sol_dict = {}
-    for j in range(q):
-        system = [A[i] * X == Y[i, j] for i in range(m)]
-        sol = solve(system, *X_pivots)
-
-        if len(sol):
-            for s in sol[0]:
-                coefficients = [s.rhs().coefficient(var) for var in X_free]
-                constant_term = s.rhs() - sum(coeff * var for coeff, var in zip(coefficients, X_free))
-                
-                coeff_var_pairs = [(coeff, var) for coeff, var in zip(coefficients, X_free)]
-                coeff_var_strings = [f"{coeff}{var}" for coeff, var in coeff_var_pairs]
-
-                if len(X_free):
-                    param_sol_dict[str(s.lhs())] = [constant_term, coeff_var_strings]
-
-            if len(X_free):
-                for free_var in X_free:
-                    param_sol_dict[str(free_var)] = [0, [f'1{var}' if var == free_var else f'0{var}' for var in X_free]]
-
-            sols += sol
-
-    return sols, X, X_pivots, X_free, param_sol_dict
-</script></div>
-
-
-    <div class="compute"><script type="text/x-sage">
-M = matrix(QQ, 3, [1,2,3,0,1,2,0,0,1])
-v = vector(QQ, [4,3,2])
-Maug = M.augment(v, subdivide=True)
-solution_details(Maug)
-</script></div>
-  </body>
-</html>
+# Three coefficients and the right-hand side in each row.
+augmented = Matrix([
+    [1, 2, 3, 4],
+    [0, 1, 2, 3],
+    [0, 0, 1, 2],
+])
+A = augmented[:, :-1]
+b = augmented[:, -1]
+x = symbols('x0:' + str(A.cols))
+rref, pivots = augmented.rref()
+print('Augmented matrix and its reduced row echelon form:')
+pprint(augmented)
+pprint(rref)
+print('Pivot columns (zero-based, including any right-hand-side pivot):', pivots)
+print('Free variable columns:', [i for i in range(A.cols) if i not in A.rref()[1]])
+print('Homogeneous (all right-hand-side entries are zero):', all(v == 0 for v in b))
+if A.rank() != augmented.rank():
+    print('No solution: the right-hand side introduces an extra pivot.')
+elif A.rank() == A.cols:
+    print('Unique solution:')
+else:
+    print('Infinitely many solutions: free variables remain.')
+pprint(linsolve((A, b), x))</textarea><button id="run">Run Python</button><p id="status" role="status">Python starts when you choose Run Python. Code runs on your device.</p><pre id="output" aria-label="Python output">Output will appear here.</pre><p>Output checks concern this matrix, not every possible system. Python edits are saved in this browser when storage is available.</p><p><a href="/learn_linear_algebra/interactive/">Open the interactive linear algebra course</a> · <a href="/learn_linear_algebra/notebooks/00-start-here.html">Return to the notebook introduction</a></p><script>
+const code=document.getElementById('code'),run=document.getElementById('run'),status=document.getElementById('status'),output=document.getElementById('output'),key='linear-algebra:python-runner:v1';let worker,ready=false;
+try{code.value=localStorage.getItem(key)??code.value}catch{}
+code.addEventListener('input',()=>{try{localStorage.setItem(key,code.value)}catch{status.textContent='Storage is unavailable. Copy your edits before closing.'}});
+function submit(){output.textContent='';worker.postMessage({type:'run',code:code.value})}
+run.onclick=()=>{run.disabled=true;status.textContent='Starting Python…';if(ready){submit();return}worker=new Worker('/learn_linear_algebra/interactive/python-worker.js');worker.onmessage=({data})=>{if(data.type==='ready'){ready=true;submit()}else if(data.type==='stdout'){output.textContent+=data.text+'\n'}else if(data.type==='status'){status.textContent=data.text}else if(['done','error','init-error'].includes(data.type)){run.disabled=false;status.textContent=data.type==='done'?'Run complete. Inspect Python output.':'Python reported an error. Your source is kept.';if(data.text)output.textContent+=data.text+'\n';if(data.type==='init-error'){worker.terminate();worker=undefined;ready=false}}};worker.onerror=event=>{worker.terminate();worker=undefined;ready=false;run.disabled=false;status.textContent='Python could not start. Your source is kept; retry Run Python.';output.textContent=event.message};worker.postMessage({type:'init'})};
+</script></body></html>

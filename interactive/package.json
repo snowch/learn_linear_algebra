@@ -1,1 +1,13 @@
-{"name":"learn-linear-algebra-interactive","version":"2.0.0","private":true,"type":"module","scripts":{"test":"node --test --test-isolation=none tests/*.test.js"}}
+{
+  "name": "learn-linear-algebra-interactive",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test --test-isolation=none tests/*.test.js",
+    "test:runtime": "node tests/self-hosted-runtime.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

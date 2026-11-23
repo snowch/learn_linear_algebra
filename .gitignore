@@ -1,1 +1,6 @@
 .ipynb_checkpoints
+
+.cache/browser-assets/
+
+__pycache__/
+_build/
