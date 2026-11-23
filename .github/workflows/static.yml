@@ -74,7 +74,9 @@ jobs:
           test -s _build/html/interactive/python-worker.js
 
       - name: Bundle the original book browser assets
-        run: python scripts/vendor-browser-assets.py _build/html /learn_linear_algebra
+        run: |
+          python scripts/vendor-browser-assets.py _build/html /learn_linear_algebra
+          python scripts/check-browser-assets.py _build/html
 
       - name: Upload the complete site
         if: github.ref == 'refs/heads/main'

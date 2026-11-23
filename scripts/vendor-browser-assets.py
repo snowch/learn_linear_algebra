@@ -30,9 +30,17 @@ replacements={
 }
 count=0
 for path in out.rglob('*'):
- if not path.is_file() or 'vendor' in path.relative_to(out).parts or path.suffix not in {'.html','.js','.css','.json'}:continue
+ if not path.is_file() or 'vendor' in path.relative_to(out).parts or path.suffix not in {'','.html','.js','.css','.json'}:continue
  s=path.read_text();original=s
- if path.suffix==".html":
+ if path.suffix in {'','.html'}:
+  seen=set()
+  def unique_thebe(match):
+   block=match.group(0)
+   if 'THEBE_JS_URL' not in block:return block
+   if block in seen:return ''
+   seen.add(block);return block
+  s=re.sub(r'<script\b[^>]*>.*?</script>', unique_thebe, s, flags=re.S)
+ if path.suffix in {'','.html'}:
   s=re.sub(r'<img\b[^>]*src=["\']https://mirrors\.creativecommons\.org/presskit/buttons/88x31/png/by-nc-sa\.png["\'][^>]*>', "<span>CC BY-NC-SA 4.0</span>", s)
  for before,after in replacements.items():s=s.replace(before,after)
  # Byte-identical third-party CSS keeps its original integrity attribute.
