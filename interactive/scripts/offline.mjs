@@ -21,7 +21,7 @@ async function filesUnder(directory, prefix = "") {
   }
   return files.sort();
 }
-const markup = "<button id=\"app-status-open\" class=\"offline-status-control\" type=\"button\" aria-label=\"App status and offline access\" aria-describedby=\"app-status-summary\" title=\"App status and offline access\" aria-haspopup=\"dialog\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M19.35 10.04C18.67 6.59 15.64 4 12 4c-2.89 0-5.4 1.64-6.65 4.04C2.34 8.36 0 10.9 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z\"/></svg><span id=\"app-status-summary\" class=\"offline-status-label\">Check version</span></button>";
+const markup = "<button id=\"app-status-open\" disabled class=\"offline-status-control\" type=\"button\" aria-label=\"App status and offline access\" aria-describedby=\"app-status-summary\" title=\"App status and offline access\" aria-haspopup=\"dialog\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M19.35 10.04C18.67 6.59 15.64 4 12 4c-2.89 0-5.4 1.64-6.65 4.04C2.34 8.36 0 10.9 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z\"/></svg><span id=\"app-status-summary\" class=\"offline-status-label\">Check version</span></button>";
 const panel = `<dialog id="app-status-dialog" aria-labelledby="app-status-title">
 <div class="status-heading"><h2 id="app-status-title">App status</h2><button id="app-status-close" type="button" autofocus>Close</button></div>
 <div id="app-status-feedback"><p id="app-status-error" role="status"></p></div>

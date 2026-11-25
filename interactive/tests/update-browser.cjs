@@ -78,7 +78,9 @@ async function updates() {
     slowStarted = false,
     releaseSlow,
     failUpdate = false,
-    outage = false;
+    outage = false,
+    controlStarted = false,
+    releaseControl;
   for (const version of ["a", "b"]) {
     const root = (roots[version] = path.join(directory, version));
     await fs.mkdir(path.join(root, "assets"), { recursive: true });
@@ -121,6 +123,10 @@ async function updates() {
           res.writeHead(503).end("Fixture server disconnected");
           return true;
         }
+        if (!controlStarted && name.endsWith("/offline.mjs")) {
+          controlStarted = true;
+          await new Promise(resolve => { releaseControl = resolve; });
+        }
         if (!name.endsWith("assets/transfer-fixture.txt")) return false;
         if (failUpdate && name.includes(releases.b.id)) {
           res.writeHead(503).end("Temporary fixture failure");
@@ -145,7 +151,11 @@ async function updates() {
     context = await browser.newContext();
   try {
     const p = await context.newPage();
-    await p.goto(base + "#one");
+    await p.goto(base + "#one", { waitUntil: "commit" });
+    await expect(p.locator("#app-status-open")).toBeDisabled();
+    await expect.poll(() => controlStarted).toBe(true);
+    releaseControl();
+    await expect(p.locator("#app-status-open")).toBeEnabled({ timeout: 30000 });
     await p.locator("#source").fill("First window note");
     await p
       .locator("#output")
@@ -191,7 +201,9 @@ async function updates() {
     await saveAndReload(q);
     await expect(q.locator("body")).toHaveAttribute("data-version", "a");
     await expect(q.locator("#source")).toHaveValue("Second window note");
-    outage = false;
+    outage = false,
+    controlStarted = false,
+    releaseControl;
     failUpdate = false;
     await context.setOffline(false);
     await expect(p.locator("#restart-update")).toBeVisible({ timeout: 30000 });
