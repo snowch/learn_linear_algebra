@@ -1,0 +1,13 @@
+import {cp,mkdir,readFile,writeFile,rm} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
+import {buildOffline} from './offline.mjs';
+const output='.build/site';
+await rm(output,{recursive:true,force:true});await mkdir(output,{recursive:true});await cp('dist',output,{recursive:true});
+for(const name of ["offline.mjs", "release-contract.mjs", "release-metadata.mjs", "media-range.mjs", "experiment-state.mjs", "runtime-recovery.mjs", "runtime-recovery.css", "app-status.css"])await cp('src/'+name,output+'/'+name);
+const app=await readFile(output+'/app.js','utf8');await writeFile(output+'/app.js',"import './experiment-state.mjs';\n"+app);
+let html=await readFile(output+'/index.html','utf8');
+html=html.replace('</head>','<meta name="reading-state-managed" content="true"><link rel="stylesheet" href="./app-status.css"><link rel="stylesheet" href="./runtime-recovery.css"></head>');
+html=html.replace('<!-- offline-header-icon -->','<!-- app-status-control -->');
+await writeFile(output+'/index.html',html);
+const commit=process.env.COURSE_COMMIT||execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
+await buildOffline(output,{commit,date:new Date().toISOString().slice(0,10)});

@@ -16,6 +16,12 @@ def fetch(item):
    if attempt==2:raise
    time.sleep(attempt+1)
 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:list(pool.map(fetch,lock['files']))
+# Pyodide 0.27 otherwise retries failed local packages on jsDelivr. Keep both
+# the initial request and recovery attempt within this lab's configured index.
+for name in ['pyodide.js','pyodide.mjs']:
+ p=out/name;s=p.read_text();before='n.setCdnUrl(`https://cdn.jsdelivr.net/pyodide/v${d.version}/full/`)'
+ if s.count(before)!=1:raise ValueError('Review changed Pyodide fallback before publishing')
+ p.write_text(s.replace(before,'n.setCdnUrl(r.indexURL)'))
 # Keep only the supported, bundled package graph. Unsupported imports fail locally.
 index=out/'pyodide-lock.json';data=json.loads(index.read_text());data['packages']={n:v for n,v in data['packages'].items() if n in lock['packages']};index.write_text(json.dumps(data)+'\n')
 print('Bundled Python '+lock['version']+' and '+str(len(lock['packages']))+' packages')

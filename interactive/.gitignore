@@ -1,2 +1,6 @@
 
 /dist/vendor/
+
+node_modules/
+.build/
+test-results/

@@ -17,11 +17,13 @@ self.onmessage = async ({data}) => {
     ready.catch(()=>{});
   }
   if(data.type==='run') {
+    let phase='asset';
     try {
       await ready;
       if(!pyodide) throw new Error('Python could not start. Choose Run Python to retry.');
       postMessage({type:'status',text:'Loading the packages used by this code…'});
       await pyodide.loadPackagesFromImports(data.code);
+      phase='execution';
       postMessage({type:'status',text:'Running locally…'});
       const result = await pyodide.runPythonAsync(data.code);
       if(result!==undefined && result!==null) {
@@ -29,6 +31,6 @@ self.onmessage = async ({data}) => {
         if(typeof result.destroy==='function') result.destroy();
       }
       postMessage({type:'done'});
-    } catch(error) { postMessage({type:'error',text:String(error)}); }
+    } catch(error) { postMessage({type:'error',category:phase,text:String(error)}); }
   }
 };
