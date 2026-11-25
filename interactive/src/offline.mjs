@@ -1272,6 +1272,8 @@ $("confirm-remove").addEventListener("click", async () => {
   try {
     await remembering;
     await rpc("REMOVE");
+    // A verification started before removal must not restore its stale result.
+    ++refreshGeneration;
     snapshot = {};
     removed = true;
     $("remove-confirmation").hidden = true;
@@ -1304,6 +1306,7 @@ navigator.serviceWorker?.addEventListener("message", ({ data }) => {
     refresh(true);
   }
   if (data?.type === "OFFLINE_REMOVED") {
+    ++refreshGeneration;
     snapshot = {};
     removed = true;
     render();
