@@ -1387,3 +1387,6 @@ $("reload-online").onclick = async () => {
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") checkNativeProgress();
 });
+
+// The visible control must not accept a click before its handlers exist.
+$("app-status-open").disabled = false;
