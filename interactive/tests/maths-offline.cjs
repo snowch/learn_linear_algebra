@@ -226,8 +226,47 @@ const config = {
     await visit(p, config.first);
     await p.locator("#app-status-open").click();
     await p.locator("#app-status-details").evaluate((n) => (n.open = true));
+    await expect(p.locator("#offline-status")).toContainText(
+      "Downloaded and ready to use offline",
+      { timeout: 30000 },
+    );
+    // Hold a real ready STATUS response across REMOVE. A late verification
+    // must not make deleted files appear downloaded again.
+    await p.evaluate(() => {
+      const post = ServiceWorker.prototype.postMessage;
+      const replies = [];
+      window.releaseHeldStatus = () => {
+        for (const reply of replies) reply();
+      };
+      ServiceWorker.prototype.postMessage = function (message, ports) {
+        if (message.type === "STATUS") {
+          const channel = new MessageChannel();
+          channel.port1.onmessage = ({ data }) => {
+            if (data.progress) ports[0].postMessage(data);
+            else {
+              window.heldStatusReady ||= Boolean(data.result?.offlineReady);
+              replies.push(() => {
+                ports[0].postMessage(data);
+                channel.port1.close();
+              });
+            }
+          };
+          return post.call(this, message, [channel.port2]);
+        }
+        return post.call(this, message, ports);
+      };
+      dispatchEvent(new Event("focus"));
+    });
+    await p.waitForFunction(() => window.heldStatusReady);
     await p.locator("#remove-offline").click();
     await p.locator("#confirm-remove").click();
+    await expect(p.locator("#offline-status")).toContainText(
+      "Not downloaded for offline use",
+    );
+    await p.evaluate(async () => {
+      releaseHeldStatus();
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
     await expect(p.locator("#offline-status")).toContainText(
       "Not downloaded for offline use",
     );
