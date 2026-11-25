@@ -1,0 +1,56 @@
+.runtime-recovery-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 24px;
+  color: var(--ink);
+  background: var(--paper, var(--panel));
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px #0004;
+}
+.runtime-recovery-dialog::backdrop {
+  background: #0009;
+}
+.runtime-recovery-dialog h2 {
+  margin: 0 0 16px;
+  font-size: 22px;
+  line-height: 1.3;
+}
+.runtime-recovery-dialog h2:focus {
+  outline: none;
+}
+.runtime-recovery-dialog p {
+  margin: 0 0 20px;
+  font-size: 16px;
+  line-height: 1.55;
+}
+.runtime-recovery-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.runtime-recovery-dialog button {
+  min-height: 44px;
+  padding: 10px 14px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper, var(--panel));
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.runtime-recovery-dialog button.primary {
+  background: var(--accent);
+  color: var(--on-accent, var(--bg));
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.runtime-recovery-dialog button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}

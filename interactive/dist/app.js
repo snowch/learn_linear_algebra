@@ -234,7 +234,7 @@ function showPythonResult(){
 function showPythonStatus(){
   if(pythonBusy)return;
   const result=pythonResults.get(current);
-  $('#python-status').textContent=result?.status??(pythonReady?'Choose Run Python to calculate.':'The first run downloads Python from jsDelivr.');
+  $('#python-status').textContent=result?.status??(pythonReady?'Choose Run Python to calculate.':'Python loads from this course. Save the offline copy before disconnecting.');
 }
 function finishPython(message){
   clearTimeout(workerTimer);
@@ -275,7 +275,7 @@ function startPython(){
     runtime.onmessage=({data})=>{
       if(worker!==runtime || !pythonRun)return;
       if(data.type==='ready'){pythonReady=true;executePython();return;}
-      if(data.type==='init-error'){stopPython('Python could not load. Check the connection and choose Run Python again.');return;}
+      if(data.type==='init-error'){stopPython('Python could not load.');window.courseOffline?.experimentFilesUnavailable('Run Python');return;}
       const result=pythonResults.get(pythonRun.id);
       if(data.type==='stdout'&&result.output.length<50000){result.output+=data.text+'\n';showPythonResult();}
       if(data.type==='status')$('#python-status').textContent=data.text;
@@ -283,9 +283,9 @@ function startPython(){
         if(!result.output)result.output='The code finished without printing a value.';
         finishPython('Python run finished.');
       }
-      if(data.type==='error'){result.error=data.text;finishPython('Python run ended with an error.');}
+      if(data.type==='error'){result.error=data.text;finishPython('Python run ended with an error.');if(data.category==='asset')window.courseOffline?.experimentFilesUnavailable('Run Python');}
     };
-    runtime.onerror=()=>stopPython('Python could not start. Check the connection and choose Run Python again.');
+    runtime.onerror=()=>{stopPython('Python could not start.');window.courseOffline?.experimentFilesUnavailable('Run Python');};
     runtime.postMessage({type:'init'});
     workerTimer=setTimeout(()=>stopPython('Python took too long to load. Choose Run Python to try again.'),90000);
   } catch {
@@ -505,7 +505,14 @@ $('#import-file').addEventListener('change',async event=>{
   }catch(error){$('#import-status').textContent='Import failed: '+error.message;}
   importInput.value='';
 });
+window.courseOffline?.registerReading('linear-algebra',{
+ isBusy:()=>pythonBusy,
+ save:()=>{persist();if(worker&&!pythonBusy){worker.terminate();worker=null;pythonReady=false;}return {state:structuredClone(snapshot()),lastSaved,pythonOpen:!$('#python-panel').hidden,results:[...pythonResults]};},
+ restore:value=>{lastSaved=value.lastSaved;const data=value.state;for(const [target,key]of [[states,'states'],[progress,'progress'],[missionProgress,'missions'],[codes,'codes'],[settingBackups,'settingBackups'],[codeBackups,'codeBackups']])Object.assign(target,data[key]);pythonResults.clear();for(const [id,result]of value.results||[])pythonResults.set(id,result);$('#python-panel').hidden=!value.pythonOpen;$('#python-toggle').setAttribute('aria-expanded',String(!!value.pythonOpen));loadLesson(data.current);if(!$('#python-panel').hidden){syncPythonEditor();showPythonResult();showPythonStatus();}}
+});
 renderNavigation();
 window.addEventListener('hashchange',()=>{const id=location.hash.slice(1);if(ids.includes(id))loadLesson(id,true);});
 const initialId=location.hash.slice(1);
 loadLesson(ids.includes(initialId)?initialId:ids.includes(saved.current)?saved.current:'vectors');
+
+await window.courseOffline?.completeReadingSetup();

@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "test": "node --test --test-isolation=none tests/*.test.js",
-    "test:runtime": "node tests/self-hosted-runtime.cjs"
+    "test:runtime": "node tests/self-hosted-runtime.cjs",
+    "test:offline": "node --test tests/offline-build.test.mjs tests/retention.test.mjs tests/artifact.test.mjs tests/publication.test.mjs && node tests/maths-offline.cjs && node tests/update-browser.cjs",
+    "build": "python3 tools/vendor-python.py && node scripts/build-offline.mjs"
   },
   "devDependencies": {
-    "playwright": "1.62.1"
+    "playwright": "^1.62.1"
   }
 }
