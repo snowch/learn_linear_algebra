@@ -17,6 +17,19 @@ const types={'.js':'application/javascript','.mjs':'application/javascript','.wa
   const runs=await page.evaluate(async(kind)=>{if(kind==='probability'){const {pythonExamples}=await import('./python-examples.js');const w=new Worker('./python-worker.js',{type:'module'}),results=[];for(const [id,example] of Object.entries(pythonExamples)){const result=await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('Timed out '+id)),120000);w.onerror=e=>{clearTimeout(timeout);reject(Error(e.message))};w.onmessage=({data})=>{if(['result','error'].includes(data.type)){clearTimeout(timeout);resolve({id,type:data.type,message:data.message,figures:data.figures?.length,output:data.output})}};w.postMessage({id,code:example.code,packages:example.packages})});results.push(result);if(result.type==='error')break;}w.terminate();return results;}const w=new Worker('./python-worker.js'),results=[];await new Promise((resolve,reject)=>{w.onmessage=({data})=>{if(data.type==='ready')resolve();if(data.type==='init-error')reject(Error(data.text))};w.postMessage({type:'init'})});for(const code of ['from sympy import Matrix\nprint(Matrix([[1,2],[3,4]]).det())','import numpy as np\nprint(np.linalg.svd(np.eye(2))[1])']){const output=[];const r=await new Promise(resolve=>{w.onmessage=({data})=>{if(data.type==='stdout')output.push(data.text);if(['done','error'].includes(data.type))resolve({type:data.type,text:data.text,output})};w.postMessage({type:'run',code})});results.push(r)}w.terminate();return results;}, "linear");
   assert.deepEqual(blocked,[],'No third-party request may be attempted');assert.deepEqual(failures,[],'Every required local asset must load');
   for(const run of runs)assert.notEqual(run.type,'error',JSON.stringify(run));
+  // A failed local wheel must report an error, never try the loader's default CDN.
+  await context.route('**/*numpy*.whl',route=>{if(!route.request().url().startsWith(base)){blocked.push(route.request().url());return route.abort()}return route.fulfill({status:503,body:'Simulated local package failure'})});
+  const failure=await page.evaluate(async(kind)=>{
+   const worker=new Worker('./python-worker.js',kind==='probability'?{type:'module'}:undefined);
+   try{return await new Promise((resolve,reject)=>{
+    const timeout=setTimeout(()=>reject(Error('Missing-package check timed out')),120000);
+    const run=()=>worker.postMessage(kind==='probability'?{id:'missing',code:'import numpy',packages:['numpy']}:{type:'run',code:'import numpy'});
+    worker.onmessage=({data})=>{if(data.type==='ready')run();if(['error','init-error','result','done'].includes(data.type)){clearTimeout(timeout);resolve(data)}};
+    worker.onerror=event=>{clearTimeout(timeout);reject(Error(event.message))};
+    if(kind==='probability')run();else worker.postMessage({type:'init'});
+   })}finally{worker.terminate()}
+  }, 'linear');
+  assert.equal(failure.type,'error','Missing local packages must not succeed through a CDN');assert.deepEqual(blocked,[],'Recovery must remain inside the lab');
   assert.equal(runs.length,2);console.log('Self-hosted Python: '+runs.length+' checks passed; no external or failed requests');
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1});
