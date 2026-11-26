@@ -155,6 +155,17 @@ export function mountHeaderControls({ statusOnly = false } = {}) {
             : "");
       control.append(visual);
     }
+    let caption = control.querySelector(":scope > .lab-header-label");
+    if (!caption) {
+      caption = document.createElement("span");
+      caption.className = "lab-header-label";
+      caption.setAttribute("data-header-label", "");
+      caption.setAttribute("aria-hidden", "true");
+      control.append(caption);
+    }
+    const captionText =
+      action === "theme" ? "Theme" : statusOnly ? "App status" : "Offline";
+    if (caption.textContent !== captionText) caption.textContent = captionText;
     const label =
       action === "theme"
         ? `Switch to ${resolved() === "dark" ? "light" : "dark"} theme`
