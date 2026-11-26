@@ -163,6 +163,7 @@ export function mountHeaderControls({ statusOnly = false } = {}) {
       caption.setAttribute("aria-hidden", "true");
       control.append(caption);
     }
+    if (visual.nextElementSibling !== caption) control.insertBefore(visual, caption);
     const captionText =
       action === "theme" ? "Theme" : statusOnly ? "App status" : "Offline";
     if (caption.textContent !== captionText) caption.textContent = captionText;
