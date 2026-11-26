@@ -156,21 +156,24 @@ header button.lab-header-control {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  flex: 0 0 48px !important;
-  width: 48px !important;
-  height: 48px !important;
+  flex: 0 0 auto !important;
+  flex-direction: row !important;
+  width: auto !important;
+  height: auto !important;
   min-width: 48px !important;
   min-height: 48px !important;
-  max-width: 48px !important;
-  padding: 0 !important;
+  max-width: none !important;
+  padding: 8px 12px !important;
   margin: 0;
   border: 0 !important;
-  border-radius: 50% !important;
+  border-radius: 8px !important;
   background: transparent !important;
   color: inherit !important;
-  font-size: 0 !important;
-  line-height: 0 !important;
+  font-size: max(14px, 1em) !important;
+  line-height: 1.4 !important;
   position: relative;
+  box-sizing: border-box;
+  gap: 8px !important;
   cursor: pointer;
   box-shadow: none !important;
   vertical-align: middle;
@@ -189,14 +192,32 @@ header button.lab-header-control:disabled {
   opacity: 0.55;
   cursor: wait;
 }
-header button.lab-header-control > :not(.lab-header-visual) {
+header button.lab-header-control > :not(.lab-header-visual):not(.lab-header-label) {
   display: none !important;
+}
+.lab-header-label {
+  display: inline !important;
+  font: inherit;
+  white-space: nowrap;
+  pointer-events: none;
+}
+header:has(.lab-header-control),
+header:has(.lab-header-control) > div {
+  flex-wrap: wrap;
+  row-gap: 12px;
+}
+header:has(.lab-header-control) :is(nav, .top-actions, .global-nav, .header-actions) {
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
+  row-gap: 8px;
 }
 .lab-header-visual {
   display: inline-flex;
   position: relative;
   width: 24px;
   height: 24px;
+  flex: none;
   pointer-events: none;
 }
 .lab-header-visual > svg {
