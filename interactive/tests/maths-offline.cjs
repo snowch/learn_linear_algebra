@@ -127,7 +127,7 @@ const config = {
     let p = await open();
     p.on("pageerror", (e) => errors.push(e.message));
     await visit(p, "");
-    assert.equal(await p.locator("#app-status-open svg").count(), 1);
+    assert.equal(await p.locator("#app-status-open svg:visible").count(), 1);
     assert.equal(
       await p.locator("#app-status-open").getAttribute("aria-label"),
       "App status and offline access",

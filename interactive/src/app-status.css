@@ -150,3 +150,100 @@
 #app-status-dialog{font:inherit;background:var(--paper,var(--bg,#fff));color:var(--ink,var(--text,#193237));box-sizing:border-box}
 #app-status-dialog p{margin:12px 0;line-height:1.6}
 #app-status-dialog .status-heading h2{font-size:1.4rem}
+
+/* Copyright © 2026 Christopher Snow. Shared course header icon controls. */
+header button.lab-header-control {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 48px !important;
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  max-width: 48px !important;
+  padding: 0 !important;
+  margin: 0;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: inherit !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  position: relative;
+  cursor: pointer;
+  box-shadow: none !important;
+  vertical-align: middle;
+}
+header button.lab-header-control:hover {
+  background: color-mix(in srgb, currentColor 9%, transparent) !important;
+}
+header button.lab-header-control:active {
+  background: color-mix(in srgb, currentColor 16%, transparent) !important;
+}
+header button.lab-header-control:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+header button.lab-header-control:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+header button.lab-header-control > :not(.lab-header-visual) {
+  display: none !important;
+}
+.lab-header-visual {
+  display: inline-flex;
+  position: relative;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+}
+.lab-header-visual > svg {
+  display: block !important;
+  width: 24px !important;
+  height: 24px !important;
+  fill: currentColor !important;
+  stroke: none !important;
+}
+.lab-header-badge {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: -6px;
+  bottom: -5px;
+  width: 13px;
+  height: 13px;
+  color: inherit;
+  border-radius: 50%;
+  background: Canvas;
+}
+.lab-header-badge > svg {
+  display: block;
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+}
+.lab-header-badge[data-badge="update"] {
+  right: -4px;
+  top: -3px;
+  bottom: auto;
+  width: 8px;
+  height: 8px;
+  background: currentColor;
+  outline: 2px solid Canvas;
+}
+.header-theme-settings {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+@media (forced-colors: active) {
+  .lab-header-badge {
+    background: Canvas;
+    color: ButtonText;
+  }
+}

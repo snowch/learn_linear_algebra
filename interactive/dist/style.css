@@ -132,3 +132,20 @@ input[type="range"] { width: 100%; min-height: 36px; margin: 0; accent-color: va
   .experiment-head { display: block; }
   .reset-actions { margin: 0 0 .7rem; }
 }
+
+/* Copyright © 2026 Christopher Snow. Theme roles preserve the existing course palette. */
+:root[data-theme="dark"] {
+  color-scheme:dark; --paper:#122019; --panel:#1a2d22; --soft:#20382a;
+  --ink:#e4efe5; --muted:#b8cbbb; --line:#3c5744; --accent:#a6d8af;
+  --error:#ffb4ab; --error-bg:#492820;
+}
+[data-theme="dark"] :is(a,.reference-button,.text-button,.footer-export) { color:#a6d8af; }
+[data-theme="dark"] :is(#lessons a:hover,#lessons a.active) { background:#2a4b35; }
+[data-theme="dark"] .primary-button { background:#a6d8af; color:#14251a; }
+[data-theme="dark"] .primary-button:hover { background:#c0e8c6; }
+[data-theme="dark"] .feedback { background:#203e2a; color:#c4e8cb; }
+[data-theme="dark"] .feedback.incorrect { background:#463721; color:#f1d4a4; }
+[data-theme="dark"] #python-code { background:var(--panel); color:var(--ink); }
+[data-theme="dark"] svg :is(text[fill="#9ca68f"],text[fill="#a0aa93"]) { fill:var(--muted); }
+[data-theme="dark"] svg text[fill="#6b7d55"] { fill:#bdd49f; }
+[data-theme="dark"] svg rect[fill="#edf5e6"] { fill:#244731; }
