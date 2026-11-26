@@ -1,3 +1,4 @@
+import { mountHeaderControls } from "./header-controls.mjs";
 // Copyright © 2026 Christopher Snow.
 import { saveReadingState } from "./experiment-state.mjs";
 import { readReleaseMetadata } from "./release-metadata.mjs";
@@ -187,6 +188,7 @@ function render() {
     status = "Couldn’t verify the offline copy";
   // Keep the existing update/offline status slots for older pinned clients,
   // but expose one message under Course status in the current interface.
+  $("app-status-open").dataset.offlineState = transferring ? "busy" : (available || relevantPending || ready) ? "update" : downloaded && !(typeof checkingCopy !== "undefined" && checkingCopy) ? "saved" : "none";
   $("version-status").textContent = status;
   $("course-ready-icon").toggleAttribute(
     "hidden",
@@ -1390,3 +1392,5 @@ document.addEventListener("visibilitychange", () => {
 
 // The visible control must not accept a click before its handlers exist.
 $("app-status-open").disabled = false;
+
+mountHeaderControls();
